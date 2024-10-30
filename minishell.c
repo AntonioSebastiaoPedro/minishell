@@ -29,10 +29,24 @@ void	handle_sigquit(int sig)
 	rl_redisplay();
 }
 
+void	print_tokens(t_token *tokens)
+{
+	t_token	*temp;
+
+	temp = tokens;
+	while (temp)
+	{
+		printf("Token: %s\n", temp->value);
+		temp = temp->next;
+	}
+}
+
 int	main(void)
 {
-	char	*line;
+	char		*line;
+	t_token		*tokens;
 
+	tokens = NULL;
 	signal(SIGINT, handle_sigint);
 	signal(SIGQUIT, handle_sigquit);
 	while (1)
@@ -41,6 +55,8 @@ int	main(void)
 		if (!line)
 			break ;
 		add_history(line);
+		tokenize(line, &tokens);
+		print_tokens(tokens);
 		free(line);
 	}
 	rl_clear_history();

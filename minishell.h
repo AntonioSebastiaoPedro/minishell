@@ -20,6 +20,12 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
+typedef struct s_token
+{
+	char			*value;
+	struct s_token	*next;
+}		t_token;
+
 typedef struct s_command
 {
 	char				*command;
@@ -29,5 +35,9 @@ typedef struct s_command
 	int					append;
 	struct s_command	*next;
 }		t_command;
+
+void	tokenize(char *line, t_token **tokens);
+
+t_token	*add_token(t_token *head, char *value);
 
 #endif
