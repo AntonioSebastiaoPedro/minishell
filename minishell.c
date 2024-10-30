@@ -12,8 +12,6 @@
 
 #include "minishell.h"
 
-#include <stdlib.h>
-
 void	free_tokens(t_token *tokens)
 {
 	t_token	*current;
