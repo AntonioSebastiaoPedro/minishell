@@ -99,6 +99,7 @@ void	print_commands(t_command *commands)
 			printf("args:");
 			while (temp->args[++i] != NULL)
 				printf(" %s", temp->args[i]);
+			printf("\n");
 		}
 		printf("input_redir: %s\n", temp->input_redir);
 		printf("output_redir: %s\n", temp->output_redir);

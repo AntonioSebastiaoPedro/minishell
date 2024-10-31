@@ -91,13 +91,13 @@ t_command	*parse_tokens(t_token *tokens)
 	current_cmd = NULL;
 	while (tokens)
 	{
-		if (is_command(tokens->value))
+		if (is_command(tokens->value) && !current_cmd)
 			current_cmd = add_command(&commands, tokens->value);
 		else if (strcmp(tokens->value, "|") == 0)
 			current_cmd = NULL;
-		else if (is_redirection(tokens->value))
+		else if (is_redirection(tokens->value) && current_cmd)
 			handle_redirection(tokens, current_cmd);
-		else if (is_argument(tokens->value))
+		else if (is_argument(tokens->value) && current_cmd)
 			add_argument(current_cmd, tokens->value);
 		tokens = tokens->next;
 	}
