@@ -12,6 +12,31 @@
 
 #include "minishell.h"
 
+void	free_commands(t_command *commands)
+{
+	int			i;
+	t_command	*current;
+	t_command	*next;
+
+	if (commands == NULL)
+		return ;
+	current = commands;
+	while (current)
+	{
+		next = current->next;
+		free(current->command);
+		if (current->args)
+		{
+			i = -1;
+			while (current->args[++i] != NULL)
+				free(current->args[i]);
+			free(current->args);
+		}
+		free(current);
+		current = next;
+	}
+}
+
 void	free_tokens(t_token *tokens)
 {
 	t_token	*current;
@@ -58,10 +83,35 @@ void	print_tokens(t_token *tokens)
 	}
 }
 
+void	print_commands(t_command *commands)
+{
+	int			i;
+	t_command	*temp;
+
+	temp = commands;
+	printf("\n\n");
+	while (temp)
+	{
+		printf("command: %s\n", temp->command);
+		if (temp->args)
+		{
+			i = -1;
+			printf("args:");
+			while (temp->args[++i] != NULL)
+				printf(" %s", temp->args[i]);
+		}
+		printf("input_redir: %s\n", temp->input_redir);
+		printf("output_redir: %s\n", temp->output_redir);
+		temp = temp->next;
+		printf("\n\n");
+	}
+}
+
 int	main(void)
 {
 	char		*line;
 	t_token		*tokens;
+	t_command	*commands;
 
 	signal(SIGINT, handle_sigint);
 	signal(SIGQUIT, handle_sigquit);
@@ -73,9 +123,12 @@ int	main(void)
 			break ;
 		add_history(line);
 		tokenize(line, &tokens);
+		commands = parse_tokens(tokens);
 		print_tokens(tokens);
+		print_commands(commands);
 		free(line);
 		free_tokens(tokens);
+		free_commands(commands);
 	}
 	rl_clear_history();
 	return (0);

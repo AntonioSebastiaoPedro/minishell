@@ -15,6 +15,7 @@ NAME = minishell
 SRCS = ./minishell.c \
        ./tokenize.c \
        ./add_token.c \
+       ./parser.c
 
 INCLUDE = minishell.h
 
