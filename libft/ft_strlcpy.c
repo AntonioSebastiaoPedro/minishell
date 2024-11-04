@@ -1,35 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   add_token.c                                        :+:      :+:    :+:   */
+/*   ft_strlcpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/30 14:17:19 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/05 00:13:45 by ansebast         ###   ########.fr       */
+/*   Created: 2024/05/29 11:31:36 by ansebast          #+#    #+#             */
+/*   Updated: 2024/08/14 14:39:16 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-t_token	*add_token(t_token *head, char *value)
+size_t	ft_strlcpy(char *dest, const char *src, size_t size)
 {
-	t_token	*new_token;
-	t_token	*temp;
+	size_t	i;
+	size_t	src_len;
 
-	new_token = malloc(sizeof(t_token));
-	if (!new_token)
+	src_len = ft_strlen(src);
+	i = 0;
+	if (size > 0)
 	{
-		perror("malloc");
-		return (NULL);
+		while (i < size - 1 && src[i] != '\0')
+		{
+			dest[i] = src[i];
+			i++;
+		}
+		dest[i] = '\0';
 	}
-	new_token->value = ft_strdup(value);
-	new_token->next = NULL;
-	if (!head)
-		return (new_token);
-	temp = head;
-	while (temp->next)
-		temp = temp->next;
-	temp->next = new_token;
-	return (head);
+	return (src_len);
 }

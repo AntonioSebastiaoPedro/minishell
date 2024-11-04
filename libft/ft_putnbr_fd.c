@@ -1,35 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   add_token.c                                        :+:      :+:    :+:   */
+/*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/30 14:17:19 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/05 00:13:45 by ansebast         ###   ########.fr       */
+/*   Created: 2024/05/29 11:30:18 by ansebast          #+#    #+#             */
+/*   Updated: 2024/08/14 19:04:30 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-t_token	*add_token(t_token *head, char *value)
+void	ft_putnbr_fd(int n, int fd)
 {
-	t_token	*new_token;
-	t_token	*temp;
-
-	new_token = malloc(sizeof(t_token));
-	if (!new_token)
+	if (n == -2147483648)
 	{
-		perror("malloc");
-		return (NULL);
+		write(fd, "-2147483648", 11);
+		return ;
 	}
-	new_token->value = ft_strdup(value);
-	new_token->next = NULL;
-	if (!head)
-		return (new_token);
-	temp = head;
-	while (temp->next)
-		temp = temp->next;
-	temp->next = new_token;
-	return (head);
+	if (n < 0)
+	{
+		ft_putchar_fd('-', fd);
+		n = -n;
+	}
+	if (n > 9)
+		ft_putnbr_fd(n / 10, fd);
+	ft_putchar_fd((n % 10 + '0'), fd);
 }

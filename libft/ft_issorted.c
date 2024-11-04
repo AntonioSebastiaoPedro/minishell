@@ -1,35 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   add_token.c                                        :+:      :+:    :+:   */
+/*   ft_issorted.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/30 14:17:19 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/05 00:13:45 by ansebast         ###   ########.fr       */
+/*   Created: 2024/09/01 00:47:20 by ansebast          #+#    #+#             */
+/*   Updated: 2024/09/01 00:47:38 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-t_token	*add_token(t_token *head, char *value)
+int	ft_issorted(int *array, int size)
 {
-	t_token	*new_token;
-	t_token	*temp;
+	int	i;
 
-	new_token = malloc(sizeof(t_token));
-	if (!new_token)
+	i = 0;
+	while (i < size - 1)
 	{
-		perror("malloc");
-		return (NULL);
+		if (array[i] > array[i + 1])
+			return (0);
+		i++;
 	}
-	new_token->value = ft_strdup(value);
-	new_token->next = NULL;
-	if (!head)
-		return (new_token);
-	temp = head;
-	while (temp->next)
-		temp = temp->next;
-	temp->next = new_token;
-	return (head);
+	return (1);
 }

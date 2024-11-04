@@ -1,35 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   add_token.c                                        :+:      :+:    :+:   */
+/*   ft_lstlastprev.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/30 14:17:19 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/05 00:13:45 by ansebast         ###   ########.fr       */
+/*   Created: 2024/08/28 10:02:00 by ansebast          #+#    #+#             */
+/*   Updated: 2024/08/28 10:11:30 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-t_token	*add_token(t_token *head, char *value)
+t_stack	*ft_lstlastprev(t_stack *head)
 {
-	t_token	*new_token;
-	t_token	*temp;
+	t_stack	*curr;
 
-	new_token = malloc(sizeof(t_token));
-	if (!new_token)
-	{
-		perror("malloc");
+	if (head == NULL || head->next == NULL)
 		return (NULL);
-	}
-	new_token->value = ft_strdup(value);
-	new_token->next = NULL;
-	if (!head)
-		return (new_token);
-	temp = head;
-	while (temp->next)
-		temp = temp->next;
-	temp->next = new_token;
-	return (head);
+	curr = head;
+	while (curr->next->next)
+		curr = curr->next;
+	return (curr);
 }

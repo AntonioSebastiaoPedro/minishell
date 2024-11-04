@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ateca <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 11:25:08 by ateca             #+#    #+#             */
-/*   Updated: 2024/10/30 11:25:21 by ateca            ###   ########.fr       */
+/*   Updated: 2024/11/04 23:19:34 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <signal.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include "libft/libft.h"
 
 typedef struct s_token
 {
@@ -37,9 +38,7 @@ typedef struct s_command
 }		t_command;
 
 void		tokenize(char *line, t_token **tokens);
-
 t_token		*add_token(t_token *head, char *value);
-
 t_command	*parse_tokens(t_token *tokens);
 
 #endif

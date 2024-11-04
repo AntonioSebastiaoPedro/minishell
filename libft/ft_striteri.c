@@ -1,35 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   add_token.c                                        :+:      :+:    :+:   */
+/*   ft_striteri.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/30 14:17:19 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/05 00:13:45 by ansebast         ###   ########.fr       */
+/*   Created: 2024/05/29 11:31:16 by ansebast          #+#    #+#             */
+/*   Updated: 2024/08/14 19:04:50 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-t_token	*add_token(t_token *head, char *value)
+void	ft_striteri(char *s, void (*f)(unsigned int, char *))
 {
-	t_token	*new_token;
-	t_token	*temp;
+	unsigned int	i;
 
-	new_token = malloc(sizeof(t_token));
-	if (!new_token)
+	if (!s || !f)
+		return ;
+	i = 0;
+	while (s[i] != '\0')
 	{
-		perror("malloc");
-		return (NULL);
+		f(i, &s[i]);
+		i++;
 	}
-	new_token->value = ft_strdup(value);
-	new_token->next = NULL;
-	if (!head)
-		return (new_token);
-	temp = head;
-	while (temp->next)
-		temp = temp->next;
-	temp->next = new_token;
-	return (head);
 }

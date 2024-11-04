@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ateca <marvin@42.fr>                       +#+  +:+       +#+         #
+#    By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/30 11:44:28 by ateca             #+#    #+#              #
-#    Updated: 2024/10/30 11:44:30 by ateca            ###   ########.fr        #
+#    Updated: 2024/11/04 23:26:28 by ansebast         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,8 @@ SRCS = ./minishell.c \
        ./add_token.c \
        ./parser.c
 
-INCLUDE = minishell.h
+LIBFT = $(LIBSRC)/libft.a
+LIBSRC = ./libft
 
 CC = cc
 RM = rm -f
@@ -27,18 +28,23 @@ OBJS = ${SRCS:.c=.o}
 
 all:	${NAME}
 
-$(NAME): $(OBJS) $(INCLUDE)
-	 @${CC} ${CFLAGS} ${OBJS} -o $(NAME) -lreadline
+$(NAME): $(OBJS) $(LIBFT)
+	 @${CC} ${CFLAGS} ${OBJS} -L$(LIBSRC) -lft -I$(LIBSRC) -o $(NAME) -lreadline
 	 @echo "\nCreated $(NAME) \n"
+	 
+$(LIBFT):
+	@make -C $(LIBSRC)
 
 clean:
-			@${RM} ${OBJS}
-			@echo "\nAll objects cleaned successfully\n"
+	@${RM} ${OBJS}
+	@make clean -C $(LIBSRC)
+	@echo "\nAll objects cleaned successfully\n"
 
 fclean: 
-			@${RM} ${OBJS}
-			@${RM} ${NAME}
-			@echo "\nAll objects and executable cleaned successfully\n"
+	@${RM} ${OBJS}
+	@${RM} ${NAME}
+	@make fclean -C $(LIBSRC)
+	@echo "\nAll objects and executable cleaned successfully\n"
 re: fclean all
 
 .PHONY: all clean fclean re

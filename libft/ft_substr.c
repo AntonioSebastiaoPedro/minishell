@@ -1,35 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   add_token.c                                        :+:      :+:    :+:   */
+/*   ft_substr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/30 14:17:19 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/05 00:13:45 by ansebast         ###   ########.fr       */
+/*   Created: 2024/05/29 11:32:18 by ansebast          #+#    #+#             */
+/*   Updated: 2024/08/10 09:45:59 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-t_token	*add_token(t_token *head, char *value)
+char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
-	t_token	*new_token;
-	t_token	*temp;
+	size_t	s_len;
+	char	*ptr;
 
-	new_token = malloc(sizeof(t_token));
-	if (!new_token)
-	{
-		perror("malloc");
+	if (!s)
 		return (NULL);
-	}
-	new_token->value = ft_strdup(value);
-	new_token->next = NULL;
-	if (!head)
-		return (new_token);
-	temp = head;
-	while (temp->next)
-		temp = temp->next;
-	temp->next = new_token;
-	return (head);
+	s_len = ft_strlen(s);
+	if (start >= s_len)
+		return (ft_strdup(""));
+	if (len > s_len - start)
+		len = s_len - start;
+	ptr = (char *)ft_calloc(len + 1, 1);
+	if (!ptr)
+		return (NULL);
+	ft_memcpy(ptr, s + start, len);
+	ptr[len] = '\0';
+	return (ptr);
 }

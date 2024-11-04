@@ -1,35 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   add_token.c                                        :+:      :+:    :+:   */
+/*   ft_isint.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/30 14:17:19 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/05 00:13:45 by ansebast         ###   ########.fr       */
+/*   Created: 2024/09/01 00:41:25 by ansebast          #+#    #+#             */
+/*   Updated: 2024/09/01 00:41:59 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-t_token	*add_token(t_token *head, char *value)
+int	ft_isint(char *str)
 {
-	t_token	*new_token;
-	t_token	*temp;
+	char	*endptr;
+	long	val;
 
-	new_token = malloc(sizeof(t_token));
-	if (!new_token)
-	{
-		perror("malloc");
-		return (NULL);
-	}
-	new_token->value = ft_strdup(value);
-	new_token->next = NULL;
-	if (!head)
-		return (new_token);
-	temp = head;
-	while (temp->next)
-		temp = temp->next;
-	temp->next = new_token;
-	return (head);
+	if (*str == '\0' || (*str == '-' && *(str + 1) == '\0') || (*str == '+'
+			&& *(str + 1) == '\0'))
+		return (0);
+	val = ft_strtol(str, &endptr);
+	if (*endptr != '\0' || val < -2147483648 || val > 2147483647)
+		return (0);
+	return (1);
 }

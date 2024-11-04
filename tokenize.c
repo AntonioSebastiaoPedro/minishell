@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ateca <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 14:06:56 by ateca             #+#    #+#             */
-/*   Updated: 2024/10/30 14:06:57 by ateca            ###   ########.fr       */
+/*   Updated: 2024/11/05 00:00:03 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	handle_environment_variable(const char *line, int *i, t_token **tokens)
 
 	j = 0;
 	buffer[j++] = line[(*i)++];
-	while (isalnum(line[*i]) || line[*i] == '_')
+	while (ft_isalnum(line[*i]) || line[*i] == '_')
 	{
 		buffer[j++] = line[(*i)++];
 	}
@@ -73,7 +73,7 @@ void	handle_word(const char *line, int *i, t_token **tokens)
 	int		j;
 
 	j = 0;
-	while (line[*i] && !isspace(line[*i]) && line[*i] != '|' && line[*i]
+	while (line[*i] && !ft_isspace(line[*i]) && line[*i] != '|' && line[*i]
 		!= '>' && line[*i] != '<')
 	{
 		buffer[j++] = line[(*i)++];
@@ -89,7 +89,7 @@ void	tokenize(char *line, t_token **tokens)
 	i = 0;
 	while (line[i])
 	{
-		while (isspace(line[i]))
+		while (ft_isspace(line[i]))
 			i++;
 		if (line[i] == '|' || line[i] == '>' || line[i] == '<')
 			handle_redirection_and_pipes(line, &i, tokens);

@@ -1,35 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   add_token.c                                        :+:      :+:    :+:   */
+/*   ft_lstmax.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/30 14:17:19 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/05 00:13:45 by ansebast         ###   ########.fr       */
+/*   Created: 2024/08/29 05:51:14 by ansebast          #+#    #+#             */
+/*   Updated: 2024/08/29 10:12:55 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-t_token	*add_token(t_token *head, char *value)
+t_stack	*ft_lstmax(t_stack *head)
 {
-	t_token	*new_token;
-	t_token	*temp;
+	t_stack	*max_node;
 
-	new_token = malloc(sizeof(t_token));
-	if (!new_token)
+	max_node = head;
+	while (head != NULL)
 	{
-		perror("malloc");
-		return (NULL);
+		if (head->value > max_node->value)
+			max_node = head;
+		head = head->next;
 	}
-	new_token->value = ft_strdup(value);
-	new_token->next = NULL;
-	if (!head)
-		return (new_token);
-	temp = head;
-	while (temp->next)
-		temp = temp->next;
-	temp->next = new_token;
-	return (head);
+	return (max_node);
 }

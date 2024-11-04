@@ -1,35 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   add_token.c                                        :+:      :+:    :+:   */
+/*   ft_memmove.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/30 14:17:19 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/05 00:13:45 by ansebast         ###   ########.fr       */
+/*   Created: 2024/05/29 11:29:56 by ansebast          #+#    #+#             */
+/*   Updated: 2024/08/14 19:13:16 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-t_token	*add_token(t_token *head, char *value)
+void	*ft_memmove(void *dest, const void *src, size_t num)
 {
-	t_token	*new_token;
-	t_token	*temp;
+	unsigned char	*d;
+	unsigned char	*s;
 
-	new_token = malloc(sizeof(t_token));
-	if (!new_token)
-	{
-		perror("malloc");
-		return (NULL);
-	}
-	new_token->value = ft_strdup(value);
-	new_token->next = NULL;
-	if (!head)
-		return (new_token);
-	temp = head;
-	while (temp->next)
-		temp = temp->next;
-	temp->next = new_token;
-	return (head);
+	d = (unsigned char *)dest;
+	s = (unsigned char *)src;
+	if (num == 0 || s == d)
+		return (dest);
+	if (d < s)
+		while (num--)
+			*d++ = *s++;
+	else
+		while (num--)
+			d[num] = s[num];
+	return (dest);
 }

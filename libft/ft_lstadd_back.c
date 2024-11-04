@@ -1,35 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   add_token.c                                        :+:      :+:    :+:   */
+/*   ft_lstadd_back.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/30 14:17:19 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/05 00:13:45 by ansebast         ###   ########.fr       */
+/*   Created: 2024/05/29 11:28:43 by ansebast          #+#    #+#             */
+/*   Updated: 2024/08/29 10:10:13 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-t_token	*add_token(t_token *head, char *value)
+void	ft_lstadd_back(t_stack **head, t_stack *new_node)
 {
-	t_token	*new_token;
-	t_token	*temp;
+	t_stack	*last;
 
-	new_token = malloc(sizeof(t_token));
-	if (!new_token)
+	if (head && *head)
 	{
-		perror("malloc");
-		return (NULL);
+		last = ft_lstlast(*head);
+		last->next = new_node;
+		new_node->index = last->index + 1;
+		new_node->next = NULL;
 	}
-	new_token->value = ft_strdup(value);
-	new_token->next = NULL;
-	if (!head)
-		return (new_token);
-	temp = head;
-	while (temp->next)
-		temp = temp->next;
-	temp->next = new_token;
-	return (head);
+	else
+		*head = new_node;
 }

@@ -1,35 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   add_token.c                                        :+:      :+:    :+:   */
+/*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/30 14:17:19 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/05 00:13:45 by ansebast         ###   ########.fr       */
+/*   Created: 2024/05/29 11:31:24 by ansebast          #+#    #+#             */
+/*   Updated: 2024/08/14 19:04:55 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-t_token	*add_token(t_token *head, char *value)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
-	t_token	*new_token;
-	t_token	*temp;
+	char	*new_str;
+	size_t	len1;
+	size_t	len2;
+	size_t	total_len;
 
-	new_token = malloc(sizeof(t_token));
-	if (!new_token)
-	{
-		perror("malloc");
+	if (!s1 || !s2)
 		return (NULL);
-	}
-	new_token->value = ft_strdup(value);
-	new_token->next = NULL;
-	if (!head)
-		return (new_token);
-	temp = head;
-	while (temp->next)
-		temp = temp->next;
-	temp->next = new_token;
-	return (head);
+	len1 = ft_strlen(s1);
+	len2 = ft_strlen(s2);
+	total_len = len1 + len2 + 1;
+	new_str = (char *)ft_calloc(total_len, sizeof(char));
+	if (!new_str)
+		return (NULL);
+	ft_strlcpy(new_str, s1, total_len);
+	ft_strlcat(new_str, s2, total_len);
+	return (new_str);
 }
