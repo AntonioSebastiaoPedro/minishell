@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 16:54:03 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/05 00:02:33 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/05 00:46:06 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	is_command(const char *token)
 {
-	return (token != NULL && !isdigit(token[0]) && ft_strcmp(token, "|") != 0
+	return (token != NULL && !ft_isdigit(token[0]) && ft_strcmp(token, "|") != 0
 		&& ft_strcmp(token, "<") != 0 && ft_strcmp(token, ">") != 0
 		&& ft_strcmp(token, ">>") != 0 && ft_strcmp(token, "<<") != 0);
 }
