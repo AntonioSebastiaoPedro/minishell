@@ -84,19 +84,26 @@ void	add_argument(t_command *cmd, const char *arg)
 
 t_command	*parse_tokens(t_token *tokens)
 {
+	int			skip_file;
 	t_command	*commands;
 	t_command	*current_cmd;
 
+	skip_file = 0;
 	commands = NULL;
 	current_cmd = NULL;
 	while (tokens)
 	{
-		if (is_command(tokens->value) && !current_cmd)
+		if (skip_file)
+			skip_file = 0;
+		else if (is_command(tokens->value) && !current_cmd)
 			current_cmd = add_command(&commands, tokens->value);
 		else if (strcmp(tokens->value, "|") == 0)
 			current_cmd = NULL;
 		else if (is_redirection(tokens->value) && current_cmd)
+		{
 			handle_redirection(tokens, current_cmd);
+			skip_file = 1;
+		}
 		else if (is_argument(tokens->value) && current_cmd)
 			add_argument(current_cmd, tokens->value);
 		tokens = tokens->next;
