@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 11:19:19 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/05 01:38:57 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/05 01:42:52 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,8 +116,7 @@ void	exec_builtin(t_command *cmd)
 	}
 	else if (ft_strcmp(cmd->command, "cd") == 0)
 	{
-		if (chdir(cmd->args[1]) != 0)
-			perror("cd failed");
+		ft_cd(cmd->args);
 	}
 	else if (ft_strcmp(cmd->command, "pwd") == 0)
 	{
