@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 11:19:19 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/05 07:37:08 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/05 13:34:02 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,21 +133,28 @@ int	is_builtin(const char *cmd)
 char	*expand_variables(const char *str)
 {
 	const char	*env_val;
+	int			i;
 
-	if (str[0] == '$')
+	i = 0;
+	while (str[i])
 	{
-		env_val = getenv(str + 1);
-		if (env_val)
-			return (strdup(env_val));
-		else
-			return (strdup(""));
+		if (str[i] == '$')
+		{
+			env_val = getenv(&str[i + 1]);
+			if (env_val)
+				return (ft_strdup(env_val));
+			else
+				return (ft_strdup(""));
+		}
+		i++;
 	}
-	return (strdup(str));
+	return (ft_strdup(str));
 }
 
 void	execute_commands(t_command *cmd)
 {
 	int	i;
+
 	while (cmd)
 	{
 		i = -1;
