@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 11:19:19 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/05 01:42:52 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/05 07:37:08 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,30 +111,49 @@ void	print_commands(t_command *commands)
 void	exec_builtin(t_command *cmd)
 {
 	if (ft_strcmp(cmd->command, "echo") == 0)
-	{
 		ft_echo(cmd->args);
-	}
 	else if (ft_strcmp(cmd->command, "cd") == 0)
-	{
 		ft_cd(cmd->args);
-	}
 	else if (ft_strcmp(cmd->command, "pwd") == 0)
-	{
 		ft_pwd();
-	}
+	else if (ft_strcmp(cmd->command, "export") == 0)
+		ft_export(cmd->args);
 	else if (ft_strcmp(cmd->command, "exit") == 0)
 		exit(0);
 }
 
 int	is_builtin(const char *cmd)
 {
-    return (ft_strcmp(cmd, "echo") == 0 || ft_strcmp(cmd, "cd") == 0 || ft_strcmp(cmd, "pwd") == 0 || ft_strcmp(cmd, "exit") == 0);
+	return (ft_strcmp(cmd, "echo") == 0 || ft_strcmp(cmd, "cd") == 0
+		|| ft_strcmp(cmd, "pwd") == 0 || ft_strcmp(cmd, "exit") == 0
+		|| ft_strcmp(cmd, "export") == 0 || ft_strcmp(cmd, "unset") == 0
+		|| ft_strcmp(cmd, "env") == 0);
+}
+
+char	*expand_variables(const char *str)
+{
+	const char	*env_val;
+
+	if (str[0] == '$')
+	{
+		env_val = getenv(str + 1);
+		if (env_val)
+			return (strdup(env_val));
+		else
+			return (strdup(""));
+	}
+	return (strdup(str));
 }
 
 void	execute_commands(t_command *cmd)
 {
+	int	i;
 	while (cmd)
 	{
+		i = -1;
+		if (cmd->args)
+			while (cmd->args[++i])
+				cmd->args[i] = expand_variables(cmd->args[i]);
 		if (is_builtin(cmd->command))
 			exec_builtin(cmd);
 		else
@@ -154,7 +173,7 @@ int	main(void)
 	while (1)
 	{
 		tokens = NULL;
-		line = readline("minishell> ");
+		line = readline("akatsuki> ");
 		if (!line)
 			break ;
 		add_history(line);
