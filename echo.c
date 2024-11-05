@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 01:04:34 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/05 01:30:57 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/05 01:34:43 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	ft_echo(char **args)
 	i = 0;
 	if (args)
 	{
-		if (args[1] && ft_strcmp(args[1], "-n") == 0)
+		if (args[0] && ft_strcmp(args[0], "-n") == 0)
 		{
 			newline = 0;
 			i++;
