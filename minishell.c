@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ateca <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 11:19:19 by ateca             #+#    #+#             */
-/*   Updated: 2024/10/30 11:19:21 by ateca            ###   ########.fr       */
+/*   Updated: 2024/11/05 01:29:31 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,46 @@ void	print_commands(t_command *commands)
 	}
 }
 
+void	exec_builtin(t_command *cmd)
+{
+	if (ft_strcmp(cmd->command, "echo") == 0)
+	{
+		ft_echo(cmd->args);
+	}
+	else if (ft_strcmp(cmd->command, "cd") == 0)
+	{
+		if (chdir(cmd->args[1]) != 0)
+			perror("cd failed");
+	}
+	else if (ft_strcmp(cmd->command, "pwd") == 0)
+	{
+		char	cwd[1024];
+		if (getcwd(cwd, sizeof(cwd)) != NULL)
+			printf("%s\n", cwd);
+		else
+			perror("pwd failed");
+	}
+	else if (ft_strcmp(cmd->command, "exit") == 0)
+		exit(0);
+}
+
+int	is_builtin(const char *cmd)
+{
+    return (ft_strcmp(cmd, "echo") == 0 || ft_strcmp(cmd, "cd") == 0 || ft_strcmp(cmd, "pwd") == 0 || ft_strcmp(cmd, "exit") == 0);
+}
+
+void	execute_commands(t_command *cmd)
+{
+	while (cmd)
+	{
+		if (is_builtin(cmd->command))
+			exec_builtin(cmd);
+		else
+			printf("The cmd is not a built-in\n");
+		cmd = cmd->next;
+	}
+}
+
 int	main(void)
 {
 	char		*line;
@@ -125,8 +165,9 @@ int	main(void)
 		add_history(line);
 		tokenize(line, &tokens);
 		commands = parse_tokens(tokens);
-		print_tokens(tokens);
-		print_commands(commands);
+		// print_tokens(tokens);
+		// print_commands(commands);
+		execute_commands(commands);
 		free(line);
 		free_tokens(tokens);
 		free_commands(commands);

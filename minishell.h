@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 11:25:08 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/04 23:19:34 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/05 01:06:29 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,5 +40,6 @@ typedef struct s_command
 void		tokenize(char *line, t_token **tokens);
 t_token		*add_token(t_token *head, char *value);
 t_command	*parse_tokens(t_token *tokens);
+void		ft_echo(char **args);
 
 #endif
