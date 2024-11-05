@@ -116,8 +116,6 @@ void	exec_builtin(t_command *cmd)
 		ft_cd(cmd->args);
 	else if (ft_strcmp(cmd->command, "pwd") == 0)
 		ft_pwd();
-	else if (ft_strcmp(cmd->command, "export") == 0)
-		ft_export(cmd->args);
 	else if (ft_strcmp(cmd->command, "exit") == 0)
 		exit(0);
 }
@@ -130,24 +128,51 @@ int	is_builtin(const char *cmd)
 		|| ft_strcmp(cmd, "env") == 0);
 }
 
+void	extract_variable_name(const char *str, int *i, char *var_name)
+{
+	int	j;
+
+	j = 0;
+	(*i)++;
+	while (str[*i] && (isalnum(str[*i]) || str[*i] == '_'))
+		var_name[j++] = str[(*i)++];
+	var_name[j] = '\0';
+}
+
 char	*expand_variables(const char *str)
 {
-	const char	*env_val;
+	int			pos;
+	int			i;
+	char		*env_val;
+	char		*result;
+	char		var_name[1024];
 
-	if (str[0] == '$')
+	result = malloc(sizeof(char) * 1024);
+	pos = 0;
+	i = 0;
+	while (str[i] != '\0')
 	{
-		env_val = getenv(str + 1);
-		if (env_val)
-			return (strdup(env_val));
+		if (str[i] == '$')
+		{
+			extract_variable_name(str, &i, var_name);
+			env_val = getenv(var_name);
+			if (env_val)
+			{
+				strcpy(result + pos, env_val);
+				pos += strlen(env_val);
+			}
+		}
 		else
-			return (strdup(""));
+			result[pos++] = str[i++];
 	}
-	return (strdup(str));
+	result[pos] = '\0';
+	return (result);
 }
 
 void	execute_commands(t_command *cmd)
 {
 	int	i;
+
 	while (cmd)
 	{
 		i = -1;
@@ -179,8 +204,8 @@ int	main(void)
 		add_history(line);
 		tokenize(line, &tokens);
 		commands = parse_tokens(tokens);
-		// print_tokens(tokens);
-		// print_commands(commands);
+		print_tokens(tokens);
+		print_commands(commands);
 		execute_commands(commands);
 		free(line);
 		free_tokens(tokens);
