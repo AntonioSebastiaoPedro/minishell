@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 11:19:19 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/05 01:29:31 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/05 01:38:57 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,11 +121,7 @@ void	exec_builtin(t_command *cmd)
 	}
 	else if (ft_strcmp(cmd->command, "pwd") == 0)
 	{
-		char	cwd[1024];
-		if (getcwd(cwd, sizeof(cwd)) != NULL)
-			printf("%s\n", cwd);
-		else
-			perror("pwd failed");
+		ft_pwd();
 	}
 	else if (ft_strcmp(cmd->command, "exit") == 0)
 		exit(0);
