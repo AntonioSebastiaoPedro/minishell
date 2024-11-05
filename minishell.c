@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 11:19:19 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/05 13:34:02 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/05 15:11:57 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,8 +116,6 @@ void	exec_builtin(t_command *cmd)
 		ft_cd(cmd->args);
 	else if (ft_strcmp(cmd->command, "pwd") == 0)
 		ft_pwd();
-	else if (ft_strcmp(cmd->command, "export") == 0)
-		ft_export(cmd->args);
 	else if (ft_strcmp(cmd->command, "exit") == 0)
 		exit(0);
 }
@@ -130,25 +128,45 @@ int	is_builtin(const char *cmd)
 		|| ft_strcmp(cmd, "env") == 0);
 }
 
+void	extract_variable_name(const char *str, int *i, char *var_name)
+{
+	int	j;
+
+	j = 0;
+	(*i)++;
+	while (str[*i] && (isalnum(str[*i]) || str[*i] == '_'))
+		var_name[j++] = str[(*i)++];
+	var_name[j] = '\0';
+}
+
 char	*expand_variables(const char *str)
 {
-	const char	*env_val;
+	int			pos;
 	int			i;
+	char		*env_val;
+	char		*result;
+	char		var_name[1024];
 
+	result = malloc(sizeof(char) * 1024);
+	pos = 0;
 	i = 0;
-	while (str[i])
+	while (str[i] != '\0')
 	{
 		if (str[i] == '$')
 		{
-			env_val = getenv(&str[i + 1]);
+			extract_variable_name(str, &i, var_name);
+			env_val = getenv(var_name);
 			if (env_val)
-				return (ft_strdup(env_val));
-			else
-				return (ft_strdup(""));
+			{
+				strcpy(result + pos, env_val);
+				pos += strlen(env_val);
+			}
 		}
-		i++;
+		else
+			result[pos++] = str[i++];
 	}
-	return (ft_strdup(str));
+	result[pos] = '\0';
+	return (result);
 }
 
 void	execute_commands(t_command *cmd)
@@ -186,8 +204,8 @@ int	main(void)
 		add_history(line);
 		tokenize(line, &tokens);
 		commands = parse_tokens(tokens);
-		// print_tokens(tokens);
-		// print_commands(commands);
+		print_tokens(tokens);
+		print_commands(commands);
 		execute_commands(commands);
 		free(line);
 		free_tokens(tokens);
