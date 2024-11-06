@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 11:19:19 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/06 09:37:26 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/06 11:30:10 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ void	print_commands(t_command *commands)
 	}
 }
 
-void	exec_builtin(t_command *cmd)
+void	exec_builtin(t_command *cmd, char **env)
 {
 	if (ft_strcmp(cmd->command, "echo") == 0)
 		ft_echo(cmd->args);
@@ -117,6 +117,8 @@ void	exec_builtin(t_command *cmd)
 		ft_cd(cmd->args);
 	else if (ft_strcmp(cmd->command, "pwd") == 0)
 		ft_pwd();
+	else if (ft_strcmp(cmd->command, "env") == 0)
+		ft_env(cmd, env);
 	else if (ft_strcmp(cmd->command, "exit") == 0)
 		exit(0);
 }
@@ -142,11 +144,11 @@ void	extract_variable_name(const char *str, int *i, char *var_name)
 
 char	*expand_variables(const char *str, t_command *cmd, int *arg_pos)
 {
-	int			pos;
-	int			i;
-	char		*env_val;
-	char		*result;
-	char		var_name[1024];
+	int		pos;
+	int		i;
+	char	*env_val;
+	char	*result;
+	char	var_name[1024];
 
 	if (cmd->interpret[*arg_pos])
 		return ((char *)str);
@@ -172,7 +174,7 @@ char	*expand_variables(const char *str, t_command *cmd, int *arg_pos)
 	return (result);
 }
 
-void	execute_commands(t_command *cmd)
+void	execute_commands(t_command *cmd, char **env)
 {
 	int	i;
 
@@ -183,21 +185,40 @@ void	execute_commands(t_command *cmd)
 			while (cmd->args[++i])
 				cmd->args[i] = expand_variables(cmd->args[i], cmd, &i);
 		if (is_builtin(cmd->command))
-			exec_builtin(cmd);
+			exec_builtin(cmd, env);
 		else
 			printf("The cmd is not a built-in\n");
 		cmd = cmd->next;
 	}
 }
 
-int	main(void)
+char	**ft_matcpy(char **dest, char **src)
+{
+	int	i;
+
+	i = 0;
+	while (src[i])
+	{
+		dest[i] = ft_strdup(src[i]);
+		i++;
+	}
+	dest[i] = NULL;
+	return (dest);
+}
+
+int	main(int ac, char **av, char **env)
 {
 	char		*line;
+	char		**env_dup;
 	t_token		*tokens;
 	t_command	*commands;
 
+	(void)ac;
+	(void)av;
 	signal(SIGINT, handle_sigint);
 	signal(SIGQUIT, handle_sigquit);
+	env_dup = (char **)ft_calloc(ft_tablen(env) + 1, sizeof(char *));
+	ft_matcpy(env_dup, env);
 	while (1)
 	{
 		tokens = NULL;
@@ -209,7 +230,7 @@ int	main(void)
 		commands = parse_tokens(tokens);
 		// print_tokens(tokens);
 		// print_commands(commands);
-		execute_commands(commands);
+		execute_commands(commands, env_dup);
 		free(line);
 		free_tokens(tokens);
 		free_commands(commands);

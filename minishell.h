@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 11:25:08 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/06 08:20:43 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/06 11:29:55 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,5 +47,6 @@ void		ft_echo(char **args);
 void		ft_pwd(void);
 void		ft_cd(char **args);
 void		ft_export(char **args);
+int		ft_env(t_command *cmd, char **env);
 
 #endif
