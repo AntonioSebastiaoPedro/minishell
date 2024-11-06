@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 11:19:19 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/05 15:11:57 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/06 09:37:26 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ void	print_tokens(t_token *tokens)
 	while (temp)
 	{
 		printf("Token: %s\n", temp->value);
+		printf("Interpret: %d\n", temp->interpret);
 		temp = temp->next;
 	}
 }
@@ -139,7 +140,7 @@ void	extract_variable_name(const char *str, int *i, char *var_name)
 	var_name[j] = '\0';
 }
 
-char	*expand_variables(const char *str)
+char	*expand_variables(const char *str, t_command *cmd, int *arg_pos)
 {
 	int			pos;
 	int			i;
@@ -147,6 +148,8 @@ char	*expand_variables(const char *str)
 	char		*result;
 	char		var_name[1024];
 
+	if (cmd->interpret[*arg_pos])
+		return ((char *)str);
 	result = malloc(sizeof(char) * 1024);
 	pos = 0;
 	i = 0;
@@ -158,8 +161,8 @@ char	*expand_variables(const char *str)
 			env_val = getenv(var_name);
 			if (env_val)
 			{
-				strcpy(result + pos, env_val);
-				pos += strlen(env_val);
+				ft_strcpy(result + pos, env_val);
+				pos += ft_strlen(env_val);
 			}
 		}
 		else
@@ -178,7 +181,7 @@ void	execute_commands(t_command *cmd)
 		i = -1;
 		if (cmd->args)
 			while (cmd->args[++i])
-				cmd->args[i] = expand_variables(cmd->args[i]);
+				cmd->args[i] = expand_variables(cmd->args[i], cmd, &i);
 		if (is_builtin(cmd->command))
 			exec_builtin(cmd);
 		else
@@ -204,8 +207,8 @@ int	main(void)
 		add_history(line);
 		tokenize(line, &tokens);
 		commands = parse_tokens(tokens);
-		print_tokens(tokens);
-		print_commands(commands);
+		// print_tokens(tokens);
+		// print_commands(commands);
 		execute_commands(commands);
 		free(line);
 		free_tokens(tokens);

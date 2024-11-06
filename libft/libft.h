@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 11:32:38 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/04 23:52:41 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/05 15:21:14 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ char				*ft_strtrim(const char *s1, const char *set);
 char				*ft_strjoin(const char *s1, const char *s2);
 char				*ft_strdup(const char *s);
 char				*ft_strchr(const char *str, int c);
+char				*ft_strcpy(char *dest, const char *src);
 char				*ft_strrchr(const char *str, int c);
 char				*ft_substr(char const *s, unsigned int start, size_t len);
 char				*ft_strnstr(const char *big, const char *little,

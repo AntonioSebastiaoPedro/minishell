@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 16:54:03 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/05 00:46:06 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/06 09:13:15 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ t_command	*add_command(t_command **commands, const char *command)
 	}
 	new_command->command = ft_strdup(command);
 	new_command->args = NULL;
+	new_command->interpret = NULL;
 	new_command->input_redir = NULL;
 	new_command->output_redir = NULL;
 	new_command->append = 0;
@@ -65,21 +66,24 @@ int	is_argument(const char *token)
 	return (token != NULL && !is_redirection(token) && ft_strcmp(token, "|") != 0);
 }
 
-void	add_argument(t_command *cmd, const char *arg)
+void	add_argument(t_command *cmd, t_token *token)
 {
-	int	count;
+	int	i;
+	int	j;
 
-	count = 0;
+	i = 0;
+	j = 0;
 	if (cmd->args)
-	{
-		while (cmd->args[count])
-		{
-			count++;
-		}
-	}
-	cmd->args = ft_realloc(cmd->args, sizeof(char *) * (count + 2));
-	cmd->args[count] = ft_strdup(arg);
-	cmd->args[count + 1] = NULL;
+		while (cmd->args[i])
+			i++;
+	if (cmd->interpret)
+		while (cmd->interpret[j])
+			j++;
+	cmd->args = ft_realloc(cmd->args, sizeof(char *) * (i + 2));
+	cmd->args[i] = ft_strdup(token->value);
+	cmd->args[i + 1] = NULL;
+	cmd->interpret = ft_realloc(cmd->interpret, sizeof(int) * (j + 1));
+	cmd->interpret[j] = token->interpret;
 }
 
 t_command	*parse_tokens(t_token *tokens)
@@ -105,7 +109,7 @@ t_command	*parse_tokens(t_token *tokens)
 			skip_file = 1;
 		}
 		else if (is_argument(tokens->value) && current_cmd)
-			add_argument(current_cmd, tokens->value);
+			add_argument(current_cmd, tokens);
 		tokens = tokens->next;
 	}
 	return (commands);

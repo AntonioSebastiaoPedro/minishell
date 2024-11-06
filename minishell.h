@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 11:25:08 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/05 07:43:12 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/06 08:20:43 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 typedef struct s_token
 {
 	char			*value;
+	int		interpret;
 	struct s_token	*next;
 }		t_token;
 
@@ -34,11 +35,12 @@ typedef struct s_command
 	char				*input_redir;
 	char				*output_redir;
 	int					append;
+	int					*interpret;
 	struct s_command	*next;
 }		t_command;
 
 void		tokenize(char *line, t_token **tokens);
-t_token		*add_token(t_token *head, char *value);
+t_token		*add_token(t_token *head, char *value, int interpret);
 t_command	*parse_tokens(t_token *tokens);
 char		*remove_quotes(const char *str);
 void		ft_echo(char **args);
