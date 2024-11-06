@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 11:32:38 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/05 15:21:14 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/06 13:02:00 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ long int			ft_strtol(char *str, char **endptr);
 int					ft_lstissorted(t_stack *stack);
 int					ft_lstsize(t_stack *lst);
 int					ft_lstgetindex(t_stack **head, t_stack *value);
-void				ft_freearray(char **array, int pos);
+void				ft_freearray(char **array);
 void				ft_puterror(void);
 void				ft_lstdelone(t_stack *node);
 void				ft_bzero(void *s, size_t size);
