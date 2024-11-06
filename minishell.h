@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 11:25:08 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/06 11:29:55 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/06 12:58:16 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,8 @@ char		*remove_quotes(const char *str);
 void		ft_echo(char **args);
 void		ft_pwd(void);
 void		ft_cd(char **args);
-void		ft_export(char **args);
+void		ft_export(t_command *cmd, char **env);
 int		ft_env(t_command *cmd, char **env);
+char		**ft_matcpy(char **dest, char **src);
 
 #endif

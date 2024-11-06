@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 11:19:19 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/06 11:30:10 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/06 12:30:03 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,8 @@ void	exec_builtin(t_command *cmd, char **env)
 		ft_pwd();
 	else if (ft_strcmp(cmd->command, "env") == 0)
 		ft_env(cmd, env);
+	else if (ft_strcmp(cmd->command, "export") == 0)
+		ft_export(cmd, env);
 	else if (ft_strcmp(cmd->command, "exit") == 0)
 		exit(0);
 }
