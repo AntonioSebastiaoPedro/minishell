@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 11:30:48 by ansebast          #+#    #+#             */
-/*   Updated: 2024/10/09 22:52:00 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/06 13:00:55 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ char	**ft_split(char const *s, char c)
 			tab[j] = ft_get_word(s, &i, c);
 			if (!tab[j++])
 			{
-				ft_freearray(tab, j);
+				ft_freearray(tab);
 				return (NULL);
 			}
 		}
