@@ -6,69 +6,54 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 02:17:44 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/06 13:04:41 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/07 19:11:30 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	sort_str_tab(char **tab, int size)
+void	sort_str_list(t_env *tab, int (*cmp)(const char *str1,
+			const char *str2))
 {
-	int		i;
-	char	*temp;
+	char	*var_temp;
+	char	*value_temp;
+	int		index_temp;
+	t_env	*current;
 
-	i = 0;
-	while (i < (size - 1))
+	current = tab;
+	while (current && current->next)
 	{
-		if (ft_strcmp(tab[i], tab[i + 1]) > 0)
+		if ((*cmp)(current->var, current->next->var) > 0)
 		{
-			temp = tab[i];
-			tab[i] = tab[i + 1];
-			tab[i + 1] = temp;
-			i = 0;
+			value_temp = current->value;
+			var_temp = current->var;
+			index_temp = current->index;
+			current->var = current->next->var;
+			current->next->var = var_temp;
+			current->value = current->next->value;
+			current->next->value = value_temp;
+			current->index = current->next->index;
+			current->next->index = index_temp;
+			current = tab;
 		}
 		else
-			i++;
+			current = current->next;
 	}
 }
 
-void	ft_export(t_command *cmd, char **env)
+void	ft_export(t_command *cmd, t_env *env)
 {
-	char	*var;
-	char	*value;
-	char	**env_dup;
-	int		i;
-	int		j;
-	int		iqual;
+	t_env	*env_dup;
 
-	env_dup = (char **)ft_calloc(ft_tablen(env) + 1, sizeof(char *));
-	ft_matcpy(env_dup, env);
-	i = 0;
+	env_dup = env;
 	if (!cmd->args || !cmd->args[0])
 	{
-		sort_str_tab(env_dup, ft_tablen(env_dup));
-		while (env_dup[i])
+		sort_str_list(env_dup, ft_strcmp);
+		while (env_dup)
 		{
-			iqual = 0;
-			j = 0;
-			ft_putstr_fd("declare -x ", 1);
-			while (env_dup[i][j])
-			{
-				write(1, &env_dup[i][j++], 1);
-				if (env_dup[i][j - 1] == '=')
-					iqual = write(1, "\"", 1);
-			}
-			if (iqual)
-				write(1, "\"\n", 2);
-			i++;
+			printf("declare -x %s=", env_dup->var);
+			printf("%c%s%c\n", '\"', env_dup->value, '\"');
+			env_dup = env_dup->next;
 		}
 	}
-	// else
-	// {
-	// 	var = strtok(cmd->args[0], "=");
-	// 	value = strtok(NULL, "=");
-	// 	if (var && value)
-	// 		setenv(var, value, 1);
-	// }
-	ft_freearray(env_dup);
 }
