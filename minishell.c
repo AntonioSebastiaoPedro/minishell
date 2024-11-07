@@ -171,7 +171,7 @@ char	*expand_variables(const char *str)
 	return (result);
 }
 
-void	handle_output_redirection(t_command *cmd)
+int	handle_output_redirection(t_command *cmd)
 {
 	int	fd;
 	int	flags;
@@ -189,17 +189,16 @@ void	handle_output_redirection(t_command *cmd)
 	}
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
+	return (0);
 }
 
 void	handle_sigint_heredoc(int signum)
 {
 	(void)signum;
-	//g_heredoc_interrupted = 1;
-	//rl_on_new_line();
 	exit(1);
 }
 
-void	handle_heredoc(char *delimiter)
+int	handle_heredoc(char *delimiter)
 {
 	int		pipe_fds[2];
 	char	*line;
@@ -225,11 +224,13 @@ void	handle_heredoc(char *delimiter)
 	close(pipe_fds[1]);
 	dup2(pipe_fds[0], STDIN_FILENO);
 	close(pipe_fds[0]);
+	return (0);
 }
 
-void	handle_input_redirection(t_command *cmd)
+int	handle_input_redirection(t_command *cmd)
 {
 	int		fd;
+	int		status;
 	pid_t	pid;
 
 	if (cmd->input_redir && cmd->heredoc)
@@ -238,9 +239,16 @@ void	handle_input_redirection(t_command *cmd)
 		if (pid == 0)
 			handle_heredoc(cmd->input_redir);
 		else if (pid < 0)
+		{
 			perror("fork failed");
+			exit(1);
+		}
 		else
-			waitpid(pid, NULL, 0);
+		{
+			waitpid(pid, &status, 0);
+			if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
+				return (-1);
+		}
 	}
 	else if (cmd->input_redir)
 	{
@@ -253,14 +261,16 @@ void	handle_input_redirection(t_command *cmd)
 		dup2(fd, STDIN_FILENO);
 		close(fd);
 	}
+	return (0);
 }
 
-void	handle_redirections(t_command *cmd)
+int	handle_redirections(t_command *cmd)
 {
 	if (cmd->input_redir != NULL)
-		handle_input_redirection(cmd);
+		return (handle_input_redirection(cmd));
 	else if (cmd->output_redir != NULL)
-		handle_output_redirection(cmd);
+		return (handle_output_redirection(cmd));
+	return (0);
 }
 
 char	**prepare_args(char *executable_path, char **original_args)
@@ -359,7 +369,10 @@ void	execute_external_command(t_command *cmd, char **envp)
 		exit(errno);
 	}
 	else if (pid < 0)
+	{
 		perror("fork failed");
+		exit(1);
+	}
 	else
 		waitpid(pid, NULL, 0);
 }
@@ -379,7 +392,11 @@ void	execute_commands(t_command *cmd, char **envp)
 		if (cmd->args)
 			while (cmd->args[++i])
 				cmd->args[i] = expand_variables(cmd->args[i]);
-		handle_redirections(cmd);
+		if (handle_redirections(cmd) != 0)
+		{
+			cmd = cmd->next;
+			continue ;
+		}
 		if (is_builtin(cmd->command))
 		{
 			exec_builtin(cmd);
