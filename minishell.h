@@ -6,27 +6,35 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 11:25:08 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/06 12:58:16 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/07 21:31:00 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include "libft/libft.h"
+# include <readline/history.h>
+# include <readline/readline.h>
+# include <signal.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
-# include <signal.h>
-# include <readline/readline.h>
-# include <readline/history.h>
-# include "libft/libft.h"
 
 typedef struct s_token
 {
-	char			*value;
-	int		interpret;
-	struct s_token	*next;
-}		t_token;
+	char				*value;
+	int					interpret;
+	struct s_token		*next;
+}						t_token;
+
+typedef struct s_env
+{
+	char				*var;
+	char				*value;
+	int					index;
+	struct s_env		*next;
+}						t_env;
 
 typedef struct s_command
 {
@@ -37,17 +45,32 @@ typedef struct s_command
 	int					append;
 	int					*interpret;
 	struct s_command	*next;
-}		t_command;
+}						t_command;
 
-void		tokenize(char *line, t_token **tokens);
-t_token		*add_token(t_token *head, char *value, int interpret);
-t_command	*parse_tokens(t_token *tokens);
-char		*remove_quotes(const char *str);
-void		ft_echo(char **args);
-void		ft_pwd(void);
-void		ft_cd(char **args);
-void		ft_export(t_command *cmd, char **env);
-int		ft_env(t_command *cmd, char **env);
-char		**ft_matcpy(char **dest, char **src);
+int						ft_env(t_command *cmd, t_env *env);
+int						is_builtin(const char *cmd);
+void					tokenize(char *line, t_token **tokens);
+void					ft_echo(char **args);
+void					ft_pwd(void);
+void					ft_cd(char **args);
+void					ft_export(t_command *cmd, t_env *env);
+void					free_env(t_env **env);
+void					exec_builtin(t_command *cmd, t_env *env);
+void					handle_sigint(int sig);
+void					handle_sigquit(int sig);
+void					exec_builtin(t_command *cmd, t_env *env);
+void					execute_commands(t_command *cmd, t_env *env);
+void					free_commands(t_command *commands);
+void					envcpy(t_env **env_dup, char **src);
+void					print_tokens(t_token *tokens);
+void					print_commands(t_command *commands);
+void					free_tokens(t_token *tokens);
+void					extract_variable_name(const char *str, int *i,
+							char *var_name);
+char					*expand_variables(const char *str, t_command *cmd,
+							int *arg_pos);
+t_env					*add_env(t_env **envs, char *name);
+t_token					*add_token(t_token *head, char *value, int interpret);
+t_command				*parse_tokens(t_token *tokens);
 
 #endif
