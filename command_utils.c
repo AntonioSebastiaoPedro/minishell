@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 19:41:38 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/07 20:43:01 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/07 23:13:53 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,34 @@ void	execute_commands(t_command *cmd, t_env *env)
 			printf("The cmd is not a built-in\n");
 		cmd = cmd->next;
 	}
+}
+
+int	is_command(const char *token)
+{
+	return (token != NULL && !ft_isdigit(token[0]) && ft_strcmp(token, "|") != 0
+		&& ft_strcmp(token, "<") != 0 && ft_strcmp(token, ">") != 0
+		&& ft_strcmp(token, ">>") != 0 && ft_strcmp(token, "<<") != 0);
+}
+
+t_command	*add_command(t_command **commands, const char *command)
+{
+	t_command	*new_command;
+
+	new_command = malloc(sizeof(t_command));
+	if (!new_command)
+	{
+		perror("malloc");
+		return (NULL);
+	}
+	new_command->command = ft_strdup(command);
+	new_command->args = NULL;
+	new_command->interpret = NULL;
+	new_command->input_redir = NULL;
+	new_command->output_redir = NULL;
+	new_command->append = 0;
+	new_command->next = *commands;
+	*commands = new_command;
+	return (new_command);
 }
 
 void	free_commands(t_command *commands)

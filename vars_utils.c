@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 19:36:42 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/07 19:47:11 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/07 23:23:11 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,15 @@ void	extract_variable_name(const char *str, int *i, char *var_name)
 	var_name[j] = '\0';
 }
 
+void	check_enval(char **env_val, char **result, int *pos)
+{
+	if (*env_val)
+	{
+		ft_strcpy(*result + *pos, *env_val);
+		*pos += ft_strlen(*env_val);
+	}
+}
+
 char	*expand_variables(const char *str, t_command *cmd, int *arg_pos)
 {
 	int		pos;
@@ -32,7 +41,7 @@ char	*expand_variables(const char *str, t_command *cmd, int *arg_pos)
 	char	var_name[1024];
 
 	if (cmd->interpret[*arg_pos])
-		return ((char *)str);
+		return (ft_strdup((char *)str));
 	result = malloc(sizeof(char) * 1024);
 	pos = 0;
 	i = 0;
@@ -42,11 +51,7 @@ char	*expand_variables(const char *str, t_command *cmd, int *arg_pos)
 		{
 			extract_variable_name(str, &i, var_name);
 			env_val = getenv(var_name);
-			if (env_val)
-			{
-				ft_strcpy(result + pos, env_val);
-				pos += ft_strlen(env_val);
-			}
+			check_enval(&env_val, &result, &pos);
 		}
 		else
 			result[pos++] = str[i++];

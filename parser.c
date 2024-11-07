@@ -6,39 +6,11 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 16:54:03 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/06 09:13:15 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/07 23:14:30 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	is_command(const char *token)
-{
-	return (token != NULL && !ft_isdigit(token[0]) && ft_strcmp(token, "|") != 0
-		&& ft_strcmp(token, "<") != 0 && ft_strcmp(token, ">") != 0
-		&& ft_strcmp(token, ">>") != 0 && ft_strcmp(token, "<<") != 0);
-}
-
-t_command	*add_command(t_command **commands, const char *command)
-{
-	t_command	*new_command;
-
-	new_command = malloc(sizeof(t_command));
-	if (!new_command)
-	{
-		perror("malloc");
-		return (NULL);
-	}
-	new_command->command = ft_strdup(command);
-	new_command->args = NULL;
-	new_command->interpret = NULL;
-	new_command->input_redir = NULL;
-	new_command->output_redir = NULL;
-	new_command->append = 0;
-	new_command->next = *commands;
-	*commands = new_command;
-	return (new_command);
-}
 
 int	is_redirection(const char *token)
 {
@@ -63,7 +35,8 @@ void	handle_redirection(t_token *token, t_command *current_cmd)
 
 int	is_argument(const char *token)
 {
-	return (token != NULL && !is_redirection(token) && ft_strcmp(token, "|") != 0);
+	return (token != NULL && !is_redirection(token) \
+		&& ft_strcmp(token, "|") != 0);
 }
 
 void	add_argument(t_command *cmd, t_token *token)
