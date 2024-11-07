@@ -34,6 +34,7 @@ t_command	*add_command(t_command **commands, const char *command)
 	new_command->input_redir = NULL;
 	new_command->output_redir = NULL;
 	new_command->append = 0;
+	new_command->heredoc = 0;
 	new_command->next = *commands;
 	*commands = new_command;
 	return (new_command);
@@ -56,8 +57,11 @@ void	handle_redirection(t_token *token, t_command *current_cmd)
 		current_cmd->output_redir = token->next->value;
 		current_cmd->append = 1;
 	}
-	else if (ft_strcmp(token->value, "<<") == 0)
+	else if (ft_strcmp(token->value, "<<") == 0 && token->next->value != NULL)
+	{
 		current_cmd->input_redir = token->next->value;
+		current_cmd->heredoc = 1;
+	}
 }
 
 int	is_argument(const char *token)

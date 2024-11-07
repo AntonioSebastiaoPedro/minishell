@@ -16,7 +16,10 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <fcntl.h>
 # include <signal.h>
+# include <errno.h>
+# include <sys/wait.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "libft/libft.h"
@@ -34,8 +37,11 @@ typedef struct s_command
 	char				*input_redir;
 	char				*output_redir;
 	int					append;
+	int					heredoc;
 	struct s_command	*next;
 }		t_command;
+
+extern volatile sig_atomic_t g_heredoc_interrupted;
 
 void		tokenize(char *line, t_token **tokens);
 t_token		*add_token(t_token *head, char *value);

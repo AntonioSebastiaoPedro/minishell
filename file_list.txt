@@ -1,0 +1,44 @@
+total 180
+-rw-r--r-- 1 ateca 2024_luanda  1296 Nov  5 15:12 add_token.c
+-rw-r--r-- 1 ateca 2024_luanda  4984 Nov  6 19:13 add_token.o
+-rw-r--r-- 1 ateca 2024_luanda  1073 Nov  5 15:12 cd.c
+-rw-r--r-- 1 ateca 2024_luanda  4304 Nov  6 19:13 cd.o
+-rw-r--r-- 1 ateca 2024_luanda  1215 Nov  5 15:12 echo.c
+-rw-r--r-- 1 ateca 2024_luanda  4528 Nov  6 19:13 echo.o
+-rw-r--r-- 1 ateca 2024_luanda  6354 Nov  5 15:11 execute.c
+-rw-r--r-- 1 ateca 2024_luanda     0 Nov  6 19:21 file_list.txt
+drwxr-xr-x 2 ateca 2024_luanda  4096 Nov  6 19:13 libft
+-rw-r--r-- 1 ateca 2024_luanda  1566 Nov  5 15:12 Makefile
+-rwxr-xr-x 1 ateca 2024_luanda 41384 Nov  6 19:20 minishell
+-rw-r--r-- 1 ateca 2024_luanda  7470 Nov  6 19:18 minishell.c
+-rw-r--r-- 1 ateca 2024_luanda  1702 Nov  5 16:03 minishell.h
+-rw-r--r-- 1 ateca 2024_luanda 23664 Nov  6 19:20 minishell.o
+-rw-r--r-- 1 ateca 2024_luanda    32 Nov  6 18:47 output.txt
+-rw-r--r-- 1 ateca 2024_luanda  3338 Nov  5 15:12 parser.c
+-rw-r--r-- 1 ateca 2024_luanda  9944 Nov  6 19:13 parser.o
+-rw-r--r-- 1 ateca 2024_luanda  1046 Nov  5 15:12 pwd.c
+-rw-r--r-- 1 ateca 2024_luanda  4384 Nov  6 19:13 pwd.o
+-rw-r--r-- 1 ateca 2024_luanda  2669 Nov  5 15:12 tokenize.c
+-rw-r--r-- 1 ateca 2024_luanda  8584 Nov  6 19:13 tokenize.o
+add_token.c
+add_token.o
+cd.c
+cd.o
+current_date.txt
+echo.c
+echo.o
+execute.c
+file_list.txt
+libft
+Makefile
+minishell
+minishell.c
+minishell.h
+minishell.o
+output.txt
+parser.c
+parser.o
+pwd.c
+pwd.o
+tokenize.c
+tokenize.o
