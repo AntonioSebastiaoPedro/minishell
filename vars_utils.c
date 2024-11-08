@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 19:36:42 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/07 23:24:16 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/08 11:46:06 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	extract_variable_name(const char *str, int *i, char *var_name)
 
 	j = 0;
 	(*i)++;
-	while (str[*i] && (isalnum(str[*i]) || str[*i] == '_'))
+	while (str[*i] && (ft_isalnum(str[*i]) || str[*i] == '_'))
 		var_name[j++] = str[(*i)++];
 	var_name[j] = '\0';
 }

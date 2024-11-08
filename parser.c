@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 16:54:03 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/07 23:14:30 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/08 11:58:55 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ void	handle_redirection(t_token *token, t_command *current_cmd)
 
 int	is_argument(const char *token)
 {
-	return (token != NULL && !is_redirection(token) \
-		&& ft_strcmp(token, "|") != 0);
+	return (token != NULL && !is_redirection(token) && ft_strcmp(token,
+			"|") != 0);
 }
 
 void	add_argument(t_command *cmd, t_token *token)
@@ -47,11 +47,13 @@ void	add_argument(t_command *cmd, t_token *token)
 	i = 0;
 	j = 0;
 	if (cmd->args)
+	{
 		while (cmd->args[i])
+		{
 			i++;
-	if (cmd->interpret)
-		while (cmd->interpret[j])
 			j++;
+		}
+	}
 	cmd->args = ft_realloc(cmd->args, sizeof(char *) * (i + 2));
 	cmd->args[i] = ft_strdup(token->value);
 	cmd->args[i + 1] = NULL;

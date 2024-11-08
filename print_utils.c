@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 19:34:35 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/07 20:41:27 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/08 11:49:06 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,10 @@ void	print_commands(t_command *commands)
 			i = -1;
 			printf("args:");
 			while (temp->args[++i] != NULL)
-				printf(" %s", temp->args[i]);
+			{
+				printf("%s ", temp->args[i]);
+				printf("\nInterpret: %d\n", temp->interpret[i]);
+			}
 			printf("\n");
 		}
 		printf("input_redir: %s\n", temp->input_redir);
