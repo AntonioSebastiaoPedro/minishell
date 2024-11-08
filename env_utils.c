@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 14:17:28 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/07 19:50:10 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/08 11:35:53 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ t_env	*add_env(t_env **envs, char *name)
 	t_env	*new_env;
 	char	*var;
 	char	*value;
+	char	*name_copy;
 
 	new_env = malloc(sizeof(t_env));
 	if (!new_env)
@@ -39,7 +40,8 @@ t_env	*add_env(t_env **envs, char *name)
 		perror("malloc");
 		return (NULL);
 	}
-	var = strtok(name, "=");
+	name_copy = strdup(name);
+	var = strtok(name_copy, "=");
 	value = strtok(NULL, "=");
 	new_env->var = var;
 	new_env->value = value;

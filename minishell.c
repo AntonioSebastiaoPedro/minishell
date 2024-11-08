@@ -6,29 +6,28 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 11:19:19 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/07 20:38:03 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/08 11:34:24 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	main(int ac, char **av, char **env)
+int	main(void)
 {
 	char		*line;
 	t_env		*env_dup;
 	t_token		*tokens;
 	t_command	*commands;
+	extern char	**environ;
 
-	(void)ac;
-	(void)av;
 	signal(SIGINT, handle_sigint);
 	signal(SIGQUIT, handle_sigquit);
 	env_dup = NULL;
-	envcpy(&env_dup, env);
+	envcpy(&env_dup, (char **)environ);
 	while (1)
 	{
 		tokens = NULL;
-		line = readline("akatsuki❟❛❟🥷🏻☁🩸> ");
+		line = readline("Akatsuki🌊🔥> ");
 		if (!line)
 			break ;
 		add_history(line);
