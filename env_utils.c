@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 14:17:28 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/09 18:40:05 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/09 18:56:05 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,30 +27,6 @@ void	update_index(t_env *head)
 	}
 }
 
-void	update_env(t_env **env, char *name)
-{
-	char	*var;
-	char	*value;
-	char	*name_copy;
-	int		show;
-
-	name_copy = ft_strdup(name);
-	show = 0;
-	if (ft_strchr(name_copy, '='))
-		show = 1;
-	var = strtok(name_copy, "=");
-	value = strtok(NULL, "=");
-	(*env)->var = var;
-	(*env)->value = value;
-	if (!var)
-		(*env)->var = ft_strdup("");
-	if (!value)
-		(*env)->value = ft_strdup("");
-	(*env)->index = 0;
-	(*env)->show = show;
-	(*env)->next = NULL;
-}
-
 t_env	*add_env(t_env **envs, char *name)
 {
 	t_env	*new_env;
@@ -59,36 +35,6 @@ t_env	*add_env(t_env **envs, char *name)
 	add_back(envs, new_env);
 	update_index(*envs);
 	return (new_env);
-}
-
-void	free_env(t_env **env)
-{
-	t_env	*current;
-	t_env	*next_node;
-
-	current = *env;
-	while (current != NULL)
-	{
-		next_node = current->next;
-		free(current->var);
-		if (current->value)
-			free(current->value);
-		free(current);
-		current = next_node;
-	}
-	*env = NULL;
-}
-
-void	envcpy(t_env **env_dup, char **src)
-{
-	int	i;
-
-	i = 0;
-	while (src[i])
-	{
-		add_env(env_dup, src[i]);
-		i++;
-	}
 }
 
 t_env	*last_env(t_env *head)
@@ -112,20 +58,6 @@ void	add_back(t_env **head, t_env *new_env)
 	}
 	else
 		*head = new_env;
-}
-
-t_env	*get_env(char *var, t_env **env, int (*cmp)())
-{
-	t_env *temp;
-	
-	temp = *env;
-	while (temp)
-	{
-		if (cmp(temp->var, var) == 0)
-			return (temp);
-		temp = temp->next;
-	}
-	return (NULL);
 }
 
 t_env	*ft_newenv(char *name)

@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 02:17:44 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/09 18:23:14 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/09 18:56:34 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,19 +41,57 @@ void	sort_str_list(t_env *tab, int (*cmp)(const char *str1,
 	}
 }
 
+void	update_env(t_env **env, char *name)
+{
+	char	*var;
+	char	*value;
+	char	*name_copy;
+	int		show;
+
+	name_copy = ft_strdup(name);
+	show = 0;
+	if (ft_strchr(name_copy, '='))
+		show = 1;
+	var = strtok(name_copy, "=");
+	value = strtok(NULL, "=");
+	(*env)->var = var;
+	(*env)->value = value;
+	if (!var)
+		(*env)->var = ft_strdup("");
+	if (!value)
+		(*env)->value = ft_strdup("");
+	(*env)->index = 0;
+	(*env)->show = show;
+	(*env)->next = NULL;
+}
+
+t_env	*get_env(char *var, t_env **env, int (*cmp)())
+{
+	t_env	*temp;
+
+	temp = *env;
+	while (temp)
+	{
+		if (cmp(temp->var, var) == 0)
+			return (temp);
+		temp = temp->next;
+	}
+	return (NULL);
+}
+
 void	add_args_env(char **args, t_env **env)
 {
-	int	i;
+	int		i;
 	char	var[70000];
-	t_env *new_env;
+	t_env	*new_env;
 
 	i = -1;
 	while (args[++i])
 	{
 		if (!ft_isword(args[i]))
 		{
-			printf("minishell: export: Invalid identifier %s\n",
-				strtok(args[i], "="));
+			printf("minishell: export: Invalid identifier %s\n", strtok(args[i],
+					"="));
 			continue ;
 		}
 		ft_strcpy(var, args[i]);

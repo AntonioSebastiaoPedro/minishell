@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 15:51:48 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/09 15:48:56 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/09 18:51:16 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	ft_isword(const char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (!str || str[0] == '\0')
