@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 19:37:31 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/09 19:43:58 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/09 21:43:16 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	exec_builtin(t_command *cmd, t_env **env)
 	else if (ft_strcmp(cmd->command, "unset") == 0)
 		ft_unset(cmd, env);
 	else if (ft_strcmp(cmd->command, "exit") == 0)
-		exit(0);
+		ft_exit(cmd);
 }
 
 int	is_builtin(const char *cmd)

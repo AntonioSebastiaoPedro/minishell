@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 11:25:08 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/09 19:22:33 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/09 21:12:09 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ void					print_commands(t_command *commands);
 void					free_tokens(t_token *tokens);
 void					add_back(t_env **head, t_env *new_env);
 void					ft_unset(t_command *cmd, t_env **env);
+void					ft_exit(t_command *cmd);
 void					extract_variable_name(const char *str, int *i,
 							char *var_name);
 void					update_env(t_env **env, char *name);
