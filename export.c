@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 02:17:44 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/07 19:11:30 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/09 15:47:52 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,13 @@ void	sort_str_list(t_env *tab, int (*cmp)(const char *str1,
 	}
 }
 
-void	ft_export(t_command *cmd, t_env *env)
+void	ft_export(t_command *cmd, t_env **env)
 {
 	t_env	*env_dup;
+	int		i;
 
-	env_dup = env;
-	if (!cmd->args || !cmd->args[0])
+	env_dup = *env;
+	if (!cmd->args)
 	{
 		sort_str_list(env_dup, ft_strcmp);
 		while (env_dup)
@@ -56,4 +57,18 @@ void	ft_export(t_command *cmd, t_env *env)
 			env_dup = env_dup->next;
 		}
 	}
+	else
+	{
+		i = -1;
+		while (cmd->args[++i])
+		{
+			if (!ft_isword(cmd->args[i]))
+			{
+				printf("minishell: export: Invalid identifier %s\n", strtok(cmd->args[i], "="));
+				continue;
+			}
+			add_env(env, cmd->args[i]);
+		}
+	}
 }
+

@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 11:19:57 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/07 20:42:49 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/08 14:07:00 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	sort_index_list(t_env *tab)
 	}
 }
 
-int	ft_env(t_command *cmd, t_env *env)
+int	ft_env(t_command *cmd, t_env **env)
 {
 	t_env	*temp;
 
@@ -49,11 +49,12 @@ int	ft_env(t_command *cmd, t_env *env)
 		ft_putstr_fd("env: No options or arguments should be passed\n", 2);
 		return (1);
 	}
-	temp = env;
+	temp = *env;
 	sort_index_list(temp);
 	while (temp)
 	{
-		printf("%s=%s\n", temp->var, temp->value);
+		if (temp->show)
+			printf("%s=%s\n", temp->var, temp->value);
 		temp = temp->next;
 	}
 	return (0);

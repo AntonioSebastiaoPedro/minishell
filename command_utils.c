@@ -6,13 +6,13 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 19:41:38 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/07 23:13:53 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/08 12:08:45 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	execute_commands(t_command *cmd, t_env *env)
+void	execute_commands(t_command *cmd, t_env **env)
 {
 	int	i;
 

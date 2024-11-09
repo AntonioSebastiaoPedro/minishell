@@ -6,13 +6,13 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 19:37:31 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/07 20:44:19 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/08 12:09:01 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	exec_builtin(t_command *cmd, t_env *env)
+void	exec_builtin(t_command *cmd, t_env **env)
 {
 	if (ft_strcmp(cmd->command, "echo") == 0)
 		ft_echo(cmd->args);

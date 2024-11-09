@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 11:32:38 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/06 13:02:00 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/08 16:00:40 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ int					ft_tolower(int c);
 int					ft_toupper(int c);
 int					ft_isascii(int c);
 int					ft_atoi(const char *str);
+int					ft_isword(const char *str);
 char				*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 char				*ft_itoa(int n);
 char				*get_next_line(int fd);

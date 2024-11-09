@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 14:06:56 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/06 08:51:07 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/09 08:50:07 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	handle_word(const char *line, int *i, t_token **tokens)
 
 	j = 0;
 	while (line[*i] && !ft_isspace(line[*i]) && line[*i] != '|' && line[*i]
-		!= '>' && line[*i] != '<')
+		!= '>' && line[*i] != '<')// && line[*i] != '"' && line[*i] != '\'')
 	{
 		buffer[j++] = line[(*i)++];
 	}
