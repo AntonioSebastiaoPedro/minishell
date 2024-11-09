@@ -6,14 +6,14 @@
 #    By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/30 11:44:28 by ateca             #+#    #+#              #
-#    Updated: 2024/11/08 16:19:42 by ansebast         ###   ########.fr        #
+#    Updated: 2024/11/09 18:45:17 by ansebast         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 
 SRCS = builtins_utils.c command_utils.c env.c export.c print_utils.c signal_hnadlers.c token_utils.c vars_utils.c \
-	cd.c echo.c  env_utils.c minishell.c parser.c  pwd.c tokenize.c
+	cd.c echo.c  env_utils.c minishell.c parser.c  pwd.c tokenize.c unset.c
 
 LIBFT = $(LIBSRC)/libft.a
 LIBSRC = ./libft

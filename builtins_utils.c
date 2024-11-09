@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 19:37:31 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/08 12:09:01 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/09 18:44:38 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ void	exec_builtin(t_command *cmd, t_env **env)
 		ft_env(cmd, env);
 	else if (ft_strcmp(cmd->command, "export") == 0)
 		ft_export(cmd, env);
+	else if (ft_strcmp(cmd->command, "unset") == 0)
+		ft_unset(cmd, env);
 	else if (ft_strcmp(cmd->command, "exit") == 0)
 		exit(0);
 }

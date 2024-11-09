@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 14:17:28 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/09 18:16:38 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/09 18:40:05 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ void	add_back(t_env **head, t_env *new_env)
 		*head = new_env;
 }
 
-t_env	*get_env(char *var, t_env **env, int (*cmp)(const char *str1, const char *str2))
+t_env	*get_env(char *var, t_env **env, int (*cmp)())
 {
 	t_env *temp;
 	
