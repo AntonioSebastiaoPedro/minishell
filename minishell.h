@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 11:25:08 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/09 18:40:05 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/09 19:22:33 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int						is_command(const char *token);
 void					tokenize(char *line, t_token **tokens);
 void					ft_echo(char **args);
 void					ft_pwd(void);
-void					ft_cd(char **args);
+void					ft_cd(char **args, t_env **env);
 void					ft_export(t_command *cmd, t_env **env);
 void					free_env(t_env **env);
 void					exec_builtin(t_command *cmd, t_env **env);
@@ -73,14 +73,14 @@ void					extract_variable_name(const char *str, int *i,
 							char *var_name);
 void					update_env(t_env **env, char *name);
 char					*expand_variables(const char *str, t_command *cmd,
-							int *arg_pos);
+							int *arg_pos, t_env **env);
 t_env					*add_env(t_env **envs, char *name);
 t_token					*add_token(t_token *head, char *value, int interpret);
 t_command				*parse_tokens(t_token *tokens);
 t_command				*add_command(t_command **commands, const char *command);
 t_env					*ft_newenv(char *name);
 t_env					*last_env(t_env *head);
-t_env					*get_env(char *var, t_env **env,
-							int (*cmp)());
+t_env					*get_env(char *var, t_env **env, int (*cmp)());
+char					*get_env_value(char *var, t_env **env, int (*cmp)());
 
 #endif

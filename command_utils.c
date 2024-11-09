@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 19:41:38 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/08 12:08:45 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/09 19:18:03 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	execute_commands(t_command *cmd, t_env **env)
 		i = -1;
 		if (cmd->args)
 			while (cmd->args[++i])
-				cmd->args[i] = expand_variables(cmd->args[i], cmd, &i);
+				cmd->args[i] = expand_variables(cmd->args[i], cmd, &i, env);
 		if (is_builtin(cmd->command))
 			exec_builtin(cmd, env);
 		else
