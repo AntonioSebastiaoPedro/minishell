@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 02:17:44 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/09 15:47:52 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/09 15:56:05 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,26 @@ void	sort_str_list(t_env *tab, int (*cmp)(const char *str1,
 	}
 }
 
+void	add_args_env(char **args, t_env **env)
+{
+	int	i;
+
+	i = -1;
+	while (args[++i])
+	{
+		if (!ft_isword(args[i]))
+		{
+			printf("minishell: export: Invalid identifier %s\n",
+				strtok(args[i], "="));
+			continue ;
+		}
+		add_env(env, args[i]);
+	}
+}
+
 void	ft_export(t_command *cmd, t_env **env)
 {
 	t_env	*env_dup;
-	int		i;
 
 	env_dup = *env;
 	if (!cmd->args)
@@ -58,17 +74,5 @@ void	ft_export(t_command *cmd, t_env **env)
 		}
 	}
 	else
-	{
-		i = -1;
-		while (cmd->args[++i])
-		{
-			if (!ft_isword(cmd->args[i]))
-			{
-				printf("minishell: export: Invalid identifier %s\n", strtok(cmd->args[i], "="));
-				continue;
-			}
-			add_env(env, cmd->args[i]);
-		}
-	}
+		add_args_env(cmd->args, env);
 }
-
