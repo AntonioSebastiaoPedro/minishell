@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 11:25:08 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/08 12:41:00 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/09 17:10:39 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ void					free_tokens(t_token *tokens);
 void					add_back(t_env **head, t_env *new_env);
 void					extract_variable_name(const char *str, int *i,
 							char *var_name);
+void					update_env(t_env **env, char *name);
 char					*expand_variables(const char *str, t_command *cmd,
 							int *arg_pos);
 t_env					*add_env(t_env **envs, char *name);
@@ -78,5 +79,7 @@ t_command				*parse_tokens(t_token *tokens);
 t_command				*add_command(t_command **commands, const char *command);
 t_env					*ft_newenv(char *name);
 t_env					*last_env(t_env *head);
+t_env					*get_env(char *var, t_env **env, int (*cmp)(const char *str1,
+								const char *str2));
 
 #endif

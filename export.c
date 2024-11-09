@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 02:17:44 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/09 15:56:05 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/09 18:23:14 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ void	sort_str_list(t_env *tab, int (*cmp)(const char *str1,
 void	add_args_env(char **args, t_env **env)
 {
 	int	i;
+	char	var[70000];
+	t_env *new_env;
 
 	i = -1;
 	while (args[++i])
@@ -54,7 +56,13 @@ void	add_args_env(char **args, t_env **env)
 				strtok(args[i], "="));
 			continue ;
 		}
-		add_env(env, args[i]);
+		ft_strcpy(var, args[i]);
+		strtok(var, "=");
+		new_env = get_env(var, env, ft_strcmp);
+		if (new_env)
+			update_env(&new_env, args[i]);
+		else
+			add_env(env, args[i]);
 	}
 }
 
