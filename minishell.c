@@ -205,7 +205,7 @@ void	handle_sigterm_heredoc(int signum)
 	exit(1);
 }
 
-int	handle_heredoc(char *delimiter)
+int	handle_heredoc(char *delimiter, pid_t child_pid)
 {
 	int		pipe_fds[2];
 	int		write_check;
@@ -238,21 +238,33 @@ int	handle_heredoc(char *delimiter)
 	close(pipe_fds[1]);
 	dup2(pipe_fds[0], STDIN_FILENO);
 	close(pipe_fds[0]);
-	return (getpid());
+	return (child_pid);
 }
 
 int	handle_input_redirection(t_command *cmd)
 {
 	int		fd;
 	int		status;
+	int		pipe_fd[2];
 	pid_t	pid;
+	pid_t	child_pid;
 
 	if (cmd->heredoc)
 	{
 		signal(SIGINT, SIG_IGN);
+		if (pipe(pipe_fd) == -1)
+		{
+			perror("pipe failed");
+			return (-1);
+		}
 		pid = fork();
 		if (pid == 0)
-			return (handle_heredoc(cmd->input_redir));
+		{
+			close(pipe_fd[1]);
+			read(pipe_fd[0], &child_pid, sizeof(child_pid));
+			close(pipe_fd[0]);
+			return (handle_heredoc(cmd->input_redir, child_pid));
+		}
 		else if (pid < 0)
 		{
 			signal(SIGINT, handle_sigint);
@@ -261,6 +273,9 @@ int	handle_input_redirection(t_command *cmd)
 		}
 		else
 		{
+			close(pipe_fd[0]);
+			write(pipe_fd[1], &pid, sizeof(pid));
+			close(pipe_fd[1]);
 			waitpid(pid, &status, 0);
 			signal(SIGINT, handle_sigint);
 			if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
@@ -462,7 +477,8 @@ int	main(int argc, char *argv[], char **envp)
 	while (1)
 	{	
 		tokens = NULL;
-		line = readline("\033[1m\033[33mansebastian@ateca\033[0m-\033[1m\033[35mAkatsuki\033[0m:\033[1m\033[36m~/minishell\033[0m$ ");
+		line = readline("ansebastian@ateca-Akastuki:~/minishell$ ");
+		//line = readline("\033[1m\033[33mansebastian@ateca\033[0m-\033[1m\033[35mAkatsuki\033[0m:\033[1m\033[36m~/minishell\033[0m$ ");
 		if (!line)
 			break ;
 		add_history(line);
