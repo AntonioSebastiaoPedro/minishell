@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-void	handle_redirection_and_pipes(const char *line, int *i, t_token **tokens)
+void	handle_redirection_and_pipes(char *line, int *i, t_token **tokens)
 {
 	char	operator[2];
 

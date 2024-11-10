@@ -58,16 +58,16 @@ int	is_redirection(const char *token)
 void	handle_redirection(t_token *token, t_command *current_cmd, int *skip_file)
 {
 	*skip_file = 1;
-	if (ft_strcmp(token->value, ">") == 0)
+	if (ft_strcmp(token->value, ">") == 0 && token->next != NULL)
 		current_cmd->output_redir = token->next->value;
-	else if (ft_strcmp(token->value, "<") == 0)
+	else if (ft_strcmp(token->value, "<") == 0 && token->next != NULL)
 		current_cmd->input_redir = token->next->value;
-	else if (ft_strcmp(token->value, ">>") == 0)
+	else if (ft_strcmp(token->value, ">>") == 0 && token->next != NULL)
 	{
 		current_cmd->output_redir = token->next->value;
 		current_cmd->append = 1;
 	}
-	else if (ft_strcmp(token->value, "<<") == 0 && token->next->value != NULL)
+	else if (ft_strcmp(token->value, "<<") == 0 && token->next != NULL)
 	{
 		current_cmd->input_redir = token->next->value;
 		current_cmd->heredoc = 1;
