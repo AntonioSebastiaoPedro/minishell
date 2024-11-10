@@ -129,7 +129,7 @@ t_command	*parse_tokens(t_token *tokens)
 			handle_redirection(tokens, current_cmd, &skip_file);
 		else if (is_argument(tokens->value) && current_cmd)
 			add_argument(current_cmd, tokens->value);
-		else if (current_cmd == NULL)
+		else if (current_cmd == NULL && tokens->next == NULL)
 			case_redirection_print_message_error(tokens->value);
 		tokens = tokens->next;
 	}
