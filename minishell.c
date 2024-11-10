@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-volatile sig_atomic_t g_heredoc_interrupted = 0;
+volatile sig_atomic_t g_execute_command = 1;
 
 void	free_commands(t_command *commands)
 {
@@ -59,7 +59,7 @@ void	free_tokens(t_token *tokens)
 void	handle_sigint(int sig)
 {
 	(void)sig;
-	printf("\n");
+	write(STDERR_FILENO, "\n", 1);
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
@@ -184,8 +184,8 @@ int	handle_output_redirection(t_command *cmd)
 	fd = open(cmd->output_redir, flags, 0644);
 	if (fd < 0)
 	{
-		printf("minishell: %s: %s\n", strerror(errno), cmd->output_redir);
-		exit(1);
+		printf("minishell: %s: %s\n", cmd->output_redir, strerror(errno));
+		return (-1);
 	}
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
@@ -195,15 +195,25 @@ int	handle_output_redirection(t_command *cmd)
 void	handle_sigint_heredoc(int signum)
 {
 	(void)signum;
+	write(STDERR_FILENO, "\n", 1);
+	exit(0);
+}
+
+void	handle_sigterm_heredoc(int signum)
+{
+	(void)signum;
 	exit(1);
 }
 
 int	handle_heredoc(char *delimiter)
 {
 	int		pipe_fds[2];
+	int		write_check;
 	char	*line;
 
+	write_check = 0;
 	signal(SIGINT, handle_sigint_heredoc);
+	signal(SIGTERM, handle_sigterm_heredoc);
 	if (pipe(pipe_fds) == -1)
 	{
 		perror("pipe failed");
@@ -215,16 +225,20 @@ int	handle_heredoc(char *delimiter)
 		if (!line || strcmp(line, delimiter) == 0)
 		{
 			free(line);
-			break  ;
+			if (write_check == 0)
+				exit(1);
+			break ;
 		}
 		write(pipe_fds[1], line, strlen(line));
 		write(pipe_fds[1], "\n", 1);
+		write_check = 1;
 		free(line);
+		g_execute_command = 1;
 	}
 	close(pipe_fds[1]);
 	dup2(pipe_fds[0], STDIN_FILENO);
 	close(pipe_fds[0]);
-	return (0);
+	return (getpid());
 }
 
 int	handle_input_redirection(t_command *cmd)
@@ -233,30 +247,43 @@ int	handle_input_redirection(t_command *cmd)
 	int		status;
 	pid_t	pid;
 
-	if (cmd->input_redir && cmd->heredoc)
+	if (cmd->heredoc)
 	{
+		signal(SIGINT, SIG_IGN);
 		pid = fork();
 		if (pid == 0)
-			handle_heredoc(cmd->input_redir);
+			return (handle_heredoc(cmd->input_redir));
 		else if (pid < 0)
 		{
+			signal(SIGINT, handle_sigint);
 			perror("fork failed");
-			exit(1);
+			return (-1);
 		}
 		else
 		{
 			waitpid(pid, &status, 0);
+			signal(SIGINT, handle_sigint);
 			if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
+			{
+				g_execute_command = 1;
 				return (-1);
+			}
+			else
+			{
+				if (cmd->next != NULL)
+					g_execute_command = 0;
+				return (-1);
+			}
+			
 		}
 	}
-	else if (cmd->input_redir)
+	else
 	{
 		fd = open(cmd->input_redir, O_RDONLY);
 		if (fd < 0)
 		{
-			printf("minishell: %s: %s\n", strerror(errno), cmd->input_redir);
-			exit(1);
+			printf("minishell: %s: %s\n",  cmd->input_redir, strerror(errno));
+			return (-1);
 		}
 		dup2(fd, STDIN_FILENO);
 		close(fd);
@@ -371,7 +398,7 @@ void	execute_external_command(t_command *cmd, char **envp)
 	else if (pid < 0)
 	{
 		perror("fork failed");
-		exit(1);
+		return ;
 	}
 	else
 		waitpid(pid, NULL, 0);
@@ -380,29 +407,40 @@ void	execute_external_command(t_command *cmd, char **envp)
 void	execute_commands(t_command *cmd, char **envp)
 {
 	int	i;
+	int	pid_heredoc;
 	int	original_stdin;
 	int	original_stdout;
 	
-	(void)envp;
+	pid_heredoc = 0;
 	original_stdin = dup(STDIN_FILENO);
 	original_stdout = dup(STDOUT_FILENO);
 	while (cmd)
 	{
 		i = -1;
 		if (cmd->args)
+		{
+			g_execute_command = 1;
 			while (cmd->args[++i])
 				cmd->args[i] = expand_variables(cmd->args[i]);
-		if (handle_redirections(cmd) != 0)
+		}
+		pid_heredoc = handle_redirections(cmd);
+		if (pid_heredoc == -1)
 		{
 			cmd = cmd->next;
 			continue ;
 		}
 		if (is_builtin(cmd->command))
 		{
+			g_execute_command = 1;
 			exec_builtin(cmd);
 		}
-		else
+		else if (g_execute_command == 1)
+		{
 			execute_external_command(cmd, envp);
+			if (pid_heredoc != 0)
+				kill(pid_heredoc, SIGTERM);
+		} else
+			g_execute_command = 1;
 		cmd = cmd->next;
 	}
 	dup2(original_stdin, STDIN_FILENO);
@@ -422,15 +460,9 @@ int	main(int argc, char *argv[], char **envp)
 	signal(SIGINT, handle_sigint);
 	signal(SIGQUIT, handle_sigquit);
 	while (1)
-	{
+	{	
 		tokens = NULL;
-		/*printf("g_heredoc_interrupted: %d\n", g_heredoc_interrupted);
-		if (g_heredoc_interrupted == 1)
-		{
-			printf("g_heredoc_interrupted: %d\n", g_heredoc_interrupted);
-			handle_sigint(1);
-		}*/
-		line = readline("akatsuki> ");
+		line = readline("\033[1m\033[33mansebastian@ateca\033[0m-\033[1m\033[35mAkatsuki\033[0m:\033[1m\033[36m~/minishell\033[0m$ ");
 		if (!line)
 			break ;
 		add_history(line);

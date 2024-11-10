@@ -22,6 +22,7 @@ int	is_command(const char *token)
 t_command	*add_command(t_command **commands, const char *command)
 {
 	t_command	*new_command;
+	t_command	*current;
 
 	new_command = malloc(sizeof(t_command));
 	if (!new_command)
@@ -35,8 +36,16 @@ t_command	*add_command(t_command **commands, const char *command)
 	new_command->output_redir = NULL;
 	new_command->append = 0;
 	new_command->heredoc = 0;
-	new_command->next = *commands;
-	*commands = new_command;
+	new_command->next = NULL;
+	if (*commands == NULL)
+		*commands = new_command;
+	else
+	{
+		current = *commands;
+		while (current->next != NULL)
+			current  = current->next;
+		current->next = new_command;
+	}
 	return (new_command);
 }
 
