@@ -41,8 +41,6 @@ typedef struct s_command
 	struct s_command	*next;
 }		t_command;
 
-extern volatile sig_atomic_t g_heredoc_interrupted;
-
 void		tokenize(char *line, t_token **tokens);
 t_token		*add_token(t_token *head, char *value);
 t_command	*parse_tokens(t_token *tokens);

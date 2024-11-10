@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-volatile sig_atomic_t g_execute_command = 1;
+pid_t g_child_pid = 0;
 
 void	free_commands(t_command *commands)
 {
@@ -233,7 +233,6 @@ int	handle_heredoc(char *delimiter, pid_t child_pid)
 		write(pipe_fds[1], "\n", 1);
 		write_check = 1;
 		free(line);
-		g_execute_command = 1;
 	}
 	close(pipe_fds[1]);
 	dup2(pipe_fds[0], STDIN_FILENO);
@@ -279,14 +278,11 @@ int	handle_input_redirection(t_command *cmd)
 			waitpid(pid, &status, 0);
 			signal(SIGINT, handle_sigint);
 			if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
-			{
-				g_execute_command = 1;
 				return (-1);
-			}
 			else
 			{
 				if (cmd->next != NULL)
-					g_execute_command = 0;
+					return (-2);
 				return (-1);
 			}
 			
@@ -384,12 +380,24 @@ char	*find_executable_path(char *command)
 	return (NULL);
 }
 
+void	handle_sigint_external_command(int signum)
+{
+	(void)signum;
+	if (g_child_pid > 0)
+	{
+		write(STDERR_FILENO, "\n", 1);
+		kill(g_child_pid, SIGINT);
+	}
+}
+
 void	execute_external_command(t_command *cmd, char **envp)
 {
 	char	**new_args;
 	char	*executable_path;
 	pid_t	pid;
 
+	signal(SIGINT, SIG_IGN);
+	signal(SIGINT, handle_sigint_external_command);
 	pid = fork();
 	if (pid == 0)
 	{
@@ -411,22 +419,24 @@ void	execute_external_command(t_command *cmd, char **envp)
 		exit(errno);
 	}
 	else if (pid < 0)
-	{
 		perror("fork failed");
-		return ;
-	}
 	else
+	{
+		g_child_pid = pid;
 		waitpid(pid, NULL, 0);
+		g_child_pid = 0;
+		signal(SIGINT, handle_sigint);
+	}
 }
 
 void	execute_commands(t_command *cmd, char **envp)
 {
 	int	i;
-	int	pid_heredoc;
+	int	result;
 	int	original_stdin;
 	int	original_stdout;
 	
-	pid_heredoc = 0;
+	result = 0;
 	original_stdin = dup(STDIN_FILENO);
 	original_stdout = dup(STDOUT_FILENO);
 	while (cmd)
@@ -434,28 +444,24 @@ void	execute_commands(t_command *cmd, char **envp)
 		i = -1;
 		if (cmd->args)
 		{
-			g_execute_command = 1;
 			while (cmd->args[++i])
 				cmd->args[i] = expand_variables(cmd->args[i]);
 		}
-		pid_heredoc = handle_redirections(cmd);
-		if (pid_heredoc == -1)
+		result = handle_redirections(cmd);
+		if (result == -1)
 		{
 			cmd = cmd->next;
 			continue ;
-		}
+		} else if (result == -2)
+			break ;
 		if (is_builtin(cmd->command))
-		{
-			g_execute_command = 1;
 			exec_builtin(cmd);
-		}
-		else if (g_execute_command == 1)
+		else
 		{
 			execute_external_command(cmd, envp);
-			if (pid_heredoc != 0)
-				kill(pid_heredoc, SIGTERM);
-		} else
-			g_execute_command = 1;
+			if (result != 0)
+				kill(result, SIGTERM);
+		} 
 		cmd = cmd->next;
 	}
 	dup2(original_stdin, STDIN_FILENO);
