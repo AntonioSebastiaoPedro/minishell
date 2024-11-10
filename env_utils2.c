@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 18:53:51 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/09 18:57:51 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/10 14:59:06 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,4 +40,53 @@ void	envcpy(t_env **env_dup, char **src)
 		add_env(env_dup, src[i]);
 		i++;
 	}
+}
+
+static int	count_visible_vars(t_env *env_list)
+{
+	int	count;
+
+	count = 0;
+	while (env_list)
+	{
+		if (env_list->show == 1)
+			count++;
+		env_list = env_list->next;
+	}
+	return (count);
+}
+
+char	**env_list_to_array(t_env *env_list)
+{
+	int		i;
+	int		len;
+	int		visible_count;
+	char	**env_array;
+
+	visible_count = count_visible_vars(env_list);
+	env_array = malloc((visible_count + 1) * sizeof(char *));
+	i = 0;
+	if (!env_array)
+		return (NULL);
+	while (env_list)
+	{
+		if (env_list->show == 1)
+		{
+			len = ft_strlen(env_list->var) + ft_strlen(env_list->value) + 2;
+			env_array[i] = malloc(len * sizeof(char));
+			if (!env_array[i])
+			{
+				while (i > 0)
+					free(env_array[--i]);
+				free(env_array);
+				return (NULL);
+			}
+			snprintf(env_array[i], len, "%s=%s", env_list->var,
+				env_list->value);
+			i++;
+		}
+		env_list = env_list->next;
+	}
+	env_array[i] = NULL;
+	return (env_array);
 }

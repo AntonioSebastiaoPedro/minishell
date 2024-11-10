@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 11:32:38 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/08 16:00:40 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/10 14:25:33 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,10 @@ char				*ft_strnstr(const char *big, const char *little,
 size_t				ft_strlcat(char *dst, const char *src, size_t size);
 size_t				ft_strlcpy(char *dst, const char *src, size_t size);
 size_t				ft_strlen(const char *str);
+char				*ft_strjoin_delimiter(char const *s1, char const delim,
+						char const *s2);
+char				*ft_strtok(char *env_path, const char delim,
+						char **next_path);
 typedef struct s_list
 {
 	void			*content;
