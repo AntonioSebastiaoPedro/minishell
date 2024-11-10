@@ -55,8 +55,9 @@ int	is_redirection(const char *token)
 		|| ft_strcmp(token, ">>") == 0 || ft_strcmp(token, "<<") == 0);
 }
 
-void	handle_redirection(t_token *token, t_command *current_cmd)
+void	handle_redirection(t_token *token, t_command *current_cmd, int *skip_file)
 {
+	*skip_file = 1;
 	if (ft_strcmp(token->value, ">") == 0)
 		current_cmd->output_redir = token->next->value;
 	else if (ft_strcmp(token->value, "<") == 0)
@@ -95,6 +96,18 @@ void	add_argument(t_command *cmd, const char *arg)
 	cmd->args[count + 1] = NULL;
 }
 
+void	case_redirection_print_message_error(char *operator)
+{
+	if (ft_strcmp(operator, ">") == 0 || ft_strcmp(operator, "<") == 0
+		|| ft_strcmp(operator, ">>") == 0 || ft_strcmp(operator, "<<") == 0)
+	{
+		write(2, "bash: syntax error near unexpected token `newline'", 50);
+		write(2, "\n", 1);
+	}
+	else if (ft_strcmp(operator, "|") == 0)
+		write(2, "bash: syntax error near unexpected token `|'\n", 45);
+}
+
 t_command	*parse_tokens(t_token *tokens)
 {
 	int			skip_file;
@@ -110,15 +123,14 @@ t_command	*parse_tokens(t_token *tokens)
 			skip_file = 0;
 		else if (is_command(tokens->value) && !current_cmd)
 			current_cmd = add_command(&commands, tokens->value);
-		else if (ft_strcmp(tokens->value, "|") == 0)
+		else if (ft_strcmp(tokens->value, "|") == 0 && current_cmd)
 			current_cmd = NULL;
 		else if (is_redirection(tokens->value) && current_cmd)
-		{
-			handle_redirection(tokens, current_cmd);
-			skip_file = 1;
-		}
+			handle_redirection(tokens, current_cmd, &skip_file);
 		else if (is_argument(tokens->value) && current_cmd)
 			add_argument(current_cmd, tokens->value);
+		else if (current_cmd == NULL)
+			case_redirection_print_message_error(tokens->value);
 		tokens = tokens->next;
 	}
 	return (commands);
