@@ -250,12 +250,12 @@ int	handle_input_redirection(t_command *cmd)
 
 	if (cmd->heredoc)
 	{
-		signal(SIGINT, SIG_IGN);
 		if (pipe(pipe_fd) == -1)
 		{
 			perror("pipe failed");
-			return (-1);
+			return (-2);
 		}
+		signal(SIGINT, SIG_IGN);
 		pid = fork();
 		if (pid == 0)
 		{
