@@ -19,7 +19,7 @@ int	is_command(const char *token)
 		&& ft_strcmp(token, ">>") != 0 && ft_strcmp(token, "<<") != 0);
 }
 
-t_command	*add_command(t_command **commands, const char *command)
+t_command	*add_command(t_command **commands, char *command)
 {
 	t_command	*new_command;
 	t_command	*current;
@@ -30,7 +30,7 @@ t_command	*add_command(t_command **commands, const char *command)
 		perror("malloc");
 		return (NULL);
 	}
-	new_command->command = ft_strdup(command);
+	new_command->command = command;
 	new_command->args = NULL;
 	new_command->input_redir = NULL;
 	new_command->output_redir = NULL;
@@ -122,7 +122,12 @@ t_command	*parse_tokens(t_token *tokens)
 		if (skip_file)
 			skip_file = 0;
 		else if (is_command(tokens->value) && !current_cmd)
-			current_cmd = add_command(&commands, tokens->value);
+			current_cmd = add_command(&commands, ft_strdup(tokens->value));
+		else if (is_redirection(tokens->value) && current_cmd == NULL)
+		{
+			current_cmd = add_command(&commands, NULL);
+			handle_redirection(tokens, current_cmd, &skip_file);
+		}
 		else if (ft_strcmp(tokens->value, "|") == 0 && current_cmd)
 			current_cmd = NULL;
 		else if (is_redirection(tokens->value) && current_cmd)

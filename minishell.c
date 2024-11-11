@@ -454,7 +454,7 @@ void	execute_commands(t_command *cmd, char **envp)
 			continue ;
 		} else if (result == -2)
 			break ;
-		if (is_builtin(cmd->command))
+		if (cmd->command != NULL && is_builtin(cmd->command))
 			exec_builtin(cmd);
 		else
 		{
