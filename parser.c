@@ -121,8 +121,10 @@ t_command	*parse_tokens(t_token *tokens)
 	{
 		if (skip_file)
 			skip_file = 0;
-		else if (is_command(tokens->value) && !current_cmd)
+		else if (is_command(tokens->value) && current_cmd == NULL)
 			current_cmd = add_command(&commands, ft_strdup(tokens->value));
+		else if (current_cmd == NULL && tokens->next == NULL)
+			case_redirection_print_message_error(tokens->value);
 		else if (is_redirection(tokens->value) && current_cmd == NULL)
 		{
 			current_cmd = add_command(&commands, NULL);
@@ -134,8 +136,6 @@ t_command	*parse_tokens(t_token *tokens)
 			handle_redirection(tokens, current_cmd, &skip_file);
 		else if (is_argument(tokens->value) && current_cmd)
 			add_argument(current_cmd, tokens->value);
-		else if (current_cmd == NULL && tokens->next == NULL)
-			case_redirection_print_message_error(tokens->value);
 		tokens = tokens->next;
 	}
 	return (commands);
