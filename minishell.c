@@ -277,7 +277,7 @@ int	handle_input_redirection(t_command *cmd)
 			close(pipe_fd[1]);
 			waitpid(pid, &status, 0);
 			signal(SIGINT, handle_sigint);
-			if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
+			if (WIFEXITED(status) != 0 && WEXITSTATUS(status) != 0)
 				return (-1);
 			else
 			{
