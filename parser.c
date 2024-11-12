@@ -36,6 +36,8 @@ t_command	*add_command(t_command **commands, char *command)
 	new_command->output_redir = NULL;
 	new_command->append = 0;
 	new_command->heredoc = 0;
+	new_command->write_pipe_fd = -1;
+	new_command->read_pipe_fd = -1;
 	new_command->next = NULL;
 	if (*commands == NULL)
 		*commands = new_command;

@@ -401,11 +401,21 @@ void	execute_external_command(t_command *cmd, char **envp)
 	pid = fork();
 	if (pid == 0)
 	{
+		if (cmd->write_pipe_fd != -1)
+		{
+			dup2(cmd->write_pipe_fd, STDOUT_FILENO);
+			close(cmd->write_pipe_fd);
+		}
+		if (cmd->read_pipe_fd != -1)
+		{
+			dup2(cmd->read_pipe_fd, STDIN_FILENO);
+			close(cmd->read_pipe_fd);
+		}
 		executable_path = find_executable_path(cmd->command);
 		if (!executable_path)
 		{
 			printf("minishell: command not found: %s\n", cmd->command);
-			exit(1);
+			exit(127);
 		}
 		new_args = prepare_args(executable_path, cmd->args);
 		if (!new_args)
@@ -425,6 +435,10 @@ void	execute_external_command(t_command *cmd, char **envp)
 		g_child_pid = pid;
 		waitpid(pid, NULL, 0);
 		g_child_pid = 0;
+		if (cmd->read_pipe_fd != -1)
+			close(cmd->read_pipe_fd);
+		if (cmd->write_pipe_fd != -1)
+			close(cmd->write_pipe_fd);
 		signal(SIGINT, handle_sigint);
 	}
 }
@@ -433,6 +447,7 @@ void	execute_commands(t_command *cmd, char **envp)
 {
 	int	i;
 	int	result;
+	int	pipe_fd[2];
 	int	original_stdin;
 	int	original_stdout;
 	
@@ -441,6 +456,17 @@ void	execute_commands(t_command *cmd, char **envp)
 	original_stdout = dup(STDOUT_FILENO);
 	while (cmd)
 	{
+		if (cmd->next != NULL)
+		{
+			if (pipe(pipe_fd) == -1)
+			{
+				perror("pipe failed");
+				break ;
+			}
+			cmd->write_pipe_fd = pipe_fd[1];
+			cmd->next->read_pipe_fd = pipe_fd[0];
+		} else
+			cmd->write_pipe_fd = -1;
 		i = -1;
 		if (cmd->args)
 		{
@@ -461,7 +487,7 @@ void	execute_commands(t_command *cmd, char **envp)
 			execute_external_command(cmd, envp);
 			if (result != 0)
 				kill(result, SIGTERM);
-		} 
+		}
 		cmd = cmd->next;
 	}
 	dup2(original_stdin, STDIN_FILENO);

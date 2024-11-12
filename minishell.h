@@ -38,6 +38,8 @@ typedef struct s_command
 	char				*output_redir;
 	int					append;
 	int					heredoc;
+	int					write_pipe_fd;
+	int					read_pipe_fd;
 	struct s_command	*next;
 }		t_command;
 
