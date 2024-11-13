@@ -122,7 +122,11 @@ t_command	*parse_tokens(t_token *tokens)
 	while (tokens)
 	{
 		if (skip_file)
+		{
 			skip_file = 0;
+			if (tokens->next != NULL && is_redirection(tokens->next->value))
+				current_cmd = NULL;	
+		}
 		else if (is_command(tokens->value) && current_cmd == NULL)
 			current_cmd = add_command(&commands, ft_strdup(tokens->value));
 		else if (current_cmd == NULL && tokens->next == NULL)

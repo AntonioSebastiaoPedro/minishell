@@ -185,7 +185,7 @@ int	handle_output_redirection(t_command *cmd)
 	if (fd < 0)
 	{
 		printf("minishell: %s: %s\n", cmd->output_redir, strerror(errno));
-		return (-1);
+		return (-2);
 	}
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
@@ -199,29 +199,19 @@ void	handle_sigint_heredoc(int signum)
 	exit(0);
 }
 
-void	handle_sigterm_heredoc(int signum)
+void	handle_heredoc(t_command *cmd)
 {
-	(void)signum;
-	exit(1);
-}
-
-int	handle_heredoc(char *delimiter, pid_t child_pid)
-{
-	int		pipe_fds[2];
 	int		write_check;
 	char	*line;
-
+	char	*delimiter;
+	
 	write_check = 0;
+	delimiter = cmd->input_redir;
 	signal(SIGINT, handle_sigint_heredoc);
-	signal(SIGTERM, handle_sigterm_heredoc);
-	if (pipe(pipe_fds) == -1)
-	{
-		perror("pipe failed");
-		exit(1);
-	}
+	close(cmd->read_pipe_fd);
 	while (1)
 	{
-		line = readline("heredoc> ");
+		line = readline("> ");
 		if (!line || strcmp(line, delimiter) == 0)
 		{
 			free(line);
@@ -229,63 +219,50 @@ int	handle_heredoc(char *delimiter, pid_t child_pid)
 				exit(1);
 			break ;
 		}
-		write(pipe_fds[1], line, strlen(line));
-		write(pipe_fds[1], "\n", 1);
 		write_check = 1;
+		write(cmd->write_pipe_fd, line, strlen(line));
+		write(cmd->write_pipe_fd, "\n", 1);
 		free(line);
 	}
-	close(pipe_fds[1]);
-	dup2(pipe_fds[0], STDIN_FILENO);
-	close(pipe_fds[0]);
-	return (child_pid);
+	close(cmd->write_pipe_fd);
+	exit(1);
 }
 
 int	handle_input_redirection(t_command *cmd)
 {
 	int		fd;
 	int		status;
-	int		pipe_fd[2];
 	pid_t	pid;
-	pid_t	child_pid;
 
 	if (cmd->heredoc)
 	{
-		if (pipe(pipe_fd) == -1)
-		{
-			perror("pipe failed");
-			return (-2);
-		}
 		signal(SIGINT, SIG_IGN);
 		pid = fork();
 		if (pid == 0)
-		{
-			close(pipe_fd[1]);
-			read(pipe_fd[0], &child_pid, sizeof(child_pid));
-			close(pipe_fd[0]);
-			return (handle_heredoc(cmd->input_redir, child_pid));
-		}
+			handle_heredoc(cmd);
 		else if (pid < 0)
 		{
 			signal(SIGINT, handle_sigint);
 			perror("fork failed");
-			return (-1);
+			return (-2);
 		}
 		else
 		{
-			close(pipe_fd[0]);
-			write(pipe_fd[1], &pid, sizeof(pid));
-			close(pipe_fd[1]);
+			close(cmd->write_pipe_fd);
+			dup2(cmd->read_pipe_fd, STDIN_FILENO);
+			close(cmd->read_pipe_fd);
 			waitpid(pid, &status, 0);
+			cmd->write_pipe_fd = -1;
+			cmd->read_pipe_fd = -1;
 			signal(SIGINT, handle_sigint);
 			if (WIFEXITED(status) != 0 && WEXITSTATUS(status) != 0)
-				return (-1);
-			else
 			{
 				if (cmd->next != NULL)
-					return (-2);
-				return (-1);
+					return (-3);
+				return (0);
 			}
-			
+			else
+				return (-2);
 		}
 	}
 	else
@@ -294,7 +271,7 @@ int	handle_input_redirection(t_command *cmd)
 		if (fd < 0)
 		{
 			printf("minishell: %s: %s\n",  cmd->input_redir, strerror(errno));
-			return (-1);
+			return (-2);
 		}
 		dup2(fd, STDIN_FILENO);
 		close(fd);
@@ -403,11 +380,13 @@ void	execute_external_command(t_command *cmd, char **envp)
 	{
 		if (cmd->write_pipe_fd != -1)
 		{
+			dprintf(2, "write_pipe_fd: %d\n", cmd->write_pipe_fd);
 			dup2(cmd->write_pipe_fd, STDOUT_FILENO);
 			close(cmd->write_pipe_fd);
 		}
 		if (cmd->read_pipe_fd != -1)
 		{
+			dprintf(2, "read_pipe_fd: %d\n", cmd->read_pipe_fd);
 			dup2(cmd->read_pipe_fd, STDIN_FILENO);
 			close(cmd->read_pipe_fd);
 		}
@@ -456,15 +435,20 @@ void	execute_commands(t_command *cmd, char **envp)
 	original_stdout = dup(STDOUT_FILENO);
 	while (cmd)
 	{
+		if (pipe(pipe_fd) == -1)
+		{
+			perror("pipe failed");
+			break ;
+		}
 		if (cmd->next != NULL)
 		{
-			if (pipe(pipe_fd) == -1)
-			{
-				perror("pipe failed");
-				break ;
-			}
 			cmd->write_pipe_fd = pipe_fd[1];
 			cmd->next->read_pipe_fd = pipe_fd[0];
+		}
+		else if (cmd->input_redir != NULL && cmd->command != NULL && cmd->heredoc)
+		{
+			cmd->write_pipe_fd = pipe_fd[1];
+			cmd->read_pipe_fd = pipe_fd[0];
 		} else
 			cmd->write_pipe_fd = -1;
 		i = -1;
@@ -474,19 +458,18 @@ void	execute_commands(t_command *cmd, char **envp)
 				cmd->args[i] = expand_variables(cmd->args[i]);
 		}
 		result = handle_redirections(cmd);
-		if (result == -1)
+		if (result == -2)
+			break ;
+		else if (result == -3)
 		{
 			cmd = cmd->next;
 			continue ;
-		} else if (result == -2)
-			break ;
+		}
 		if (cmd->command != NULL && is_builtin(cmd->command))
 			exec_builtin(cmd);
 		else
 		{
 			execute_external_command(cmd, envp);
-			if (result != 0)
-				kill(result, SIGTERM);
 		}
 		cmd = cmd->next;
 	}
