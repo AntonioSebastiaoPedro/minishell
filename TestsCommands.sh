@@ -45,3 +45,5 @@ cat << EOF > heredoc_output.txt
 This is a test of HEREDOC with output redirection.
 EOF
 
+cat > zona.txt
+

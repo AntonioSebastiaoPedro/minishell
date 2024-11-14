@@ -173,7 +173,7 @@ char	*expand_variables(const char *str)
 
 int	handle_output_redirection(t_command *cmd)
 {
-	int	fd;
+	int	fd_write;
 	int	flags;
 
 	flags = O_WRONLY | O_CREAT;
@@ -181,14 +181,17 @@ int	handle_output_redirection(t_command *cmd)
 		flags |= O_APPEND;
 	else
 		flags |= O_TRUNC;
-	fd = open(cmd->output_redir, flags, 0644);
-	if (fd < 0)
+	close(cmd->write_pipe_fd);
+	fd_write = open(cmd->output_redir, flags, 0644);
+	if (fd_write < 0)
 	{
 		printf("minishell: %s: %s\n", cmd->output_redir, strerror(errno));
 		return (-2);
 	}
-	dup2(fd, STDOUT_FILENO);
-	close(fd);
+	if (cmd->read_pipe_fd > 0)
+		cmd->command = ft_strdup("cat");
+	dup2(fd_write, STDOUT_FILENO);
+	close(fd_write);
 	return (0);
 }
 
@@ -435,10 +438,14 @@ void	execute_commands(t_command *cmd, char **envp)
 	original_stdout = dup(STDOUT_FILENO);
 	while (cmd)
 	{
-		if (pipe(pipe_fd) == -1)
+		if (cmd->next != NULL 
+			|| (cmd->command && cmd->input_redir && cmd->heredoc))
 		{
-			perror("minishell: pipe failed");
-			break ;
+			if (pipe(pipe_fd) == -1)
+			{
+				perror("minishell: pipe failed");
+				break ;
+			}
 		}
 		if (cmd->next != NULL)
 		{
