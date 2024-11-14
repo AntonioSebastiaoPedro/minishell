@@ -196,7 +196,7 @@ void	handle_sigint_heredoc(int signum)
 {
 	(void)signum;
 	write(STDERR_FILENO, "\n", 1);
-	exit(0);
+	exit(1);
 }
 
 void	handle_heredoc(t_command *cmd)
@@ -216,7 +216,7 @@ void	handle_heredoc(t_command *cmd)
 		{
 			free(line);
 			if (write_check == 0)
-				exit(1);
+				exit(0);
 			break ;
 		}
 		write_check = 1;
@@ -225,7 +225,7 @@ void	handle_heredoc(t_command *cmd)
 		free(line);
 	}
 	close(cmd->write_pipe_fd);
-	exit(1);
+	exit(0);
 }
 
 int	handle_input_redirection(t_command *cmd)
@@ -243,7 +243,7 @@ int	handle_input_redirection(t_command *cmd)
 		else if (pid < 0)
 		{
 			signal(SIGINT, handle_sigint);
-			perror("fork failed");
+			perror("minishell: fork failed");
 			return (-2);
 		}
 		else
@@ -255,7 +255,7 @@ int	handle_input_redirection(t_command *cmd)
 			cmd->write_pipe_fd = -1;
 			cmd->read_pipe_fd = -1;
 			signal(SIGINT, handle_sigint);
-			if (WIFEXITED(status) != 0 && WEXITSTATUS(status) != 0)
+			if (WIFEXITED(status) == 1 && WEXITSTATUS(status) == 0)
 			{
 				if (cmd->next != NULL)
 					return (-3);
@@ -300,13 +300,13 @@ char	**prepare_args(char *executable_path, char **original_args)
 	new_args = malloc((arg_count + 2) * sizeof(char *));
 	if (!new_args)
 	{
-		perror("malloc failed");
+		perror("minishell: malloc failed");
 		exit(1);
 	}
 	new_args[0] = ft_strdup(executable_path);
 	if (!new_args[0])
 	{
-		perror("malloc failed");
+		perror("minishell: malloc failed");
 		free(new_args);
 		exit(1);
 	}
@@ -399,7 +399,7 @@ void	execute_external_command(t_command *cmd, char **envp)
 		new_args = prepare_args(executable_path, cmd->args);
 		if (!new_args)
 		{
-			perror("prepare_args failed");
+			perror("minishell: prepare_args failed");
 			exit(1);
 		}
 		execve(executable_path, new_args, envp);
@@ -408,7 +408,7 @@ void	execute_external_command(t_command *cmd, char **envp)
 		exit(errno);
 	}
 	else if (pid < 0)
-		perror("fork failed");
+		perror("minishell: fork failed");
 	else
 	{
 		g_child_pid = pid;
@@ -437,7 +437,7 @@ void	execute_commands(t_command *cmd, char **envp)
 	{
 		if (pipe(pipe_fd) == -1)
 		{
-			perror("pipe failed");
+			perror("minishell: pipe failed");
 			break ;
 		}
 		if (cmd->next != NULL)
@@ -445,12 +445,11 @@ void	execute_commands(t_command *cmd, char **envp)
 			cmd->write_pipe_fd = pipe_fd[1];
 			cmd->next->read_pipe_fd = pipe_fd[0];
 		}
-		else if (cmd->input_redir != NULL && cmd->command != NULL && cmd->heredoc)
+		else if (cmd->command && cmd->input_redir && cmd->heredoc)
 		{
 			cmd->write_pipe_fd = pipe_fd[1];
 			cmd->read_pipe_fd = pipe_fd[0];
-		} else
-			cmd->write_pipe_fd = -1;
+		}
 		i = -1;
 		if (cmd->args)
 		{
