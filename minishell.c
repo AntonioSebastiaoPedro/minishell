@@ -171,27 +171,69 @@ char	*expand_variables(const char *str)
 	return (result);
 }
 
-int	handle_output_redirection(t_command *cmd)
+int	copy_arguments(char **args, t_command *next_cmd)
 {
-	int	fd_write;
-	int	flags;
-
-	flags = O_WRONLY | O_CREAT;
-	if (cmd->append == 1)
-		flags |= O_APPEND;
-	else
-		flags |= O_TRUNC;
-	close(cmd->write_pipe_fd);
-	fd_write = open(cmd->output_redir, flags, 0644);
-	if (fd_write < 0)
+	int	i;
+	int	count;
+	
+	count = 0;
+	while (args && args[count])
+		count++;
+	next_cmd->args = (char **)malloc(sizeof(char *) * (count + 1));
+	if (!next_cmd->args)
 	{
-		printf("minishell: %s: %s\n", cmd->output_redir, strerror(errno));
+		perror("minishell: malloc failed");
 		return (-2);
 	}
-	if (cmd->read_pipe_fd > 0)
-		cmd->command = ft_strdup("cat");
-	dup2(fd_write, STDOUT_FILENO);
-	close(fd_write);
+	i = 0;
+	while (i < count)
+	{
+		next_cmd->args[i] = ft_strdup(args[i]);
+		i++;
+	}
+	next_cmd->args[count] = NULL;
+	return (0);
+}
+
+
+int	handle_output_redirection(t_command *cmd)
+{
+	int	flags;
+	int	fd_write;
+
+	flags = O_WRONLY | O_CREAT;
+	if (cmd->write_pipe_fd > 0)
+		close(cmd->write_pipe_fd);
+	while (cmd && cmd->output_redir)
+	{
+		if (cmd->append == 1)
+			flags |= O_APPEND;
+		else
+			flags |= O_TRUNC;
+		fd_write = open(cmd->output_redir, flags, 0644);
+		if (fd_write < 0)
+		{
+			printf("minishell: %s: %s\n", cmd->output_redir, strerror(errno));
+			return (-2);
+		}
+		if (cmd->next && cmd->next->output_redir)
+		{
+			close(fd_write);
+			cmd->next->read_pipe_fd = -1;
+			cmd->next->command = ft_strdup("echo");
+			if (copy_arguments(cmd->args, cmd->next) == -2);
+				return (-2)
+			cmd = cmd->next;
+		}
+		else
+		{
+			if (cmd->read_pipe_fd > 0)
+				cmd->command = ft_strdup("cat");
+			dup2(fd_write, STDOUT_FILENO);
+			close(fd_write);
+			break ;
+		}
+	}
 	return (0);
 }
 
