@@ -221,15 +221,30 @@ int	handle_output_redirection(t_command *cmd)
 		if (cmd->next && cmd->next->output_redir)
 		{
 			close(fd_write);
-			cmd->next->read_pipe_fd = -1;
-			cmd->next->command = ft_strdup("echo");
-			status = copy_arguments(cmd->args, cmd->next);
-			if (status == -2)
-				break ;
+			if (cmd->command != NULL && ft_strcmp(cmd->command, "echo") == 0)
+			{
+				cmd->next->read_pipe_fd = -1;
+				cmd->next->command = ft_strdup(cmd->command);
+				status = copy_arguments(cmd->args, cmd->next);
+				if (status == -2)
+					break ;
+				status = -1;
+			}
+			else if (cmd->read_pipe_fd > 0)
+			{
+				//dprintf(2, "output_redir: %s\n", cmd->output_redir);
+				status = -1;
+				cmd->write_pipe_fd = -1;
+				//cmd->read_pipe_fd = 6;
+				cmd->next->command = ft_strdup("cat");
+				dup2(fd_write, STDOUT_FILENO);
+			close(fd_write);
+			}
 			cmd = cmd->next;
 		}
 		else
 		{
+			//dprintf(2, "output_redir: %s\n", cmd->output_redir);
 			if (cmd->read_pipe_fd > 0)
 				cmd->command = ft_strdup("cat");
 			dup2(fd_write, STDOUT_FILENO);
@@ -481,7 +496,7 @@ void	execute_commands(t_command *cmd, char **envp)
 	result = 0;
 	original_stdin = dup(STDIN_FILENO);
 	original_stdout = dup(STDOUT_FILENO);
-	while (cmd)
+	while (cmd != NULL && result != -1)
 	{
 		if (cmd->next != NULL 
 			|| (cmd->command && cmd->input_redir && cmd->heredoc))
@@ -516,6 +531,9 @@ void	execute_commands(t_command *cmd, char **envp)
 			cmd = cmd->next;
 			continue ;
 		}
+		//else
+		//	if (result == -1)
+		//	dprintf(2, "output_redir: %s\n", cmd->output_redir);
 		if (cmd->command != NULL && is_builtin(cmd->command))
 			exec_builtin(cmd);
 		else
