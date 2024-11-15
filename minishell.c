@@ -199,8 +199,10 @@ int	copy_arguments(char **args, t_command *next_cmd)
 int	handle_output_redirection(t_command *cmd)
 {
 	int	flags;
+	int	status;
 	int	fd_write;
 
+	status = 0;
 	flags = O_WRONLY | O_CREAT;
 	if (cmd->write_pipe_fd > 0)
 		close(cmd->write_pipe_fd);
@@ -221,8 +223,9 @@ int	handle_output_redirection(t_command *cmd)
 			close(fd_write);
 			cmd->next->read_pipe_fd = -1;
 			cmd->next->command = ft_strdup("echo");
-			if (copy_arguments(cmd->args, cmd->next) == -2);
-				return (-2)
+			status = copy_arguments(cmd->args, cmd->next);
+			if (status == -2)
+				break ;
 			cmd = cmd->next;
 		}
 		else
@@ -234,7 +237,7 @@ int	handle_output_redirection(t_command *cmd)
 			break ;
 		}
 	}
-	return (0);
+	return (status);
 }
 
 void	handle_sigint_heredoc(int signum)
