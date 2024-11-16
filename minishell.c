@@ -136,7 +136,7 @@ void	extract_variable_name(const char *str, int *i, char *var_name)
 
 	j = 0;
 	(*i)++;
-	while (str[*i] && (isalnum(str[*i]) || str[*i] == '_'))
+	while (str[*i] && (ft_isalnum(str[*i]) || str[*i] == '_'))
 		var_name[j++] = str[(*i)++];
 	var_name[j] = '\0';
 }
@@ -173,7 +173,7 @@ char	*expand_variables(const char *str)
 				if (env_val)
 				{
 					strcpy(result + pos, env_val);
-					pos += strlen(env_val);
+					pos += ft_strlen(env_val);
 				}
 			}
 		}
@@ -280,7 +280,7 @@ void	handle_heredoc(t_command *cmd)
 	while (1)
 	{
 		line = readline("> ");
-		if (!line || strcmp(line, delimiter) == 0)
+		if (!line || ft_strcmp(line, delimiter) == 0)
 		{
 			free(line);
 			if (write_check == 0)
@@ -288,7 +288,7 @@ void	handle_heredoc(t_command *cmd)
 			break ;
 		}
 		write_check = 1;
-		write(cmd->write_pipe_fd, line, strlen(line));
+		write(cmd->write_pipe_fd, line, ft_strlen(line));
 		write(cmd->write_pipe_fd, "\n", 1);
 		free(line);
 	}
@@ -404,7 +404,7 @@ char	*find_executable_path(char *command)
 	char	*next_path;
 	char	*exec_path;
 
-	if (strchr(command, '/') != NULL)
+	if (ft_strchr(command, '/') != NULL)
 		return (absolute_relative_path(command));
 	path = getenv("PATH");
 	if (!path)
