@@ -225,7 +225,6 @@ int	handle_output_redirection(t_command **command)
 			close(fd_write);
 			if (cmd->command != NULL && ft_strcmp(cmd->command, "echo") == 0)
 			{
-				cmd->next->read_pipe_fd = -1;
 				cmd->next->command = ft_strdup(cmd->command);
 				status = copy_arguments(cmd->args, cmd->next);
 				if (status == -2)
