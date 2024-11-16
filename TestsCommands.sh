@@ -46,4 +46,86 @@ This is a test of HEREDOC with output redirection.
 EOF
 
 cat > zona.txt
+////////////////////////////////////////////////////////////////////////////////
 
+Exemplos de Heredoc (<<) com Comandos Externos
+1.Usando grep para buscar texto especificado em várias linhas de entrada:
+grep "Hello" << END
+Hello, World!
+Goodbye, World!
+Hello again!
+END
+
+2.Usando sort para classificar linhas de entrada:
+sort << END
+banana
+apple
+orange
+END
+
+3.Usando wc para contar palavras, linhas ou caracteres:
+O comando wc -w conta o número total de palavras nas linhas fornecidas.
+wc -w << END
+This is a test text.
+Another line here.
+END
+
+4.Usando awk para processamento de texto:
+Esse comando converte cada linha para maiúsculas, retornando.
+awk '{ print toupper($0) }' << END
+hello
+world
+END
+
+5.Usando sed para substituir padrões de texto:
+Esse comando substitui "World" por "Everyone", resultando em.
+sed 's/World/Everyone/' << END
+Hello World
+Goodbye World
+END
+
+6.Usando rev para inverter o texto em cada linha:
+rev << END
+Hello
+World
+END
+////////////////////////////////////////////////////////////////////////
+
+1. Comandos Simples com Pipes
+
+    Listar arquivos e contar: ls | wc -l
+    Procurar uma palavra em um arquivo e contar: grep "palavra" arquivo.txt | wc -l
+    Ordenar e remover duplicatas: cat arquivo.txt | sort | uniq
+
+2. Sequência de Pipes
+
+    Contar arquivos e somar linhas: ls -l | wc -l | xargs echo "Total files:"
+    Filtrar e contar palavras: echo "teste" | grep "te" | wc -l
+    Filtrar e extrair colunas: ps aux | grep root | awk '{print $1, $2}'
+
+3. Testes de Erro e Saída Condicional
+
+    Comando inexistente: ls -l | command_not_found | wc -l
+    Filtro vazio: ls | grep "inexistente" | wc -l
+    Saída redirecionada para erro: ls /diretorio_inexistente | grep "algo" | wc -l
+
+4. Redirecionamento com Pipes
+
+    Saída para arquivo: ls | tee arquivo.txt | wc -l
+    Saída padrão e erro para o mesmo pipe: find / -name "arquivo_inexistente" 2>&1 | grep "Permission"
+
+5. Comandos de Sistema e Variáveis de Ambiente
+
+    Verificar variáveis de ambiente e filtro: env | grep PATH
+    Comando em subshell: echo $(ls | wc -l) | cat
+    Comando com várias pipelines: ls -l | grep "^d" | awk '{print $9}'
+
+6. Combinações com Pipes e Heredoc (<<)
+
+    Simulação com heredoc:
+
+cat << EOF | grep "teste"
+linha1
+teste
+linha3
+EOF

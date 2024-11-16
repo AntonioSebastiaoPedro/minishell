@@ -150,18 +150,31 @@ char	*expand_variables(const char *str)
 	char		var_name[1024];
 
 	result = malloc(sizeof(char) * 1024);
+	if (!result)
+	{
+		perror("minishell: malloc failed");
+		return (NULL);
+	}
 	pos = 0;
 	i = 0;
 	while (str[i] != '\0')
 	{
 		if (str[i] == '$')
 		{
-			extract_variable_name(str, &i, var_name);
-			env_val = getenv(var_name);
-			if (env_val)
+			if (ft_isdigit(str[i + 1]))
 			{
-				strcpy(result + pos, env_val);
-				pos += strlen(env_val);
+				result[pos++] = str[i++];
+				result[pos++] = str[i++];
+			}
+			else
+			{
+				extract_variable_name(str, &i, var_name);
+				env_val = getenv(var_name);
+				if (env_val)
+				{
+					strcpy(result + pos, env_val);
+					pos += strlen(env_val);
+				}
 			}
 		}
 		else
