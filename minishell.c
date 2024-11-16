@@ -196,13 +196,15 @@ int	copy_arguments(char **args, t_command *next_cmd)
 }
 
 
-int	handle_output_redirection(t_command *cmd)
+int	handle_output_redirection(t_command **command)
 {
-	int	flags;
-	int	status;
-	int	fd_write;
+	int		flags;
+	int		status;
+	int		fd_write;
+	t_command	*cmd;
 
 	status = 0;
+	cmd = *command;
 	flags = O_WRONLY | O_CREAT;
 	if (cmd->write_pipe_fd > 0)
 		close(cmd->write_pipe_fd);
@@ -228,27 +230,18 @@ int	handle_output_redirection(t_command *cmd)
 				status = copy_arguments(cmd->args, cmd->next);
 				if (status == -2)
 					break ;
-				status = -1;
 			}
 			else if (cmd->read_pipe_fd > 0)
-			{
-				//dprintf(2, "output_redir: %s\n", cmd->output_redir);
-				status = -1;
-				cmd->write_pipe_fd = -1;
-				//cmd->read_pipe_fd = 6;
-				cmd->next->command = ft_strdup("cat");
-				dup2(fd_write, STDOUT_FILENO);
-			close(fd_write);
-			}
+				cmd->next->read_pipe_fd = cmd->read_pipe_fd;
 			cmd = cmd->next;
 		}
 		else
 		{
-			//dprintf(2, "output_redir: %s\n", cmd->output_redir);
 			if (cmd->read_pipe_fd > 0)
 				cmd->command = ft_strdup("cat");
 			dup2(fd_write, STDOUT_FILENO);
 			close(fd_write);
+			*command = cmd;
 			break ;
 		}
 	}
@@ -342,11 +335,11 @@ int	handle_input_redirection(t_command *cmd)
 	return (0);
 }
 
-int	handle_redirections(t_command *cmd)
+int	handle_redirections(t_command **cmd)
 {
-	if (cmd->input_redir != NULL)
-		return (handle_input_redirection(cmd));
-	else if (cmd->output_redir != NULL)
+	if ((*cmd)->input_redir != NULL)
+		return (handle_input_redirection(*cmd));
+	else if ((*cmd)->output_redir != NULL)
 		return (handle_output_redirection(cmd));
 	return (0);
 }
@@ -496,7 +489,7 @@ void	execute_commands(t_command *cmd, char **envp)
 	result = 0;
 	original_stdin = dup(STDIN_FILENO);
 	original_stdout = dup(STDOUT_FILENO);
-	while (cmd != NULL && result != -1)
+	while (cmd != NULL)
 	{
 		if (cmd->next != NULL 
 			|| (cmd->command && cmd->input_redir && cmd->heredoc))
@@ -523,7 +516,7 @@ void	execute_commands(t_command *cmd, char **envp)
 			while (cmd->args[++i])
 				cmd->args[i] = expand_variables(cmd->args[i]);
 		}
-		result = handle_redirections(cmd);
+		result = handle_redirections(&cmd);
 		if (result == -2)
 			break ;
 		else if (result == -3)
@@ -531,9 +524,6 @@ void	execute_commands(t_command *cmd, char **envp)
 			cmd = cmd->next;
 			continue ;
 		}
-		//else
-		//	if (result == -1)
-		//	dprintf(2, "output_redir: %s\n", cmd->output_redir);
 		if (cmd->command != NULL && is_builtin(cmd->command))
 			exec_builtin(cmd);
 		else
