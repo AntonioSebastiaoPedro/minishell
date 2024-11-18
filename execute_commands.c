@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 13:11:19 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/10 14:56:03 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/18 12:30:10 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ char	**prepare_args(char *executable_path, char **original_args)
 	return (new_args);
 }
 
-void	execute_external_command(t_command *cmd, t_env **envp)
+int	execute_external_command(t_command *cmd, t_env **envp, int *status)
 {
 	char	**new_args;
 	char	*executable_path;
@@ -97,28 +97,33 @@ void	execute_external_command(t_command *cmd, t_env **envp)
 		if (!executable_path)
 		{
 			printf("minishell: command not found: %s\n", cmd->command);
-			exit(1);
+			*status = 1;
+			exit (1);
 		}
 		new_args = prepare_args(executable_path, cmd->args);
 		if (!new_args)
 		{
 			perror("prepare_args failed");
-			exit(1);
+			*status = 1;
+			exit (1);
 		}
 		env_dup = env_list_to_array(*envp);
 		execve(executable_path, new_args, env_dup);
 		ft_freearray(env_dup);
 		free(executable_path);
 		perror("minishell");
-		exit(errno);
+		*status = errno;
+		exit (errno);
 	}
 	else if (pid < 0)
 	{
 		perror("fork failed");
-		return ;
+		*status = 1;
+		return (1);
 	}
 	else
-		waitpid(pid, NULL, 0);
+		waitpid(pid, status, 0);
+	return (*status);
 }
 
 void	execute_commands(t_command *cmd, t_env **env)
@@ -127,6 +132,7 @@ void	execute_commands(t_command *cmd, t_env **env)
 	int	pid_heredoc;
 	int	original_stdin;
 	int	original_stdout;
+	int	status;
 
 	pid_heredoc = 0;
 	original_stdin = dup(STDIN_FILENO);
@@ -149,11 +155,13 @@ void	execute_commands(t_command *cmd, t_env **env)
 		if (is_builtin(cmd->command))
 		{
 			g_execute_command_2 = 1;
-			exec_builtin(cmd, env);
+			exec_builtin(cmd, env, &status);
+			update_envvar(env, "X", ft_itoa(status));
 		}
 		else if (g_execute_command_2 == 1)
 		{
-			execute_external_command(cmd, env);
+			execute_external_command(cmd, env, &status);
+			update_envvar(env, "X", ft_itoa(status));
 			if (pid_heredoc != 0)
 				kill(pid_heredoc, SIGTERM);
 		}

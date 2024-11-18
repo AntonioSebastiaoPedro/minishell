@@ -6,13 +6,13 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 01:04:34 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/05 01:34:43 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/18 11:24:18 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_echo(char **args)
+int	ft_echo(char **args)
 {
 	int	newline;
 	int	i;
@@ -36,4 +36,5 @@ void	ft_echo(char **args)
 	}
 	if (newline)
 		printf("\n");
+	return (0);
 }

@@ -6,18 +6,25 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 01:37:03 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/07 20:42:00 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/18 11:30:14 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_pwd(void)
+int	ft_pwd(void)
 {
 	char	cwd[1024];
 
 	if (getcwd(cwd, sizeof(cwd)) != NULL)
+	{
 		printf("%s\n", cwd);
+		return (0);
+	}
 	else
-		perror("pwd failed");
+	{
+		printf("%s: ", strerror(errno));
+		return (1);
+		// perror("pwd failed");
+	}
 }

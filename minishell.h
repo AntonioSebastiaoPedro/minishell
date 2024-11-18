@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 11:25:08 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/18 04:23:06 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/18 12:28:26 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,15 +58,14 @@ int						ft_env(t_command *cmd, t_env **env);
 int						is_builtin(const char *cmd);
 int						is_command(const char *token);
 void					tokenize(char *line, t_token **tokens);
-void					ft_echo(char **args);
-void					ft_pwd(void);
-void					ft_cd(char **args, t_env **env);
-void					ft_export(t_command *cmd, t_env **env);
+int					ft_echo(char **args);
+int					ft_pwd(void);
+int					ft_cd(char **args, t_env **env);
+int					ft_export(t_command *cmd, t_env **env);
 void					free_env(t_env **env);
-void					exec_builtin(t_command *cmd, t_env **env);
 void					handle_sigint(int sig);
 void					handle_sigquit(int sig);
-void					exec_builtin(t_command *cmd, t_env **env);
+int					exec_builtin(t_command *cmd, t_env **env, int *status);
 void					execute_commands(t_command *cmd, t_env **env);
 void					free_commands(t_command *commands);
 void					envcpy(t_env **env_dup, char **src);
@@ -74,8 +73,8 @@ void					print_tokens(t_token *tokens);
 void					print_commands(t_command *commands);
 void					free_tokens(t_token *tokens);
 void					add_back(t_env **head, t_env *new_env);
-void					ft_unset(t_command *cmd, t_env **env);
-void					ft_exit(t_command *cmd);
+int					ft_unset(t_command *cmd, t_env **env);
+int					ft_exit(t_command *cmd);
 void					extract_variable_name(const char *str, int *i,
 							char *var_name);
 void					update_env(t_env **env, char *name);

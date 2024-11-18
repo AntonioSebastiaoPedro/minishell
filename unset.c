@@ -6,13 +6,13 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 18:29:39 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/09 18:57:41 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/18 11:31:40 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_env_remove_if(t_env **envs, char *var, int (*cmp)())
+void	ft_env_remove_if(t_env **envs, char *var)
 {
 	t_env	*remove;
 	t_env	*current;
@@ -20,7 +20,7 @@ void	ft_env_remove_if(t_env **envs, char *var, int (*cmp)())
 	current = *envs;
 	while (current && current->next)
 	{
-		if ((*cmp)(current->next->var, var) == 0)
+		if (ft_strcmp(current->next->var, var) == 0)
 		{
 			remove = current->next;
 			current->next = current->next->next;
@@ -31,11 +31,12 @@ void	ft_env_remove_if(t_env **envs, char *var, int (*cmp)())
 	}
 }
 
-void	ft_unset(t_command *cmd, t_env **env)
+int	ft_unset(t_command *cmd, t_env **env)
 {
 	int	i;
 
 	i = -1;
 	while (cmd->args[++i])
-		ft_env_remove_if(env, cmd->args[i], ft_strcmp);
+		ft_env_remove_if(env, cmd->args[i]);
+	return (0);
 }

@@ -6,14 +6,13 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 02:17:44 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/18 03:52:44 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/18 11:58:08 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	sort_str_list(t_env *tab, int (*cmp)(const char *str1,
-			const char *str2))
+void	sort_str_list(t_env *tab)
 {
 	char	*var_temp;
 	char	*value_temp;
@@ -23,7 +22,7 @@ void	sort_str_list(t_env *tab, int (*cmp)(const char *str1,
 	current = tab;
 	while (current && current->next)
 	{
-		if ((*cmp)(current->var, current->next->var) > 0)
+		if (ft_strcmp(current->var, current->next->var) > 0)
 		{
 			value_temp = current->value;
 			var_temp = current->var;
@@ -79,19 +78,22 @@ t_env	*get_env(char *var, t_env **env, int (*cmp)())
 	return (NULL);
 }
 
-void	add_args_env(char **args, t_env **env)
+int	add_args_env(char **args, t_env **env)
 {
 	int		i;
+	int		status;
 	char	var[70000];
 	t_env	*new_env;
 
+	status = 0;
 	i = -1;
 	while (args[++i])
 	{
 		if (!ft_isword(args[i]))
 		{
-			printf("minishell: export: Invalid identifier %s\n", ft_strtok_2(args[i],
-					"="));
+			printf("minishell: export: Invalid identifier %s\n",
+				ft_strtok_2(args[i], "="));
+			status = 1;
 			continue ;
 		}
 		ft_strcpy(var, args[i]);
@@ -102,23 +104,27 @@ void	add_args_env(char **args, t_env **env)
 		else
 			add_env(env, args[i]);
 	}
+	return (status);
 }
 
-void	ft_export(t_command *cmd, t_env **env)
+int	ft_export(t_command *cmd, t_env **env)
 {
 	t_env	*env_dup;
+	int		status;
 
 	env_dup = *env;
 	if (!cmd->args)
 	{
-		sort_str_list(env_dup, ft_strcmp);
+		sort_str_list(env_dup);
 		while (env_dup)
 		{
 			printf("declare -x %s=", env_dup->var);
 			printf("%c%s%c\n", '\"', env_dup->value, '\"');
 			env_dup = env_dup->next;
 		}
+		status = 0;
 	}
 	else
-		add_args_env(cmd->args, env);
+		status = (add_args_env(cmd->args, env));
+	return (status);
 }
