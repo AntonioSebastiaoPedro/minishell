@@ -12,7 +12,10 @@
 
 NAME = minishell
 
-SRCS = ./minishell.c ./tokenize.c ./add_token.c ./parser.c ./echo.c ./pwd.c ./cd.c
+SRCS = ./minishell.c ./tokenize.c ./add_token.c ./parser.c ./echo.c ./pwd.c ./cd.c \
+       ./execute_commands.c ./execute_external_command.c ./find_path_prepare_args.c \
+       ./handle_input_redirection.c ./handle_output_redirection.c ./expand_variables.c \
+       ./handle_signal.c ./minishell_utils.c
 
 LIBFT = $(LIBSRC)/libft.a
 LIBSRC = ./libft
