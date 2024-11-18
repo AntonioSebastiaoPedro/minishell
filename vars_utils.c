@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 19:36:42 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/09 19:49:39 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/18 02:17:30 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,14 @@ void	check_enval(char **env_val, char **result, int *pos)
 	}
 }
 
-char	*get_env_value(char *var, t_env **env, int (*cmp)())
+char	*get_env_value(char *var, t_env **env)
 {
 	t_env	*temp;
 
 	temp = *env;
 	while (temp)
 	{
-		if (cmp(temp->var, var) == 0)
+		if (ft_strcmp(temp->var, var) == 0)
 			return (temp->value);
 		temp = temp->next;
 	}
@@ -65,7 +65,7 @@ char	*expand_variables(const char *str, t_command *cmd, int *arg_pos,
 		if (str[i] == '$')
 		{
 			extract_variable_name(str, &i, var_name);
-			env_val = get_env_value(var_name, env, ft_strcmp);
+			env_val = get_env_value(var_name, env);
 			check_enval(&env_val, &result, &pos);
 		}
 		else

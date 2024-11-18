@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 02:17:44 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/17 20:04:28 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/18 03:52:44 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,8 @@ void	update_env(t_env **env, char *name)
 	show = 0;
 	if (ft_strchr(name_copy, '='))
 		show = 1;
-	var = strtok(name_copy, "=");
-	value = strtok(NULL, "=");
+	var = ft_strtok_2(name_copy, "=");
+	value = ft_strtok_2(NULL, "=");
 	(*env)->var = var;
 	(*env)->value = value;
 	if (!var)
@@ -90,12 +90,12 @@ void	add_args_env(char **args, t_env **env)
 	{
 		if (!ft_isword(args[i]))
 		{
-			printf("minishell: export: Invalid identifier %s\n", strtok(args[i],
+			printf("minishell: export: Invalid identifier %s\n", ft_strtok_2(args[i],
 					"="));
 			continue ;
 		}
 		ft_strcpy(var, args[i]);
-		strtok(var, "=");
+		ft_strtok_2(var, "=");
 		new_env = get_env(var, env, ft_strcmp);
 		if (new_env)
 			update_env(&new_env, args[i]);

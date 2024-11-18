@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 11:25:08 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/18 01:46:21 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/18 04:23:06 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,10 +88,11 @@ t_command				*add_command(t_command **commands, const char *command);
 t_env					*ft_newenv(char *name);
 t_env					*last_env(t_env *head);
 t_env					*get_env(char *var, t_env **env, int (*cmp)());
-char					*get_env_value(char *var, t_env **env, int (*cmp)());
+char					*get_env_value(char *var, t_env **env);
 int					handle_redirections(t_command *cmd);
 int					handle_heredoc(char *delimiter);
 char					**env_list_to_array(t_env *env_list);
 void					update_shlvl(t_env **env);
+void					update_envvar(t_env **env, char *var, char *value);
 
 #endif
