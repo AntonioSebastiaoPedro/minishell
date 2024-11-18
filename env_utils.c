@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 14:17:28 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/10 14:58:52 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/18 01:29:56 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,22 +65,18 @@ t_env	*ft_newenv(char *name)
 	t_env	*new_env;
 	char	*var;
 	char	*value;
-	char	*name_copy;
+	char	name_copy[70000];
 	int		show;
 
 	new_env = malloc(sizeof(t_env));
-	name_copy = ft_strdup(name);
+	ft_strcpy(name_copy, name);
 	show = 0;
 	if (ft_strchr(name_copy, '='))
 		show = 1;
-	var = strtok(name_copy, "=");
-	value = strtok(NULL, "=");
+	var = ft_strdup(ft_strtok_2(name_copy, "="));
+	value = ft_strdup(ft_strtok_2(NULL, "="));
 	new_env->var = var;
 	new_env->value = value;
-	if (!var)
-		new_env->var = ft_strdup("");
-	if (!value)
-		new_env->value = ft_strdup("");
 	new_env->index = 0;
 	new_env->show = show;
 	new_env->next = NULL;

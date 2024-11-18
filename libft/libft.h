@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 11:32:38 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/10 14:25:33 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/18 01:29:28 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,7 @@ char				*ft_strjoin_delimiter(char const *s1, char const delim,
 						char const *s2);
 char				*ft_strtok(char *env_path, const char delim,
 						char **next_path);
+char				*ft_strtok_2(char *str, const char *delimiter);
 typedef struct s_list
 {
 	void			*content;

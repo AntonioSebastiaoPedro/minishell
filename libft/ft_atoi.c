@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 11:27:45 by ansebast          #+#    #+#             */
-/*   Updated: 2024/08/14 19:00:46 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/18 01:13:03 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ int	ft_atoi(const char *str)
 	signal = 1;
 	num = 0;
 	i = 0;
+	if (!str)
+		return (0);
 	while (str[i] == 32 || (str[i] >= 9 && str[i] <= 13))
 		i++;
 	if (str[i] == '-')

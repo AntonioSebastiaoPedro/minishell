@@ -1,27 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   env_utils3.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/29 11:31:04 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/18 01:43:37 by ansebast         ###   ########.fr       */
+/*   Created: 2024/11/18 01:45:25 by ansebast          #+#    #+#             */
+/*   Updated: 2024/11/18 01:45:46 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-char	*ft_strdup(const char *str)
+void	update_shlvl(t_env **env)
 {
-	char	*str2;
-	size_t	size;
+	t_env	*current;
+	int		shlvl_value;
 
-	size = ft_strlen(str) + 1;
-	str2 = (char *)ft_calloc(1, size);
-	if (!str2)
-		return (NULL);
-	if (str)
-		ft_memcpy(str2, str, size);
-	return (str2);
+	current = *env;
+	while (current)
+	{
+		if (ft_strcmp(current->var, "SHLVL") == 0)
+		{
+			shlvl_value = ft_atoi(current->value);
+			shlvl_value++;
+			free(current->value);
+			current->value = ft_strdup(ft_itoa(shlvl_value));
+			return ;
+		}
+		current = current->next;
+	}
+	add_env(env, "SHLVL=1");
 }

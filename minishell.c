@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 11:19:19 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/17 19:57:56 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/18 01:45:32 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ int	main(void)
 	signal(SIGQUIT, handle_sigquit);
 	env_dup = NULL;
 	envcpy(&env_dup, environ);
+	update_shlvl(&env_dup);
 	while (1)
 	{
 		tokens = NULL;
