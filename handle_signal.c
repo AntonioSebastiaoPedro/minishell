@@ -12,16 +12,6 @@
 
 #include "minishell.h"
 
-/*void	handle_sigint_external_command_(int signum)
-{
-	(void)signum;
-	if (g_child_pid > 0)
-	{
-		write(STDERR_FILENO, "\n", 1);
-		kill(g_child_pid, SIGINT);
-	}
-}*/
-
 void	handle_sigint_external_command(int signum)
 {
 	(void)signum;

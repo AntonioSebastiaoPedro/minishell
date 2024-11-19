@@ -12,8 +12,6 @@
 
 #include "minishell.h"
 
-//pid_t	g_child_pid = 0;
-
 void	free_commands(t_command *commands)
 {
 	int			i;

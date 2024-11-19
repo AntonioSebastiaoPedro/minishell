@@ -14,10 +14,7 @@
 
 void	handle_parent_process(t_command *cmd, pid_t pid)
 {
-	//g_child_pid = pid;
 	waitpid(pid, NULL, 0);
-	dprintf(2, "Saiu do processo\n");
-	//g_child_pid = 0;
 	if (cmd->read_pipe_fd != -1)
 		close(cmd->read_pipe_fd);
 	if (cmd->write_pipe_fd != -1)

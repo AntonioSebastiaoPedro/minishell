@@ -43,15 +43,10 @@ typedef struct s_command
 	struct s_command	*next;
 }		t_command;
 
-#ifndef G_CHILD_PID_H
-# define G_CHILD_PID_H
-//extern pid_t	g_child_pid;
-#endif
-
 void		tokenize(char *line, t_token **tokens);
 t_token		*add_token(t_token *head, char *value);
 t_command	*parse_tokens(t_token *tokens);
-int			execute_commands(t_command *cmd, char **envp);
+void		execute_commands(t_command *cmd, char **envp);
 int			is_builtin(char *cmd);
 void		exec_builtin(t_command *cmd);
 char		*expand_variables(char *str);
