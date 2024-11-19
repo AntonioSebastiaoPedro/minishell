@@ -83,14 +83,16 @@ char				*get_next_line(int fd);
 char				**ft_split(char const *str, char c);
 char				*ft_strtrim(const char *s1, const char *set);
 char				*ft_strjoin(const char *s1, const char *s2);
-char				*ft_strjoin_delimiter(char const *s1, char const delim, char const *s2);
+char				*ft_strjoin_delimiter(char const *s1, char const delim,
+						char const *s2);
 char				*ft_strdup(const char *s);
 char				*ft_strchr(const char *str, int c);
 char				*ft_strrchr(const char *str, int c);
 char				*ft_substr(char const *s, unsigned int start, size_t len);
 char				*ft_strnstr(const char *big, const char *little,
 						size_t len);
-char				*ft_strtok(char *env_path, const char delim, char **next_path);
+char				*ft_strtok(char *env_path, const char delim,
+						char **next_path);
 size_t				ft_strlcat(char *dst, const char *src, size_t size);
 size_t				ft_strlcpy(char *dst, const char *src, size_t size);
 size_t				ft_strlen(const char *str);

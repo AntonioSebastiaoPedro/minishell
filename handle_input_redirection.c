@@ -98,7 +98,7 @@ int	handle_heredoc_redirection(t_command *cmd)
 int	handle_input_redirection(t_command *cmd)
 {
 	if (cmd->heredoc)
-		return handle_heredoc_redirection(cmd);
+		return (handle_heredoc_redirection(cmd));
 	else
-		return handle_file_input_redirection(cmd);
+		return (handle_file_input_redirection(cmd));
 }
