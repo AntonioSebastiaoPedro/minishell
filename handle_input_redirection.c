@@ -20,7 +20,7 @@ int	handle_file_input_redirection(t_command *cmd)
 	if (fd_read < 0)
 	{
 		print_error_redirection_file(cmd->input_redir);
-		return (-2);
+		return (-3);
 	}
 	dup2(fd_read, STDIN_FILENO);
 	close(fd_read);

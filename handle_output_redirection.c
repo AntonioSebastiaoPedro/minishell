@@ -79,7 +79,7 @@ int	process_output_redirection(t_command **cmd, t_command **command)
 	if (fd_write < 0)
 	{
 		print_error_redirection_file((*cmd)->output_redir);
-		return (-2);
+		return (-3);
 	}
 	if ((*cmd)->next && (*cmd)->next->output_redir)
 	{
