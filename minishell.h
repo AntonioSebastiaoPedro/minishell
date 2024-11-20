@@ -49,7 +49,7 @@ t_command	*parse_tokens(t_token *tokens);
 t_command	*add_command(t_command **commands, char *command);
 void		execute_commands(t_command *cmd, char **envp);
 int			is_builtin(char *cmd);
-void		exec_builtin(t_command *cmd);
+void		exec_builtin(t_command *cmd, int original_stdout);
 char		*expand_variables(char *str);
 int			handle_redirections(t_command **cmd);
 int			execute_external_command(t_command *cmd, char **envp);

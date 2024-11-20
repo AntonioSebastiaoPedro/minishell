@@ -14,16 +14,16 @@
 
 int	handle_file_input_redirection(t_command *cmd)
 {
-	int	fd;
+	int	fd_read;
 
-	fd = open(cmd->input_redir, O_RDONLY);
-	if (fd < 0)
+	fd_read = open(cmd->input_redir, O_RDONLY);
+	if (fd_read < 0)
 	{
 		printf("minishell: %s: %s\n", cmd->input_redir, strerror(errno));
 		return (-2);
 	}
-	dup2(fd, STDIN_FILENO);
-	close(fd);
+	dup2(fd_read, STDIN_FILENO);
+	close(fd_read);
 	return (0);
 }
 

@@ -20,11 +20,11 @@ void	restore_stdio(int original_stdin, int original_stdout)
 	close(original_stdout);
 }
 
-int	execute_command(t_command *cmd, char **envp)
+int	execute_command(t_command *cmd, int original_stdout, char **envp)
 {
 	if (cmd->command != NULL && is_builtin(cmd->command))
 	{
-		exec_builtin(cmd);
+		exec_builtin(cmd, original_stdout);
 	}
 	else
 	{
@@ -94,7 +94,7 @@ void	execute_commands(t_command *cmd, char **envp)
 			cmd = cmd->next;
 			continue ;
 		}
-		if (execute_command(cmd, envp) == -1)
+		if (execute_command(cmd, original_stdout, envp) == -1)
 			break ;
 		cmd = cmd->next;
 	}

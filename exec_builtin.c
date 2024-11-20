@@ -20,8 +20,13 @@ int	is_builtin(char *cmd)
 		|| ft_strcmp(cmd, "env") == 0);
 }
 
-void	exec_builtin(t_command *cmd)
+void	exec_builtin(t_command *cmd, int original_stdout)
 {
+	if (cmd->write_pipe_fd != -1)
+	{
+		dup2(cmd->write_pipe_fd, STDOUT_FILENO);
+		close(cmd->write_pipe_fd);
+	}
 	if (ft_strcmp(cmd->command, "echo") == 0)
 		ft_echo(cmd->args);
 	else if (ft_strcmp(cmd->command, "cd") == 0)
@@ -30,4 +35,9 @@ void	exec_builtin(t_command *cmd)
 		ft_pwd();
 	else if (ft_strcmp(cmd->command, "exit") == 0)
 		exit(0);
+	if (cmd->write_pipe_fd != -1)
+	{
+		dup2(original_stdout, STDOUT_FILENO);
+		close(original_stdout);
+	}
 }
