@@ -45,14 +45,42 @@ int	handle_redirections(t_command **cmd)
 	return (0);
 }
 
-void	case_redirection_print_message_error(char *operator)
+void	print_error_redirection_single(char *redir)
 {
-	if (ft_strcmp(operator, ">") == 0 || ft_strcmp(operator, "<") == 0
-		|| ft_strcmp(operator, ">>") == 0 || ft_strcmp(operator, "<<") == 0)
+	char	*program_name;
+	char	*error_message;
+	char	*newline;
+
+	newline = "\n";
+	program_name = "minishell: ";
+	write(2, program_name, ft_strlen(program_name));
+	if (ft_strcmp(redir, ">") == 0 || ft_strcmp(redir, "<") == 0
+		|| ft_strcmp(redir, ">>") == 0 || ft_strcmp(redir, "<<") == 0)
 	{
-		write(2, "bash: syntax error near unexpected token `newline'", 50);
-		write(2, "\n", 1);
+		error_message = "syntax error near unexpected token `newline'";
 	}
-	else if (ft_strcmp(operator, "|") == 0)
-		write(2, "bash: syntax error near unexpected token `|'\n", 45);
+	else if (ft_strcmp(redir, "|") == 0)
+	{
+		error_message = "syntax error near unexpected token `|'";
+	}
+	write(2, error_message, ft_strlen(error_message));
+	write(2, newline, ft_strlen(newline));
+}
+
+void	print_error_redirection_file(char *file_redir)
+{
+	char	*program_name;
+	char	*colon_space;
+	char	*newline;
+	char	*error_message;
+
+	program_name = "minishell: ";
+	colon_space = ": ";
+	newline = "\n";
+	error_message = strerror(errno);
+	write(2, program_name, ft_strlen(program_name));
+	write(2, file_redir, ft_strlen(file_redir));
+	write(2, colon_space, ft_strlen(colon_space));
+	write(2, error_message, ft_strlen(error_message));
+	write(2, newline, ft_strlen(newline));
 }

@@ -26,11 +26,15 @@ void	execute_child_process(t_command *cmd, char **envp)
 {
 	char	**new_args;
 	char	*executable_path;
+	char	*msg;
 
 	executable_path = find_executable_path(cmd->command);
 	if (!executable_path)
 	{
-		printf("minishell: command not found: %s\n", cmd->command);
+		msg = ": command not found";
+		write(2, cmd->command, ft_strlen(cmd->command));
+		write(2, msg, ft_strlen(msg));
+		write(2, "\n", 1);
 		exit(127);
 	}
 	new_args = prepare_args(executable_path, cmd->args);

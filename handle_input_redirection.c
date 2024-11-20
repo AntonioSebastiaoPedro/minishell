@@ -19,7 +19,7 @@ int	handle_file_input_redirection(t_command *cmd)
 	fd_read = open(cmd->input_redir, O_RDONLY);
 	if (fd_read < 0)
 	{
-		printf("minishell: %s: %s\n", cmd->input_redir, strerror(errno));
+		print_error_redirection_file(cmd->input_redir);
 		return (-2);
 	}
 	dup2(fd_read, STDIN_FILENO);

@@ -78,7 +78,7 @@ int	process_output_redirection(t_command **cmd, t_command **command)
 	fd_write = open((*cmd)->output_redir, flags, 0644);
 	if (fd_write < 0)
 	{
-		printf("minishell: %s: %s\n", (*cmd)->output_redir, strerror(errno));
+		print_error_redirection_file((*cmd)->output_redir);
 		return (-2);
 	}
 	if ((*cmd)->next && (*cmd)->next->output_redir)
