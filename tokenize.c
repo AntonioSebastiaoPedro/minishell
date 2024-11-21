@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 14:06:56 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/17 19:36:02 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/21 22:27:40 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	handle_environment_variable(const char *line, int *i, t_token **tokens)
 
 	j = 0;
 	buffer[j++] = line[(*i)++];
-	while (ft_isalnum(line[*i]) || line[*i] == '_')
+	while (ft_isalnum(line[*i]) || line[*i] == '_' || line[*i] == '?')
 	{
 		buffer[j++] = line[(*i)++];
 	}

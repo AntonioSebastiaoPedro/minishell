@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 19:36:42 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/18 02:17:30 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/21 22:05:29 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	extract_variable_name(const char *str, int *i, char *var_name)
 
 	j = 0;
 	(*i)++;
-	while (str[*i] && (ft_isalnum(str[*i]) || str[*i] == '_'))
+	while (str[*i] && (ft_isalnum(str[*i]) || str[*i] == '_' || str[*i] == '?'))
 		var_name[j++] = str[(*i)++];
 	var_name[j] = '\0';
 }
@@ -65,7 +65,10 @@ char	*expand_variables(const char *str, t_command *cmd, int *arg_pos,
 		if (str[i] == '$')
 		{
 			extract_variable_name(str, &i, var_name);
-			env_val = get_env_value(var_name, env);
+			if (ft_strcmp("?", var_name) == 0)
+				env_val = get_env_value("XDG_CMD_STATUS", env);
+			else
+				env_val = get_env_value(var_name, env);
 			check_enval(&env_val, &result, &pos);
 		}
 		else

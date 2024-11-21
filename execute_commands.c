@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 13:11:19 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/18 12:30:10 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/21 22:02:38 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,12 +156,12 @@ void	execute_commands(t_command *cmd, t_env **env)
 		{
 			g_execute_command_2 = 1;
 			exec_builtin(cmd, env, &status);
-			update_envvar(env, "X", ft_itoa(status));
+			update_envvar(env, "XDG_CMD_STATUS", ft_itoa(status));
 		}
 		else if (g_execute_command_2 == 1)
 		{
 			execute_external_command(cmd, env, &status);
-			update_envvar(env, "X", ft_itoa(status));
+			update_envvar(env, "XDG_CMD_STATUS", ft_itoa(status));
 			if (pid_heredoc != 0)
 				kill(pid_heredoc, SIGTERM);
 		}

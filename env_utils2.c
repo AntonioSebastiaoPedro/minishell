@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 18:53:51 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/18 12:31:32 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/21 22:04:56 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	envcpy(t_env **env_dup, char **src)
 		add_env(env_dup, src[i]);
 		i++;
 	}
-	add_env(env_dup, "X=0");
+	add_env(env_dup, "XDG_CMD_STATUS=0");
 }
 
 static int	count_visible_vars(t_env *env_list)
