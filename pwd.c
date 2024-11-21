@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 01:37:03 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/18 11:30:14 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/22 00:51:39 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,5 @@ int	ft_pwd(void)
 	{
 		printf("%s: ", strerror(errno));
 		return (1);
-		// perror("pwd failed");
 	}
 }

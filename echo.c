@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 01:04:34 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/22 00:29:48 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/22 00:56:54 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	ft_echo(t_command *cmd)
 	{
 		if (cmd->args[0] && ft_strcmp(cmd->args[0], "-n") == 0)
 		{
-			newline = 0;
+			newline = -1;
 			i++;
 		}
 		while (cmd->args[i])
@@ -46,7 +46,7 @@ int	ft_echo(t_command *cmd)
 			i++;
 		}
 	}
-	if (newline)
+	if (newline != -1)
 		printf("\n");
 	return (0);
 }

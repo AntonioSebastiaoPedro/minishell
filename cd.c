@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 01:40:15 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/18 11:28:48 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/22 00:51:29 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ int	ft_cd(char **args, t_env **env)
 	if (chdir(path) == -1)
 	{
 		printf("%s: ", strerror(errno));
-		// perror("cd");
 		return (1);
 	}
 	cwd = getcwd(NULL, 0);

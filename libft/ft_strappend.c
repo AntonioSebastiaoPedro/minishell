@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 02:33:06 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/18 02:36:55 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/22 00:50:02 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	*ft_strappend(char *dest, const char *src)
 
 	i = 0;
 	j = 0;
-	while(dest[j])
+	while (dest[j])
 		j++;
 	while (src[i])
 		dest[j++] = src[i++];
