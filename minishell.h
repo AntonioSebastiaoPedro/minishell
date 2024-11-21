@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 11:25:08 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/18 12:28:26 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/22 00:28:39 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ typedef struct s_command
 	int					append;
 	int					*interpret;
 	int					heredoc;
+	int					invalid_redir;
 	struct s_command	*next;
 }						t_command;
 
@@ -58,7 +59,7 @@ int						ft_env(t_command *cmd, t_env **env);
 int						is_builtin(const char *cmd);
 int						is_command(const char *token);
 void					tokenize(char *line, t_token **tokens);
-int					ft_echo(char **args);
+int					ft_echo(t_command *cmd);
 int					ft_pwd(void);
 int					ft_cd(char **args, t_env **env);
 int					ft_export(t_command *cmd, t_env **env);

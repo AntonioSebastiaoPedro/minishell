@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 16:54:03 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/08 11:58:55 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/22 00:46:05 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,11 @@ int	is_redirection(const char *token)
 
 void	handle_redirection(t_token *token, t_command *current_cmd)
 {
+	if (!token->next)
+	{
+		current_cmd->invalid_redir = 1;
+		return ;
+	}
 	if (ft_strcmp(token->value, ">") == 0)
 		current_cmd->output_redir = token->next->value;
 	else if (ft_strcmp(token->value, "<") == 0)

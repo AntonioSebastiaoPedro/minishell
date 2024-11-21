@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 19:37:31 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/18 12:26:44 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/22 00:29:06 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	exec_builtin(t_command *cmd, t_env **env, int *status)
 {	
 	if (ft_strcmp(cmd->command, "echo") == 0)
-		*status = (ft_echo(cmd->args));
+		*status = (ft_echo(cmd));
 	else if (ft_strcmp(cmd->command, "cd") == 0)
 		*status = (ft_cd(cmd->args, env));
 	else if (ft_strcmp(cmd->command, "pwd") == 0)
