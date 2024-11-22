@@ -102,7 +102,7 @@ int	main(int argc, char *argv[], char **envp)
 	signal(SIGINT, handle_sigint);
 	signal(SIGQUIT, handle_sigquit);
 	while (1)
-	{	
+	{
 		tokens = NULL;
 		line = readline("ansebastian@ateca-Akastuki:~/minishell$ ");
 		if (!line)
