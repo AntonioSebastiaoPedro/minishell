@@ -76,5 +76,6 @@ void		ft_echo(char **args);
 void		ft_pwd(void);
 void		ft_cd(char **args);
 void		ft_export(char **args);
+void		free_tokens(t_token *tokens);
 
 #endif

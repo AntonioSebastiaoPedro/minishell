@@ -116,9 +116,6 @@ void	handle_pipe_heredoc(char *line, t_token **tokens, int *i)
 		child_process_pipe_heredoc(line, tokens);
 	else if (pid < 0)
 	{
-		free(line);
-		*i = ft_strlen(line);
-		signal(SIGINT, handle_sigint);
 		perror("minishell: fork failed");
 	}
 	else
@@ -127,7 +124,11 @@ void	handle_pipe_heredoc(char *line, t_token **tokens, int *i)
 		*i = ft_strlen(line);
 		signal(SIGINT, handle_sigint);
 		if (WIFEXITED(status) && WEXITSTATUS(status) == 1)
+		{
+			rl_clear_history();
+			free_tokens(*tokens);
 			exit(1);
+		}
 		else if (WIFEXITED(status) && WEXITSTATUS(status) == 130)
 			*tokens = NULL;
 	}

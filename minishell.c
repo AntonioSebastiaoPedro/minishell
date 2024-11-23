@@ -103,18 +103,18 @@ int	main(int argc, char *argv[], char **envp)
 	signal(SIGQUIT, handle_sigquit);
 	while (1)
 	{
-		tokens = NULL;
+		//tokens = NULL;
 		line = readline("ansebastian@ateca-Akastuki:~/minishell$ ");
 		if (!line)
 			break ;
 		add_history(line);
 		tokenize(line, &tokens);
+		free(line);
 		commands = parse_tokens(tokens);
 		//print_tokens(tokens);
+		free_tokens(tokens);
 		//print_commands(commands);
 		execute_commands(commands, envp);
-		free(line);
-		free_tokens(tokens);
 		free_commands(commands);
 	}
 	rl_clear_history();
