@@ -137,3 +137,20 @@ who | grep "teca"
 ls | wc -l > output.txt
 cat output.txt
 
+ls | comando_invalido
+
+| ls
+ls |
+
+ls | grep "minishell" | wc -l
+
+echo "42" | cat | grep "4"
+who | sort | uniq | wc -l
+
+////////////////////////////////////////////////////////////////////////////////
+echo e" "f
+echo tete"tete"
+echo "teste"tete
+echo "ccc"fff'hhhh'""ddd
+
+
