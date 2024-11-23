@@ -105,7 +105,7 @@ void	child_process_pipe_heredoc(char *line, t_token **tokens)
 	exit(0);
 }
 
-void	handle_pipe_heredoc(char *line, t_token **tokens, int *i)
+void	handle_pipe_stdin(char *line, t_token **tokens, int *i)
 {
 	pid_t	pid;
 	int		status;
@@ -144,7 +144,7 @@ void	tokenize(char *line, t_token **tokens)
 		while (ft_isspace(line[i]))
 			i++;
 		if (line[i] == '|' && line[i + 1] == '\0')
-			handle_pipe_heredoc(line, tokens, &i);
+			handle_pipe_stdin(line, tokens, &i);
 		else if (line[i] == '|' || line[i] == '>' || line[i] == '<')
 			handle_redirection_and_pipes(line, &i, tokens);
 		else if (line[i] == '"' || line[i] == '\'')
