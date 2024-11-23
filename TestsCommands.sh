@@ -129,3 +129,7 @@ linha1
 teste
 linha3
 EOF
+
+ls | wc -l > output.txt
+cat output.txt
+

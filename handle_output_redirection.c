@@ -43,15 +43,22 @@ int	handle_chained_redirection(t_command **cmd)
 	status = 0;
 	if ((*cmd)->command != NULL && ft_strcmp((*cmd)->command, "echo") == 0)
 	{
-		(*cmd)->next->read_pipe_fd = -1;
 		(*cmd)->next->command = ft_strdup((*cmd)->command);
 		status = copy_arguments((*cmd)->args, (*cmd)->next);
 		if (status == -2)
 			return (status);
 	}
-	else if ((*cmd)->read_pipe_fd != -1)
+	else if ((*cmd)->command != NULL)
 	{
-		(*cmd)->next->read_pipe_fd = (*cmd)->read_pipe_fd;
+		(*cmd)->next->command = ft_strdup((*cmd)->command);
+		if ((*cmd)->read_pipe_fd != -1 && (*cmd)->heredoc == 1)
+			(*cmd)->next->read_pipe_fd = (*cmd)->read_pipe_fd;
+		else
+		{
+			if ((*cmd)->next->next != NULL)
+				(*cmd)->next->next->read_pipe_fd
+					= (*cmd)->next->read_pipe_fd;
+		}
 	}
 	*cmd = (*cmd)->next;
 	return (0);
@@ -88,8 +95,6 @@ int	process_output_redirection(t_command **cmd, t_command **command)
 	}
 	else
 	{
-		if ((*cmd)->read_pipe_fd != -1)
-			(*cmd)->command = ft_strdup("cat");
 		dup2(fd_write, STDOUT_FILENO);
 		close(fd_write);
 		*command = *cmd;

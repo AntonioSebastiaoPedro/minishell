@@ -41,7 +41,14 @@ int	handle_heredoc_parent_process(t_command *cmd, pid_t pid)
 	if (WIFEXITED(status) && WEXITSTATUS(status) == 0)
 	{
 		if (cmd->next != NULL)
+		{
+			if (cmd->next->output_redir)
+			{
+				cmd->next->heredoc = 1;
+				cmd->next->command = ft_strdup(cmd->command);
+			}
 			return (-3);
+		}
 		return (0);
 	}
 	return (-2);
