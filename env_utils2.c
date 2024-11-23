@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 18:53:51 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/21 22:04:56 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/22 17:00:35 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,19 @@ static int	count_visible_vars(t_env *env_list)
 	return (count);
 }
 
+int	init_env_var(char **env_array, int *i, int len)
+{
+	env_array[*i] = malloc(len * sizeof(char));
+	if (!env_array[*i])
+	{
+		while (*i > 0)
+			free(env_array[--*i]);
+		free(env_array);
+		return (1);
+	}
+	return (0);
+}
+
 char	**env_list_to_array(t_env *env_list)
 {
 	int		i;
@@ -74,16 +87,10 @@ char	**env_list_to_array(t_env *env_list)
 		if (env_list->show == 1)
 		{
 			len = ft_strlen(env_list->var) + ft_strlen(env_list->value) + 2;
-			env_array[i] = malloc(len * sizeof(char));
-			if (!env_array[i])
-			{
-				while (i > 0)
-					free(env_array[--i]);
-				free(env_array);
+			if (init_env_var(env_array, &i, len))
 				return (NULL);
-			}
-			snprintf(env_array[i], len, "%s=%s", env_list->var,
-				env_list->value);
+			env_array[i] = ft_strjoin_delimiter(env_list->var, '=',
+					env_list->value);
 			i++;
 		}
 		env_list = env_list->next;

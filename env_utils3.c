@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 01:45:25 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/18 04:03:07 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/22 13:10:01 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,4 +54,18 @@ void	update_envvar(t_env **env, char *var, char *value)
 	ft_strappend(var_value, "=");
 	ft_strappend(var_value, value);
 	add_env(env, var_value);
+}
+
+char	*get_env_value(char *var, t_env **env)
+{
+	t_env	*temp;
+
+	temp = *env;
+	while (temp)
+	{
+		if (ft_strcmp(temp->var, var) == 0)
+			return (temp->value);
+		temp = temp->next;
+	}
+	return (NULL);
 }

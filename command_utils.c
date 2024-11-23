@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 19:41:38 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/10 14:34:42 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/22 13:03:25 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,22 @@ int	is_command(const char *token)
 		&& ft_strcmp(token, ">>") != 0 && ft_strcmp(token, "<<") != 0);
 }
 
-t_command	*add_command(t_command **commands, const char *command)
+void	atribute_cmd_values(t_command **cmd)
+{
+	(*cmd)->args = NULL;
+	(*cmd)->input_redir = NULL;
+	(*cmd)->output_redir = NULL;
+	(*cmd)->append = 0;
+	(*cmd)->heredoc = 0;
+	(*cmd)->write_pipe_fd = -1;
+	(*cmd)->read_pipe_fd = -1;
+	(*cmd)->next = NULL;
+}
+
+t_command	*add_command(t_command **commands, char *command)
 {
 	t_command	*new_command;
+	t_command	*current;
 
 	new_command = malloc(sizeof(t_command));
 	if (!new_command)
@@ -29,14 +42,17 @@ t_command	*add_command(t_command **commands, const char *command)
 		perror("malloc");
 		return (NULL);
 	}
-	new_command->command = ft_strdup(command);
-	new_command->args = NULL;
-	new_command->interpret = NULL;
-	new_command->input_redir = NULL;
-	new_command->output_redir = NULL;
-	new_command->append = 0;
-	new_command->next = *commands;
-	*commands = new_command;
+	new_command->command = command;
+	atribute_cmd_values(&new_command);
+	if (*commands == NULL)
+		*commands = new_command;
+	else
+	{
+		current = *commands;
+		while (current->next != NULL)
+			current = current->next;
+		current->next = new_command;
+	}
 	return (new_command);
 }
 

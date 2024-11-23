@@ -6,13 +6,13 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 19:37:31 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/22 00:54:32 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/22 13:13:47 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	exec_builtin(t_command *cmd, t_env **env, int *status)
+void	get_status_builtin(int *status, t_command *cmd, t_env **env)
 {
 	if (ft_strcmp(cmd->command, "echo") == 0)
 		*status = (ft_echo(cmd));
@@ -28,7 +28,25 @@ int	exec_builtin(t_command *cmd, t_env **env, int *status)
 		*status = (ft_unset(cmd, env));
 	else if (ft_strcmp(cmd->command, "exit") == 0)
 		*status = (ft_exit(cmd));
-	return (*status);
+}
+
+int	exec_builtin(t_command *cmd, int original_stdout, t_env **env)
+{
+	int	status;
+
+	status = 0;
+	if (cmd->write_pipe_fd != -1)
+	{
+		dup2(cmd->write_pipe_fd, STDOUT_FILENO);
+		close(cmd->write_pipe_fd);
+	}
+	get_status_builtin(&status, cmd, env);
+	if (cmd->write_pipe_fd != -1)
+	{
+		dup2(original_stdout, STDOUT_FILENO);
+		close(original_stdout);
+	}
+	return (status);
 }
 
 int	is_builtin(const char *cmd)

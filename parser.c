@@ -6,36 +6,39 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 16:54:03 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/22 00:46:05 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/22 09:18:16 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	is_redirection(const char *token)
+t_command	*process_current_token(t_token *tokens, t_command **commands,
+		t_command *current_cmd, int *skip_file_redirection)
 {
-	return (ft_strcmp(token, ">") == 0 || ft_strcmp(token, "<") == 0
-		|| ft_strcmp(token, ">>") == 0 || ft_strcmp(token, "<<") == 0);
-}
-
-void	handle_redirection(t_token *token, t_command *current_cmd)
-{
-	if (!token->next)
+	if (current_cmd == NULL && is_command(tokens->value))
+		current_cmd = add_command(commands, ft_strdup(tokens->value));
+	else if (current_cmd == NULL && tokens->next == NULL)
 	{
-		current_cmd->invalid_redir = 1;
-		return ;
+		print_error_redirection_single(tokens->value);
 	}
-	if (ft_strcmp(token->value, ">") == 0)
-		current_cmd->output_redir = token->next->value;
-	else if (ft_strcmp(token->value, "<") == 0)
-		current_cmd->input_redir = token->next->value;
-	else if (ft_strcmp(token->value, ">>") == 0)
+	else if (current_cmd == NULL && is_redirection(tokens->value))
 	{
-		current_cmd->output_redir = token->next->value;
-		current_cmd->append = 1;
+		*skip_file_redirection = 1;
+		current_cmd = add_command(commands, NULL);
+		handle_redirection(tokens, current_cmd);
 	}
-	else if (ft_strcmp(token->value, "<<") == 0)
-		current_cmd->input_redir = token->next->value;
+	else if (current_cmd != NULL && ft_strcmp(tokens->value, "|") == 0)
+	{
+		current_cmd = NULL;
+	}
+	else if (current_cmd != NULL && is_redirection(tokens->value))
+	{
+		*skip_file_redirection = 1;
+		handle_redirection(tokens, current_cmd);
+	}
+	else if (current_cmd != NULL && is_argument(tokens->value))
+		add_argument(current_cmd, tokens);
+	return (current_cmd);
 }
 
 int	is_argument(const char *token)
@@ -68,28 +71,24 @@ void	add_argument(t_command *cmd, t_token *token)
 
 t_command	*parse_tokens(t_token *tokens)
 {
-	int			skip_file;
 	t_command	*commands;
 	t_command	*current_cmd;
+	int			skip_file_redirection;
 
-	skip_file = 0;
 	commands = NULL;
 	current_cmd = NULL;
+	skip_file_redirection = 0;
 	while (tokens)
 	{
-		if (skip_file)
-			skip_file = 0;
-		else if (is_command(tokens->value) && !current_cmd)
-			current_cmd = add_command(&commands, tokens->value);
-		else if (ft_strcmp(tokens->value, "|") == 0)
-			current_cmd = NULL;
-		else if (is_redirection(tokens->value) && current_cmd)
+		if (skip_file_redirection)
 		{
-			handle_redirection(tokens, current_cmd);
-			skip_file = 1;
+			skip_file_redirection = 0;
+			if (tokens->next != NULL && is_redirection(tokens->next->value))
+				current_cmd = NULL;
 		}
-		else if (is_argument(tokens->value) && current_cmd)
-			add_argument(current_cmd, tokens);
+		else
+			current_cmd = process_current_token(tokens, &commands, current_cmd,
+					&skip_file_redirection);
 		tokens = tokens->next;
 	}
 	return (commands);

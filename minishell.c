@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 11:19:19 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/21 21:55:19 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/22 16:53:26 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ int	main(void)
 	while (1)
 	{
 		tokens = NULL;
-		line = readline("\033[38;5;81mateca\033[0m@\033[38;5;208mansebast\033[0m-\033[38;5;196mAkatsuki\033[0m🌊🔥$ ");
+		// line = readline("\001\033[38;5;81mateca\033[0m@\033[38;5;208mansebast\033[0m-\033[38;5;196mAkatsuki\033[0m🌊🔥$\002 ");
+		line = readline("Akatsuki$ ");
 		if (!line)
 			break ;
 		add_history(line);

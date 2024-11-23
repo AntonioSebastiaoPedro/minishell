@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   vars_utils.c                                       :+:      :+:    :+:   */
+/*   expand_variables.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/07 19:36:42 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/21 22:05:29 by ansebast         ###   ########.fr       */
+/*   Created: 2024/11/18 15:50:04 by ateca             #+#    #+#             */
+/*   Updated: 2024/11/22 12:32:53 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,18 +32,36 @@ void	check_enval(char **env_val, char **result, int *pos)
 	}
 }
 
-char	*get_env_value(char *var, t_env **env)
+int	handle_dollar_sign(char *str, int *i, char *result, int pos, t_env **env)
 {
-	t_env	*temp;
+	char	var_name[1024];
+	char	*env_val;
 
-	temp = *env;
-	while (temp)
+	if (ft_isdigit(str[*i + 1]))
 	{
-		if (ft_strcmp(temp->var, var) == 0)
-			return (temp->value);
-		temp = temp->next;
+		result[pos++] = str[(*i)++];
+		result[pos++] = str[(*i)++];
 	}
-	return (NULL);
+	else
+	{
+		extract_variable_name(str, i, var_name);
+		if (ft_strcmp("?", var_name) == 0)
+			env_val = get_env_value("XDG_CMD_STATUS", env);
+		else
+			env_val = get_env_value(var_name, env);
+		check_enval(&env_val, &result, &pos);
+	}
+	return (pos);
+}
+
+char	*allocate_result_buffer(void)
+{
+	char	*result;
+
+	result = malloc(sizeof(char) * 1024);
+	if (!result)
+		perror("minishell: malloc failed");
+	return (result);
 }
 
 char	*expand_variables(const char *str, t_command *cmd, int *arg_pos,
@@ -51,26 +69,19 @@ char	*expand_variables(const char *str, t_command *cmd, int *arg_pos,
 {
 	int		pos;
 	int		i;
-	char	*env_val;
 	char	*result;
-	char	var_name[1024];
 
 	if (cmd->interpret[*arg_pos])
 		return (ft_strdup((char *)str));
-	result = malloc(sizeof(char) * 1024);
+	result = allocate_result_buffer();
+	if (!result)
+		return (NULL);
 	pos = 0;
 	i = 0;
 	while (str[i] != '\0')
 	{
 		if (str[i] == '$')
-		{
-			extract_variable_name(str, &i, var_name);
-			if (ft_strcmp("?", var_name) == 0)
-				env_val = get_env_value("XDG_CMD_STATUS", env);
-			else
-				env_val = get_env_value(var_name, env);
-			check_enval(&env_val, &result, &pos);
-		}
+			pos = handle_dollar_sign((char *)str, &i, result, pos, env);
 		else
 			result[pos++] = str[i++];
 	}
