@@ -82,6 +82,57 @@ void	handle_word(const char *line, int *i, t_token **tokens)
 	(*tokens) = add_token(*tokens, buffer);
 }
 
+void	child_process_pipe_heredoc(char *line, t_token **tokens)
+{
+	char	*new_line;
+	char	*next_line;
+
+	signal(SIGINT, handle_sigint_heredoc);
+	*tokens = add_token(*tokens, "|");
+	next_line = readline("> ");
+	if (next_line == NULL)
+	{
+		free(line);
+		write(2, "minishell: ", 11);
+		write(2, "syntax error: unexpected end of file\n", 37);
+		write(2, "exit\n", 5);
+		exit(1);
+	}
+	new_line = ft_strdup(next_line);
+	free(next_line);
+	tokenize(new_line, tokens);
+	free(new_line);
+	exit(0);
+}
+
+void	handle_pipe_heredoc(char *line, t_token **tokens, int *i)
+{
+	pid_t	pid;
+	int		status;
+
+	signal(SIGINT, SIG_IGN);
+	pid = fork();
+	if (pid == 0)
+		child_process_pipe_heredoc(line, tokens);
+	else if (pid < 0)
+	{
+		free(line);
+		*i = ft_strlen(line);
+		signal(SIGINT, handle_sigint);
+		perror("minishell: fork failed");
+	}
+	else
+	{
+		waitpid(pid, &status, 0);
+		*i = ft_strlen(line);
+		signal(SIGINT, handle_sigint);
+		if (WIFEXITED(status) && WEXITSTATUS(status) == 1)
+			exit(1);
+		else if (WIFEXITED(status) && WEXITSTATUS(status) == 130)
+			*tokens = NULL;
+	}
+}
+
 void	tokenize(char *line, t_token **tokens)
 {
 	int	i;
@@ -91,7 +142,9 @@ void	tokenize(char *line, t_token **tokens)
 	{
 		while (ft_isspace(line[i]))
 			i++;
-		if (line[i] == '|' || line[i] == '>' || line[i] == '<')
+		if (line[i] == '|' && line[i + 1] == '\0')
+			handle_pipe_heredoc(line, tokens, &i);
+		else if (line[i] == '|' || line[i] == '>' || line[i] == '<')
 			handle_redirection_and_pipes(line, &i, tokens);
 		else if (line[i] == '"' || line[i] == '\'')
 			handle_quotes(line, &i, tokens);

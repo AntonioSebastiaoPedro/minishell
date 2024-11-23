@@ -22,7 +22,7 @@ void	handle_sigint_heredoc(int signum)
 {
 	(void)signum;
 	write(STDERR_FILENO, "\n", 1);
-	exit(1);
+	exit(130);
 }
 
 void	handle_sigquit(int sig)
