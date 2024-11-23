@@ -60,6 +60,7 @@ void		handle_redirection(t_token *token, t_command *current_cmd);
 void		add_argument(t_command *cmd, const char *arg);
 void		print_error_redirection_single(char *redir);
 void		print_error_redirection_file(char *file_redir);
+void		handle_pipe_stdin(char *line, t_token **tokens, int *i);
 void		handle_sigint(int sig);
 void		handle_sigquit(int sig);
 void		handle_sigint_external_command(int signum);
