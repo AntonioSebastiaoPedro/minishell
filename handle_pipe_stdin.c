@@ -24,9 +24,8 @@ int	check_isspace(char *line, int i)
 	return (1);
 }
 
-void	child_process_pipe_heredoc(char *line, t_token **tokens)
+void	child_process(t_token **tokens, int *pipe_fd)
 {
-	char	*new_line;
 	char	*next_line;
 
 	signal(SIGINT, handle_sigint_heredoc);
@@ -34,44 +33,63 @@ void	child_process_pipe_heredoc(char *line, t_token **tokens)
 	next_line = readline("> ");
 	if (next_line == NULL)
 	{
-		free(line);
 		write(2, "minishell: ", 11);
 		write(2, "syntax error: unexpected end of file\n", 37);
 		write(2, "exit\n", 5);
 		exit(1);
 	}
-	new_line = ft_strdup(next_line);
+	close(pipe_fd[0]);
+	write(pipe_fd[1], next_line, ft_strlen(next_line));
+	close(pipe_fd[1]);
 	free(next_line);
-	tokenize(new_line, tokens);
-	free(new_line);
 	exit(0);
+}
+
+void	parent_process(pid_t pid, t_token **tokens, int *pipe_fd)
+{
+	char	new_line[1025];
+	int		status;
+	int		bytes;
+
+	waitpid(pid, &status, 0);
+	signal(SIGINT, handle_sigint);
+	if (WIFEXITED(status) && WEXITSTATUS(status) == 1)
+	{
+		rl_clear_history();
+		free_tokens(*tokens);
+		exit(1);
+	}
+	else if (WIFEXITED(status) && WEXITSTATUS(status) == 130)
+		*tokens = NULL;
+	else
+	{
+		bytes = read(pipe_fd[0], new_line, 1024);
+		new_line[bytes] = '\0';
+		tokenize(new_line, tokens);
+	}
 }
 
 void	handle_pipe_stdin(char *line, t_token **tokens, int *i)
 {
 	pid_t	pid;
-	int		status;
+	int		pipe_fd[2];
 
 	signal(SIGINT, SIG_IGN);
+	add_token(*tokens, "|");
+	pipe(pipe_fd);
 	pid = fork();
 	if (pid == 0)
-		child_process_pipe_heredoc(line, tokens);
+		child_process(tokens, pipe_fd);
 	else if (pid < 0)
 	{
+		*tokens = NULL;
+		*i = ft_strlen(line);
+		signal(SIGINT, handle_sigint);
 		perror("minishell: fork failed");
 	}
 	else
 	{
-		waitpid(pid, &status, 0);
 		*i = ft_strlen(line);
-		signal(SIGINT, handle_sigint);
-		if (WIFEXITED(status) && WEXITSTATUS(status) == 1)
-		{
-			rl_clear_history();
-			free_tokens(*tokens);
-			exit(1);
-		}
-		else if (WIFEXITED(status) && WEXITSTATUS(status) == 130)
-			*tokens = NULL;
+		parent_process(pid, tokens, pipe_fd);
 	}
 }
