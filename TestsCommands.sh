@@ -130,6 +130,10 @@ teste
 linha3
 EOF
 
+echo "Hello, World!" | cat
+ls | wc -l
+who | grep "teca"
+
 ls | wc -l > output.txt
 cat output.txt
 

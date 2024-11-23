@@ -56,6 +56,7 @@ int			execute_external_command(t_command *cmd, char **envp);
 int			is_command(char *token);
 int			is_argument(const char *token);
 int			is_redirection(const char *token);
+int			check_isspace(char *line, int i);
 void		handle_redirection(t_token *token, t_command *current_cmd);
 void		add_argument(t_command *cmd, const char *arg);
 void		print_error_redirection_single(char *redir);

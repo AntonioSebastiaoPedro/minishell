@@ -12,6 +12,18 @@
 
 #include "minishell.h"
 
+int	check_isspace(char *line, int i)
+{
+	i++;
+	while (line[i])
+	{
+		if (!ft_isspace(line[i]))
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 void	child_process_pipe_heredoc(char *line, t_token **tokens)
 {
 	char	*new_line;
