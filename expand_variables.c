@@ -52,7 +52,7 @@ char	*allocate_result_buffer(void)
 
 	result = malloc(sizeof(char) * 1024);
 	if (!result)
-		perror("minishell: malloc failed");
+		perror("malloc failed");
 	return (result);
 }
 

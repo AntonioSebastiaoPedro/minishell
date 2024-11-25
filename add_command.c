@@ -27,7 +27,7 @@ t_command	*add_command(t_command **commands, char *command)
 	new_command = malloc(sizeof(t_command));
 	if (!new_command)
 	{
-		perror("malloc");
+		perror("malloc failed");
 		return (NULL);
 	}
 	new_command->command = command;

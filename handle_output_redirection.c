@@ -23,7 +23,7 @@ int	copy_arguments(char **args, t_command *next_cmd)
 	next_cmd->args = (char **)malloc(sizeof(char *) * (count + 1));
 	if (!next_cmd->args)
 	{
-		perror("minishell: malloc failed");
+		perror("malloc failed");
 		return (-2);
 	}
 	i = 0;

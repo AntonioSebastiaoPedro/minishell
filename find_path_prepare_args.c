@@ -24,13 +24,13 @@ char	**prepare_args(char *executable_path, char **original_args)
 	new_args = malloc((arg_count + 2) * sizeof(char *));
 	if (!new_args)
 	{
-		perror("minishell: malloc failed");
+		perror("malloc failed");
 		exit(1);
 	}
 	new_args[0] = ft_strdup(executable_path);
 	if (!new_args[0])
 	{
-		perror("minishell: malloc failed");
+		perror("malloc failed");
 		free(new_args);
 		exit(1);
 	}

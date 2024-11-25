@@ -85,7 +85,7 @@ void	handle_pipe_stdin(char *line, t_token **tokens, int *i)
 		*tokens = NULL;
 		*i = ft_strlen(line);
 		signal(SIGINT, handle_sigint);
-		perror("minishell: fork failed");
+		perror("fork failed");
 	}
 	else
 	{

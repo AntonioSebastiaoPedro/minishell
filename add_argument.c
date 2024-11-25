@@ -31,6 +31,11 @@ void	add_argument(t_command *cmd, const char *arg)
 		}
 	}
 	cmd->args = ft_realloc(cmd->args, sizeof(char *) * (count + 2));
+	if (!cmd->args)
+	{
+		perror("malloc failed");
+		return ;
+	}
 	cmd->args[count] = ft_strdup(arg);
 	cmd->args[count + 1] = NULL;
 }
