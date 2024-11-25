@@ -112,7 +112,7 @@ int	main(int argc, char *argv[], char **envp)
 		free(line);
 		commands = parse_tokens(tokens);
 		//print_tokens(tokens);
-		print_commands(commands);
+		//print_commands(commands);
 		execute_commands(commands, envp);
 		free_tokens(tokens);
 		free_commands(commands);

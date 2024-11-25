@@ -72,6 +72,7 @@ int			handle_heredoc_redirection(t_command *cmd);
 int			handle_file_input_redirection(t_command *cmd);
 int			handle_input_redirection(t_command *cmd);
 int			handle_output_redirection(t_command **command);
+int			expects_stdin(char *cmd);
 char		*expand_variables(char *str);
 char		*remove_quotes(const char *str);
 void		ft_echo(char **args);

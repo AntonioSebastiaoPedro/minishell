@@ -147,6 +147,8 @@ ls | grep "minishell" | wc -l
 echo "42" | cat | grep "4"
 who | sort | uniq | wc -l
 
+cat < file.txt | grep "42" > result.txt
+
 ////////////////////////////////////////////////////////////////////////////////
 echo e" "f
 echo tete"tete"
