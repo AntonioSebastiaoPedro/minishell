@@ -40,6 +40,10 @@ Hello,
 This is a HEREDOC example.
 END
 
+cat << END > output.txt
+
+cat << END > output.txt > output1.txt > output2.txt
+
 Esse último comando cria um arquivo heredoc_output.txt com o conteúdo entre EOF e EOF.
 cat << EOF > heredoc_output.txt
 This is a test of HEREDOC with output redirection.

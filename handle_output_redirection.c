@@ -50,7 +50,6 @@ int	handle_chained_redirection(t_command **cmd)
 		if ((*cmd)->read_pipe_fd != -1 && (*cmd)->heredoc == 1)
 		{
 			(*cmd)->next->heredoc = 1;
-			(*cmd)->next->command = ft_strdup((*cmd)->command);
 			(*cmd)->next->read_pipe_fd = (*cmd)->read_pipe_fd;
 		}
 		else
