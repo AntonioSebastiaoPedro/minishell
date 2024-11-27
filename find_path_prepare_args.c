@@ -30,7 +30,7 @@ char	**prepare_args(char *executable_path, char **original_args)
 	new_args[0] = ft_strdup(executable_path);
 	if (!new_args[0])
 	{
-		perror("malloc failed");
+		perror("minishell");
 		free(new_args);
 		exit(1);
 	}
@@ -39,6 +39,12 @@ char	**prepare_args(char *executable_path, char **original_args)
 		new_args[i + 1] = original_args[i];
 	new_args[arg_count + 1] = NULL;
 	return (new_args);
+}
+
+char	*get_env(char **path)
+{
+	(*path) = getenv("PATH");
+	return (*path);
 }
 
 char	*absolute_relative_path(char *command)
@@ -62,8 +68,7 @@ char	*find_executable_path(char *command)
 
 	if (ft_strchr(command, '/') != NULL)
 		return (absolute_relative_path(command));
-	path = getenv("PATH");
-	if (!path)
+	if (!get_env(&path))
 		return (NULL);
 	path_copy = ft_strdup(path);
 	dir = ft_strtok(path_copy, ':', &next_path);
@@ -75,6 +80,7 @@ char	*find_executable_path(char *command)
 			free(path_copy);
 			return (exec_path);
 		}
+		free(exec_path);
 		dir = ft_strtok(NULL, ':', &next_path);
 	}
 	free(path_copy);
