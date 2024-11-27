@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 19:41:38 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/22 13:03:25 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/27 11:54:53 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,8 @@ void	free_commands(t_command *commands)
 				free(current->args[i]);
 			free(current->args);
 		}
+		if (current->interpret)
+			free(current->interpret);
 		free(current);
 		current = next;
 	}

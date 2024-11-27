@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 01:45:25 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/22 13:10:01 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/27 11:46:41 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	update_shlvl(t_env **env)
 {
 	t_env	*current;
 	int		shlvl_value;
+	char		*itoa_result;
 
 	current = *env;
 	while (current)
@@ -25,7 +26,9 @@ void	update_shlvl(t_env **env)
 			shlvl_value = ft_atoi(current->value);
 			shlvl_value++;
 			free(current->value);
-			current->value = ft_strdup(ft_itoa(shlvl_value));
+			itoa_result = ft_itoa(shlvl_value);
+			current->value = ft_strdup(itoa_result);
+			free(itoa_result);
 			return ;
 		}
 		current = current->next;

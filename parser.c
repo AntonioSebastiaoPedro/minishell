@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 16:54:03 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/22 09:18:16 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/27 11:52:13 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	add_argument(t_command *cmd, t_token *token)
 		}
 	}
 	cmd->args = ft_realloc(cmd->args, sizeof(char *) * (i + 2));
-	cmd->args[i] = ft_strdup(token->value);
+	cmd->args[i] = token->value;
 	cmd->args[i + 1] = NULL;
 	cmd->interpret = ft_realloc(cmd->interpret, sizeof(int) * (j + 1));
 	cmd->interpret[j] = token->interpret;
