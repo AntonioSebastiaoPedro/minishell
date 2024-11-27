@@ -36,10 +36,10 @@ void	handle_redirection(t_token *token, t_command *current_cmd)
 	}
 }
 
-int	handle_redirections(t_command **cmd)
+int	handle_redirections(t_command **cmd, int fd_stdout)
 {
 	if ((*cmd)->input_redir != NULL)
-		return (handle_input_redirection(*cmd));
+		return (handle_input_redirection(*cmd, fd_stdout));
 	else if ((*cmd)->output_redir != NULL)
 		return (handle_output_redirection(cmd));
 	return (0);

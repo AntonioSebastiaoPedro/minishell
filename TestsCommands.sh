@@ -149,6 +149,8 @@ who | sort | uniq | wc -l
 
 cat < file.txt | grep "42" > result.txt
 
+ls > a << vc
+
 ////////////////////////////////////////////////////////////////////////////////
 echo e" "f
 echo tete"tete"

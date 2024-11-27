@@ -85,7 +85,7 @@ void	handle_heredoc(t_command *cmd)
 	exit(0);
 }
 
-int	handle_heredoc_redirection(t_command *cmd)
+int	handle_heredoc_redirection(t_command *cmd, int fd_stdout)
 {
 	pid_t	pid;
 
@@ -93,6 +93,11 @@ int	handle_heredoc_redirection(t_command *cmd)
 	pid = fork();
 	if (pid == 0)
 	{
+		if (!isatty(STDOUT_FILENO))
+		{
+			dup2(fd_stdout, STDOUT_FILENO);
+			close(fd_stdout);
+		}
 		handle_heredoc(cmd);
 	}
 	else if (pid < 0)
@@ -104,10 +109,10 @@ int	handle_heredoc_redirection(t_command *cmd)
 	return (handle_heredoc_parent_process(cmd, pid));
 }
 
-int	handle_input_redirection(t_command *cmd)
+int	handle_input_redirection(t_command *cmd, int fd_stdout)
 {
 	if (cmd->heredoc)
-		return (handle_heredoc_redirection(cmd));
+		return (handle_heredoc_redirection(cmd, fd_stdout));
 	else
 		return (handle_file_input_redirection(cmd));
 }

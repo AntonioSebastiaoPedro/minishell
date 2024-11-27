@@ -86,7 +86,7 @@ void	execute_commands(t_command *cmd, char **envp)
 		if (setup_pipes(cmd) == -1)
 			break ;
 		expand_command_args(cmd);
-		result = handle_redirections(&cmd);
+		result = handle_redirections(&cmd, original_stdout);
 		if (result == -2)
 			break ;
 		else if (result == -3)
