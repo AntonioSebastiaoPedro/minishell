@@ -35,7 +35,8 @@ int	handle_heredoc_parent_process(t_command *cmd, pid_t pid)
 
 	close(cmd->write_pipe_fd);
 	dup2(cmd->read_pipe_fd, STDIN_FILENO);
-	close(cmd->read_pipe_fd);
+	if (cmd->read_pipe_fd != -1)
+		close(cmd->read_pipe_fd);
 	waitpid(pid, &status, 0);
 	cmd->write_pipe_fd = -1;
 	cmd->read_pipe_fd = -1;
@@ -65,7 +66,6 @@ void	handle_heredoc(t_command *cmd)
 	write_check = 0;
 	delimiter = cmd->input_redir;
 	signal(SIGINT, handle_sigint_heredoc);
-	close(cmd->read_pipe_fd);
 	while (1)
 	{
 		line = readline("> ");
@@ -98,6 +98,8 @@ int	handle_heredoc_redirection(t_command *cmd, int fd_stdout)
 			dup2(fd_stdout, STDOUT_FILENO);
 			close(fd_stdout);
 		}
+		if (cmd->read_pipe_fd != -1)
+			close(cmd->read_pipe_fd);
 		handle_heredoc(cmd);
 	}
 	else if (pid < 0)
