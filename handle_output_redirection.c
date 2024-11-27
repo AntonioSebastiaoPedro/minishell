@@ -38,21 +38,21 @@ int	copy_arguments(char **args, t_command *next_cmd)
 
 int	handle_chained_redirection(t_command **cmd)
 {
-	int	status;
-
-	status = 0;
 	if ((*cmd)->command != NULL && ft_strcmp((*cmd)->command, "echo") == 0)
 	{
 		(*cmd)->next->command = ft_strdup((*cmd)->command);
-		status = copy_arguments((*cmd)->args, (*cmd)->next);
-		if (status == -2)
-			return (status);
+		if (copy_arguments((*cmd)->args, (*cmd)->next) == -2)
+			return (-2);
 	}
 	else if ((*cmd)->command != NULL)
 	{
 		(*cmd)->next->command = ft_strdup((*cmd)->command);
 		if ((*cmd)->read_pipe_fd != -1 && (*cmd)->heredoc == 1)
+		{
+			(*cmd)->next->heredoc = 1;
+			(*cmd)->next->command = ft_strdup((*cmd)->command);
 			(*cmd)->next->read_pipe_fd = (*cmd)->read_pipe_fd;
+		}
 		else
 		{
 			if ((*cmd)->next->next != NULL)
