@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 11:19:19 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/27 11:43:38 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/27 11:58:28 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ int	main(void)
 		// print_commands(commands);
 		execute_commands(commands, &env_dup);
 		free(line);
-		printf("%d\n", *env_dup->var);
 		free_tokens(tokens);
 		free_commands(commands);
 	}
