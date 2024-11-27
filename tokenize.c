@@ -38,48 +38,84 @@ void	handle_redirection_and_pipes(char *line, int *i, t_token **tokens)
 void	handle_quotes(const char *line, int *i, t_token **tokens)
 {
 	int		j;
+	int		capacity;
 	char	quote;
-	char	buffer[256];
+	char	*buffer;
 
 	j = 0;
+	capacity = 256;
+	buffer = malloc(sizeof(char) * capacity);
+	if (!buffer)
+		return ;
 	quote = line[(*i)++];
 	while (line[*i] && line[*i] != quote)
 	{
+		if (j >= capacity - 1)
+		{
+			buffer = realloc_token(buffer, &capacity);
+			if (!buffer)
+				return ;
+		}
 		buffer[j++] = line[(*i)++];
 	}
 	buffer[j] = '\0';
 	(*tokens) = add_token(*tokens, buffer);
 	(*i)++;
+	free(buffer);
 }
 
 void	handle_environment_variable(const char *line, int *i, t_token **tokens)
 {
-	char	buffer[256];
+	char	*buffer;
 	int		j;
+	int		capacity;
 
 	j = 0;
+	capacity = 256;
+	buffer = malloc(sizeof(char) * capacity);
+	if (!buffer)
+		return ;
 	buffer[j++] = line[(*i)++];
 	while (ft_isalnum(line[*i]) || line[*i] == '_')
 	{
+		if (j >= capacity - 1)
+		{
+			buffer = realloc_token(buffer, &capacity);
+			if (!buffer)
+				return ;
+		}
 		buffer[j++] = line[(*i)++];
 	}
 	buffer[j] = '\0';
 	(*tokens) = add_token(*tokens, buffer);
+	free(buffer);
 }
 
 void	handle_word(const char *line, int *i, t_token **tokens)
 {
-	char	buffer[256];
+	char	*buffer;
 	int		j;
+	int		capacity;
 
 	j = 0;
+	capacity = 256;
+	buffer = malloc(sizeof(char) * capacity);
+	if (!buffer)
+		return ;
 	while (line[*i] && !ft_isspace(line[*i]) && line[*i] != '|' && line[*i]
 		!= '>' && line[*i] != '<')
 	{
+		if (j >= capacity - 1)
+		{
+			buffer = realloc_token(buffer, &capacity);
+			if (!buffer)
+				return ;
+		}
 		buffer[j++] = line[(*i)++];
 	}
 	buffer[j] = '\0';
 	(*tokens) = add_token(*tokens, buffer);
+	free(buffer);
 }
 
 void	tokenize(char *line, t_token **tokens)

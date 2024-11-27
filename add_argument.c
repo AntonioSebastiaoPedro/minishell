@@ -18,7 +18,7 @@ int	is_argument(const char *token)
 		&& ft_strcmp(token, "|") != 0);
 }
 
-void	add_argument(t_command *cmd, const char *arg)
+void	add_argument(t_command *cmd, char *arg)
 {
 	int	count;
 
@@ -36,6 +36,6 @@ void	add_argument(t_command *cmd, const char *arg)
 		perror("malloc failed");
 		return ;
 	}
-	cmd->args[count] = ft_strdup(arg);
+	cmd->args[count] = arg;
 	cmd->args[count + 1] = NULL;
 }

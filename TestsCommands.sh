@@ -154,5 +154,6 @@ echo e" "f
 echo tete"tete"
 echo "teste"tete
 echo "ccc"fff'hhhh'""ddd
+$PATH
 
 

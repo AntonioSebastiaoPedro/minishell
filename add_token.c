@@ -33,3 +33,17 @@ t_token	*add_token(t_token *head, char *value)
 	temp->next = new_token;
 	return (head);
 }
+
+char	*realloc_token(char *buffer, int *capacity)
+{
+	char	*new_buffer;
+
+	(*capacity) *= 2;
+	new_buffer = ft_realloc(buffer, sizeof(char) * (*capacity));
+	if (!new_buffer)
+	{
+		perror("realloc failed");
+		return (NULL);
+	}
+	return (new_buffer);
+}
