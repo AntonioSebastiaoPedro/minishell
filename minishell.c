@@ -25,11 +25,15 @@ void	free_commands(t_command *commands)
 	{
 		next = current->next;
 		free(current->command);
+		current->command = NULL;
 		if (current->args)
 		{
 			i = -1;
 			while (current->args[++i] != NULL)
+			{
 				free(current->args[i]);
+				current->args[i] = NULL;
+			}
 			free(current->args);
 		}
 		free(current);
@@ -48,7 +52,11 @@ void	free_tokens(t_token *tokens)
 	while (current != NULL)
 	{
 		next = current->next;
-		free(current->value);
+		if (current->value)
+		{
+			free(current->value);
+			current->value = NULL;
+		}
 		free(current);
 		current = next;
 	}
@@ -111,8 +119,8 @@ int	main(int argc, char *argv[], char **envp)
 		tokenize(line, &tokens);
 		free(line);
 		commands = parse_tokens(tokens);
-		//print_tokens(tokens);
-		//print_commands(commands);
+		print_tokens(tokens);
+		print_commands(commands);
 		execute_commands(commands, envp);
 		free_tokens(tokens);
 		free_commands(commands);
