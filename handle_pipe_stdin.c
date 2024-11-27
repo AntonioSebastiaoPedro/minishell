@@ -47,7 +47,7 @@ void	child_process(t_token **tokens, int *pipe_fd)
 
 void	parent_process(pid_t pid, t_token **tokens, int *pipe_fd)
 {
-	char	new_line[1025];
+	char	new_line[8192];
 	int		status;
 	int		bytes;
 
@@ -63,9 +63,14 @@ void	parent_process(pid_t pid, t_token **tokens, int *pipe_fd)
 		*tokens = NULL;
 	else
 	{
-		bytes = read(pipe_fd[0], new_line, 1024);
-		new_line[bytes] = '\0';
-		tokenize(new_line, tokens);
+		bytes = read(pipe_fd[0], new_line, 8192);
+		if (bytes >= 0 && bytes < 8192)
+		{
+			new_line[bytes] = '\0';
+			tokenize(new_line, tokens);
+		}
+		else
+			perror("Erro de leitura ou tamanho excedido.\n");
 	}
 }
 
