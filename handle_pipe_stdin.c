@@ -45,22 +45,21 @@ void	child_process(t_token **tokens, int *pipe_fd)
 	exit(0);
 }
 
-void	parent_process(pid_t pid, t_token **tokens, int *pipe_fd)
+void	parent_process(int status, t_token **tokens, int *pipe_fd)
 {
 	char	new_line[8192];
-	int		status;
 	int		bytes;
 
-	waitpid(pid, &status, 0);
-	signal(SIGINT, handle_sigint);
 	if (WIFEXITED(status) && WEXITSTATUS(status) == 1)
 	{
-		rl_clear_history();
 		free_tokens(*tokens);
 		exit(1);
 	}
 	else if (WIFEXITED(status) && WEXITSTATUS(status) == 130)
-		*tokens = NULL;
+	{
+		free_tokens(*tokens);
+		(*tokens) = NULL;
+	}
 	else
 	{
 		bytes = read(pipe_fd[0], new_line, 8192);
@@ -77,6 +76,7 @@ void	parent_process(pid_t pid, t_token **tokens, int *pipe_fd)
 void	handle_pipe_stdin(char *line, t_token **tokens, int *i)
 {
 	pid_t	pid;
+	int		status;
 	int		pipe_fd[2];
 
 	signal(SIGINT, SIG_IGN);
@@ -95,6 +95,8 @@ void	handle_pipe_stdin(char *line, t_token **tokens, int *i)
 	else
 	{
 		*i = ft_strlen(line);
-		parent_process(pid, tokens, pipe_fd);
+		waitpid(pid, &status, 0);
+		signal(SIGINT, handle_sigint);
+		parent_process(status, tokens, pipe_fd);
 	}
 }
