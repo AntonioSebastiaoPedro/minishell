@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 15:28:48 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/22 12:29:42 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/28 15:16:33 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,10 @@ void	handle_redirection(t_token *token, t_command *current_cmd)
 	}
 }
 
-int	handle_redirections(t_command **cmd)
+int	handle_redirections(t_command **cmd, int fd_stdout)
 {
 	if ((*cmd)->input_redir != NULL)
-		return (handle_input_redirection(*cmd));
+		return (handle_input_redirection(*cmd, fd_stdout));
 	else if ((*cmd)->output_redir != NULL)
 		return (handle_output_redirection(cmd));
 	return (0);

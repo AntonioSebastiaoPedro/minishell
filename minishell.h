@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 11:25:08 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/22 14:42:10 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/28 15:18:48 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int						exec_builtin(t_command *cmd, int original_stdout,
 							t_env **env);
 int						ft_unset(t_command *cmd, t_env **env);
 int						ft_exit(t_command *cmd);
-int						handle_redirections(t_command **cmd);
+int						handle_redirections(t_command **cmd, int fd_stdout);
 void					handle_heredoc(t_command *cmd);
 void					free_env(t_env **env);
 void					handle_sigint(int sig);
@@ -100,7 +100,7 @@ void					handle_sigint_heredoc(int signum);
 char					*find_executable_path(char *command, t_env **env);
 char					**prepare_args(char *executable_path,
 							char **original_args);
-int						handle_input_redirection(t_command *cmd);
+int						handle_input_redirection(t_command *cmd, int fd_stdout);
 int						handle_output_redirection(t_command **command);
 void					print_error_redirection_single(char *redir);
 void					handle_redirection(t_token *token,
@@ -111,5 +111,7 @@ int						is_redirection(const char *token);
 int						execute_external_command(t_command *cmd, t_env **envp);
 void					print_error_redirection_file(char *file_redir);
 void					handle_word(const char *line, int *i, t_token **tokens);
+char					*realloc_token(char *buffer, int *capacity);
+int						expects_stdin(char *cmd);
 
 #endif

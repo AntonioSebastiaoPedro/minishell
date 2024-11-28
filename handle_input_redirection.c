@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_input_redirection.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ateca <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 14:01:15 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/18 14:01:18 by ateca            ###   ########.fr       */
+/*   Updated: 2024/11/28 15:13:04 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ int	handle_file_input_redirection(t_command *cmd)
 	if (fd_read < 0)
 	{
 		print_error_redirection_file(cmd->input_redir);
+		if (cmd->next != NULL && expects_stdin(cmd->next->command))
+			return (-2);
 		return (-3);
 	}
 	dup2(fd_read, STDIN_FILENO);
@@ -33,7 +35,8 @@ int	handle_heredoc_parent_process(t_command *cmd, pid_t pid)
 
 	close(cmd->write_pipe_fd);
 	dup2(cmd->read_pipe_fd, STDIN_FILENO);
-	close(cmd->read_pipe_fd);
+	if (cmd->read_pipe_fd != -1)
+		close(cmd->read_pipe_fd);
 	waitpid(pid, &status, 0);
 	cmd->write_pipe_fd = -1;
 	cmd->read_pipe_fd = -1;
@@ -41,7 +44,14 @@ int	handle_heredoc_parent_process(t_command *cmd, pid_t pid)
 	if (WIFEXITED(status) && WEXITSTATUS(status) == 0)
 	{
 		if (cmd->next != NULL)
+		{
+			if (cmd->next->output_redir)
+			{
+				cmd->next->heredoc = 1;
+				cmd->next->command = ft_strdup(cmd->command);
+			}
 			return (-3);
+		}
 		return (0);
 	}
 	return (-2);
@@ -56,7 +66,6 @@ void	handle_heredoc(t_command *cmd)
 	write_check = 0;
 	delimiter = cmd->input_redir;
 	signal(SIGINT, handle_sigint_heredoc);
-	close(cmd->read_pipe_fd);
 	while (1)
 	{
 		line = readline("> ");
@@ -76,7 +85,7 @@ void	handle_heredoc(t_command *cmd)
 	exit(0);
 }
 
-int	handle_heredoc_redirection(t_command *cmd)
+int	handle_heredoc_redirection(t_command *cmd, int fd_stdout)
 {
 	pid_t	pid;
 
@@ -84,6 +93,13 @@ int	handle_heredoc_redirection(t_command *cmd)
 	pid = fork();
 	if (pid == 0)
 	{
+		if (!isatty(STDOUT_FILENO))
+		{
+			dup2(fd_stdout, STDOUT_FILENO);
+			close(fd_stdout);
+		}
+		if (cmd->read_pipe_fd != -1)
+			close(cmd->read_pipe_fd);
 		handle_heredoc(cmd);
 	}
 	else if (pid < 0)
@@ -95,10 +111,10 @@ int	handle_heredoc_redirection(t_command *cmd)
 	return (handle_heredoc_parent_process(cmd, pid));
 }
 
-int	handle_input_redirection(t_command *cmd)
+int	handle_input_redirection(t_command *cmd, int fd_stdout)
 {
 	if (cmd->heredoc)
-		return (handle_heredoc_redirection(cmd));
+		return (handle_heredoc_redirection(cmd, fd_stdout));
 	else
 		return (handle_file_input_redirection(cmd));
 }

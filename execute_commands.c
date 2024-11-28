@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 13:11:19 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/22 12:32:09 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/28 15:18:19 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void	execute_commands(t_command *cmd, t_env **envp)
 		if (setup_pipes(cmd) == -1)
 			break ;
 		expand_command_args(cmd, envp);
-		result = handle_redirections(&cmd);
+		result = handle_redirections(&cmd, original_stdout);
 		if (result == -2)
 			break ;
 		else if (result == -3)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_output_redirection.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ateca <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 14:43:04 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/18 14:43:07 by ateca            ###   ########.fr       */
+/*   Updated: 2024/11/28 15:02:30 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,20 +38,26 @@ int	copy_arguments(char **args, t_command *next_cmd)
 
 int	handle_chained_redirection(t_command **cmd)
 {
-	int	status;
-
-	status = 0;
 	if ((*cmd)->command != NULL && ft_strcmp((*cmd)->command, "echo") == 0)
 	{
-		(*cmd)->next->read_pipe_fd = -1;
 		(*cmd)->next->command = ft_strdup((*cmd)->command);
-		status = copy_arguments((*cmd)->args, (*cmd)->next);
-		if (status == -2)
-			return (status);
+		if (copy_arguments((*cmd)->args, (*cmd)->next) == -2)
+			return (-2);
 	}
-	else if ((*cmd)->read_pipe_fd != -1)
+	else if ((*cmd)->command != NULL)
 	{
-		(*cmd)->next->read_pipe_fd = (*cmd)->read_pipe_fd;
+		(*cmd)->next->command = ft_strdup((*cmd)->command);
+		if ((*cmd)->read_pipe_fd != -1 && (*cmd)->heredoc == 1)
+		{
+			(*cmd)->next->heredoc = 1;
+			(*cmd)->next->read_pipe_fd = (*cmd)->read_pipe_fd;
+		}
+		else
+		{
+			if ((*cmd)->next->next != NULL)
+				(*cmd)->next->next->read_pipe_fd
+					= (*cmd)->next->read_pipe_fd;
+		}
 	}
 	*cmd = (*cmd)->next;
 	return (0);

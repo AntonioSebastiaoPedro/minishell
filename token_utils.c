@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 14:17:19 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/27 11:21:27 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/28 15:14:42 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,4 +50,18 @@ void	free_tokens(t_token *tokens)
 		free(current);
 		current = next;
 	}
+}
+
+char	*realloc_token(char *buffer, int *capacity)
+{
+	char	*new_buffer;
+
+	(*capacity) *= 2;
+	new_buffer = ft_realloc(buffer, sizeof(char) * (*capacity));
+	if (!new_buffer)
+	{
+		perror("realloc failed");
+		return (NULL);
+	}
+	return (new_buffer);
 }
