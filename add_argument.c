@@ -20,17 +20,17 @@ int	is_argument(const char *token)
 
 void	add_argument(t_command *cmd, char *arg)
 {
-	int	count;
+	int			count;
+	static int	current_size;
 
 	count = 0;
 	if (cmd->args)
-	{
 		while (cmd->args[count])
-		{
 			count++;
-		}
-	}
-	cmd->args = ft_realloc(cmd->args, sizeof(char *) * (count + 2));
+	else
+		current_size = 0;
+	cmd->args = ft_realloc(cmd->args, sizeof(char *) * current_size,
+			sizeof(char *) * (count + 2));
 	if (!cmd->args)
 	{
 		perror("malloc failed");
@@ -38,4 +38,5 @@ void	add_argument(t_command *cmd, char *arg)
 	}
 	cmd->args[count] = arg;
 	cmd->args[count + 1] = NULL;
+	current_size = count + 2;
 }

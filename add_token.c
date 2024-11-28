@@ -39,7 +39,7 @@ char	*realloc_token(char *buffer, int *capacity)
 	char	*new_buffer;
 
 	(*capacity) *= 2;
-	new_buffer = ft_realloc(buffer, sizeof(char) * (*capacity));
+	new_buffer = ft_realloc(buffer, 0, sizeof(char) * (*capacity));
 	if (!new_buffer)
 	{
 		perror("realloc failed");
