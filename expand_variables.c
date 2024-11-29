@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 15:50:04 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/22 12:32:53 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/29 07:12:48 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	check_enval(char **env_val, char **result, int *pos)
 
 int	handle_dollar_sign(char *str, int *i, char *result, int pos, t_env **env)
 {
-	char	var_name[1024];
+	char	var_name[7000000];
 	char	*env_val;
 
 	if (ft_isdigit(str[*i + 1]))
@@ -58,7 +58,7 @@ char	*allocate_result_buffer(void)
 {
 	char	*result;
 
-	result = malloc(sizeof(char) * 1024);
+	result = malloc(sizeof(char) * 7000000);
 	if (!result)
 		perror("minishell: malloc failed");
 	return (result);

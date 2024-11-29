@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 14:17:28 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/18 01:29:56 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/29 07:11:05 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ t_env	*ft_newenv(char *name)
 	t_env	*new_env;
 	char	*var;
 	char	*value;
-	char	name_copy[70000];
+	char	name_copy[7000000];
 	int		show;
 
 	new_env = malloc(sizeof(t_env));

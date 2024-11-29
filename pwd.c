@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 01:37:03 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/22 00:51:39 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/29 07:10:37 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	ft_pwd(void)
 {
-	char	cwd[1024];
+	char	cwd[7000000];
 
 	if (getcwd(cwd, sizeof(cwd)) != NULL)
 	{

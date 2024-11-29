@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 14:30:37 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/22 14:30:59 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/29 07:11:05 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	interpret_quotes(const char *line, int *i, int *dob_quote, int *sin_quote, i
 
 void	handle_word(const char *line, int *i, t_token **tokens)
 {
-	char	buffer[70000];
+	char	buffer[7000000];
 	int		j;
 	int		interpret;
 	int		dob_quote;

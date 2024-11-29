@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 16:54:03 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/27 11:52:13 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/29 08:59:23 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ void	add_argument(t_command *cmd, t_token *token)
 {
 	int	i;
 	int	j;
+	static int	current_size_i;
+	static int	current_size_j;
 
 	i = 0;
 	j = 0;
@@ -62,11 +64,24 @@ void	add_argument(t_command *cmd, t_token *token)
 			j++;
 		}
 	}
-	cmd->args = ft_realloc(cmd->args, sizeof(char *) * (i + 2));
+	else
+	{
+		current_size_i = 0;
+		current_size_j = 0;
+		
+	}
+	cmd->args = ft_realloc(cmd->args, sizeof(char *) * (current_size_i), sizeof(char *) * (i + 2));
 	cmd->args[i] = token->value;
 	cmd->args[i + 1] = NULL;
-	cmd->interpret = ft_realloc(cmd->interpret, sizeof(int) * (j + 1));
+	cmd->interpret = ft_realloc(cmd->interpret, sizeof(int) * (current_size_j), sizeof(int) * (j + 1));\
+	if (!cmd->args)
+	{
+		perror("malloc failed");
+		return ;
+	}
 	cmd->interpret[j] = token->interpret;
+	current_size_i = i + 2;
+	current_size_j = j + 1;
 }
 
 t_command	*parse_tokens(t_token *tokens)

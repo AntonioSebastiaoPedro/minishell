@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 14:06:56 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/22 14:30:48 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/29 07:11:05 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	handle_quotes(const char *line, int *i, t_token **tokens)
 	int		j;
 	int		interpret;
 	char	quote;
-	char	buffer[70000];
+	char	buffer[7000000];
 
 	j = 0;
 	interpret = 0;
@@ -58,7 +58,7 @@ void	handle_quotes(const char *line, int *i, t_token **tokens)
 
 void	handle_environment_variable(const char *line, int *i, t_token **tokens)
 {
-	char	buffer[70000];
+	char	buffer[7000000];
 	int		j;
 
 	j = 0;

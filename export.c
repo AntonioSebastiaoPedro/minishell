@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 02:17:44 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/18 11:58:08 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/29 07:11:05 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ int	add_args_env(char **args, t_env **env)
 {
 	int		i;
 	int		status;
-	char	var[70000];
+	char	var[7000000];
 	t_env	*new_env;
 
 	status = 0;

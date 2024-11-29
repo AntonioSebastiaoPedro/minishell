@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 01:45:25 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/27 11:46:41 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/11/29 07:11:05 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	update_shlvl(t_env **env)
 void	update_envvar(t_env **env, char *var, char *value)
 {
 	t_env	*current;
-	char	var_value[70000];
+	char	var_value[7000000];
 
 	current = *env;
 	while (current)
