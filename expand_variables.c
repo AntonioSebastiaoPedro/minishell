@@ -32,26 +32,26 @@ void	check_enval(char **env_val, char **result, int *pos)
 	}
 }
 
-int	handle_dollar_sign(char *str, int *i, char *result, int pos, t_env **env)
+int	handle_dollar_sign(char *str, int *i, t_expand_state *state)
 {
 	char	var_name[1024];
 	char	*env_val;
 
 	if (ft_isdigit(str[*i + 1]))
 	{
-		result[pos++] = str[(*i)++];
-		result[pos++] = str[(*i)++];
+		state->result[state->pos++] = str[(*i)++];
+		state->result[state->pos++] = str[(*i)++];
 	}
 	else
 	{
 		extract_variable_name(str, i, var_name);
 		if (ft_strcmp("?", var_name) == 0)
-			env_val = get_env_value("XDG_CMD_STATUS", env);
+			env_val = get_env_value("XDG_CMD_STATUS", state->env);
 		else
-			env_val = get_env_value(var_name, env);
-		check_enval(&env_val, &result, &pos);
+			env_val = get_env_value(var_name, state->env);
+		check_enval(&env_val, &(state->result), &(state->pos));
 	}
-	return (pos);
+	return (state->pos);
 }
 
 char	*allocate_result_buffer(void)
@@ -64,27 +64,28 @@ char	*allocate_result_buffer(void)
 	return (result);
 }
 
-char	*expand_variables(const char *str, t_command *cmd, int *arg_pos,
-		t_env **env)
+char	*expand_variables(char *str, t_command *cmd, int *arg_pos, t_env **env)
 {
-	int		pos;
-	int		i;
-	char	*result;
+	int				i;
+	char			*result;
+	t_expand_state	state;
 
+	i = 0;
 	if (cmd->interpret[*arg_pos])
 		return (ft_strdup((char *)str));
 	result = allocate_result_buffer();
 	if (!result)
 		return (NULL);
-	pos = 0;
-	i = 0;
+	state.result = result;
+	state.pos = 0;
+	state.env = env;
 	while (str[i] != '\0')
 	{
 		if (str[i] == '$')
-			pos = handle_dollar_sign((char *)str, &i, result, pos, env);
+			handle_dollar_sign((char *)str, &i, &state);
 		else
-			result[pos++] = str[i++];
+			state.result[state.pos++] = str[i++];
 	}
-	result[pos] = '\0';
-	return (result);
+	state.result[state.pos] = '\0';
+	return (state.result);
 }

@@ -35,8 +35,8 @@ int	main(void)
 		tokenize(line, &tokens);
 		free(line);
 		commands = parse_tokens(tokens);
-		// print_tokens(tokens);
-		// print_commands(commands);
+		//print_tokens(tokens);
+		//print_commands(commands);
 		execute_commands(commands, &env_dup);
 		free_tokens(tokens);
 		free_commands(commands);

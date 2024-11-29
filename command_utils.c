@@ -28,6 +28,8 @@ void	atribute_cmd_values(t_command **cmd)
 	(*cmd)->heredoc = 0;
 	(*cmd)->write_pipe_fd = -1;
 	(*cmd)->read_pipe_fd = -1;
+	(*cmd)->interpret = NULL;
+	(*cmd)->invalid_redir = 0;
 	(*cmd)->next = NULL;
 }
 

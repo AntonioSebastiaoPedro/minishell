@@ -41,6 +41,12 @@ char	**prepare_args(char *executable_path, char **original_args)
 	return (new_args);
 }
 
+char	*get_env_(char **path, t_env **env)
+{
+	(*path) = get_env_value("PATH", env);
+	return (*path);
+}
+
 char	*absolute_relative_path(char *command)
 {
 	if (access(command, X_OK) == 0)
@@ -62,8 +68,7 @@ char	*find_executable_path(char *command, t_env **env)
 
 	if (ft_strchr(command, '/') != NULL)
 		return (absolute_relative_path(command));
-	path = get_env_value("PATH", env);
-	if (!path)
+	if (!get_env_(&path, env))
 		return (NULL);
 	path_copy = ft_strdup(path);
 	dir = ft_strtok(path_copy, ':', &next_path);
@@ -75,6 +80,7 @@ char	*find_executable_path(char *command, t_env **env)
 			free(path_copy);
 			return (exec_path);
 		}
+		free(exec_path);
 		dir = ft_strtok(NULL, ':', &next_path);
 	}
 	free(path_copy);

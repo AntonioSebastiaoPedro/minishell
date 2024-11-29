@@ -15,8 +15,8 @@
 void	update_shlvl(t_env **env)
 {
 	t_env	*current;
+	char	*itoa_result;
 	int		shlvl_value;
-	char		*itoa_result;
 
 	current = *env;
 	while (current)

@@ -17,48 +17,76 @@ int	is_special_char(char c)
 	return (c == '|' || c == '>' || c == '<');
 }
 
-int	interpret_quotes(const char *line, int *i, int *dob_quote, int *sin_quote, int *interpret)
+int	interpret_quotes(const char *line, int *i, t_quote_state *state)
 {
-	if (line[*i] == '\"' && !sin_quote)
+	if (line[*i] == '\"' && !state->sin_quote)
 	{
-		*dob_quote = !*dob_quote;
+		state->dob_quote = !state->dob_quote;
 		(*i)++;
-		if (*dob_quote)
-			*interpret = 0;
+		if (state->dob_quote)
+			state->interpret = 0;
 		return (1);
 	}
-	if (line[*i] == '\'' && !*dob_quote)
+	if (line[*i] == '\'' && !state->dob_quote)
 	{
-		*sin_quote = !*sin_quote;
+		state->sin_quote = !state->sin_quote;
 		(*i)++;
-		if (*sin_quote)
-			*interpret = 1;
+		if (state->sin_quote)
+			state->interpret = 1;
 		return (1);
 	}
 	return (0);
 }
 
-
-void	handle_word(const char *line, int *i, t_token **tokens)
+char	*expand_buffer(char *buffer, int *capacity)
 {
-	char	buffer[70000];
+	buffer = realloc(buffer, sizeof(char) * (*capacity) * 2);
+	if (!buffer)
+		return (NULL);
+	*capacity *= 2;
+	return (buffer);
+}
+
+char	*extract_word(const char *line, int *i, t_quote_state *state)
+{
+	char	*buffer;
 	int		j;
-	int		interpret;
-	int		dob_quote;
-	int		sin_quote;
+	int		capacity;
 
 	j = 0;
-	interpret = 0;
-	dob_quote = 0;
-	sin_quote = 0;
+	capacity = 256;
+	buffer = malloc(sizeof(char) * capacity);
+	if (!buffer)
+		return (NULL);
 	while (line[*i] && !is_special_char(line[*i]))
 	{
-		if (interpret_quotes(line, i, &dob_quote, &sin_quote, &interpret))
-			continue;
-		if (ft_isspace(line[*i]) && !dob_quote && !sin_quote)
-			break;
+		if (interpret_quotes(line, i, state))
+			continue ;
+		if (ft_isspace(line[*i]) && !state->dob_quote && !state->sin_quote)
+			break ;
+		if (j >= capacity - 1)
+		{
+			buffer = expand_buffer(buffer, &capacity);
+			if (!buffer)
+				return (NULL);
+		}
 		buffer[j++] = line[(*i)++];
 	}
 	buffer[j] = '\0';
-	(*tokens) = add_token(*tokens, buffer, interpret);
+	return (buffer);
+}
+
+void	handle_word(const char *line, int *i, t_token **tokens)
+{
+	char			*word;
+	t_quote_state	state;
+
+	state.dob_quote = 0;
+	state.sin_quote = 0;
+	state.interpret = 0;
+	word = extract_word(line, i, &state);
+	if (!word)
+		return ;
+	(*tokens) = add_token(*tokens, word, state.interpret);
+	free(word);
 }

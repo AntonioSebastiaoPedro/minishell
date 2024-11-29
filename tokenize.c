@@ -38,37 +38,61 @@ void	handle_redirection_and_pipes(const char *line, int *i, t_token **tokens)
 void	handle_quotes(const char *line, int *i, t_token **tokens)
 {
 	int		j;
+	int		capacity;
 	int		interpret;
 	char	quote;
-	char	buffer[70000];
+	char	*buffer;
 
 	j = 0;
+	capacity = 256;
 	interpret = 0;
 	quote = line[(*i)++];
 	if (quote == '\'')
 		interpret = 1;
+	buffer = malloc(sizeof(char) * capacity);
+	if (!buffer)
+		return ;
 	while (line[*i] && line[*i] != quote)
 	{
+		if (j >= capacity - 1)
+		{
+			buffer = realloc_token(buffer, &capacity);
+			if (!buffer)
+				return ;
+		}
 		buffer[j++] = line[(*i)++];
 	}
 	buffer[j] = '\0';
 	(*tokens) = add_token(*tokens, buffer, interpret);
 	(*i)++;
+	free(buffer);
 }
 
 void	handle_environment_variable(const char *line, int *i, t_token **tokens)
 {
-	char	buffer[70000];
+	char	*buffer;
 	int		j;
+	int		capacity;
 
 	j = 0;
+	capacity = 256;
+	buffer = malloc(sizeof(char) * capacity);
+	if (!buffer)
+		return ;
 	buffer[j++] = line[(*i)++];
-	while (ft_isalnum(line[*i]) || line[*i] == '_' || line[*i] == '?')
+	while (ft_isalnum(line[*i]) || line[*i] == '_')
 	{
+		if (j >= capacity - 1)
+		{
+			buffer = realloc_token(buffer, &capacity);
+			if (!buffer)
+				return ;
+		}
 		buffer[j++] = line[(*i)++];
 	}
 	buffer[j] = '\0';
 	(*tokens) = add_token(*tokens, buffer, 0);
+	free(buffer);
 }
 
 void	tokenize(char *line, t_token **tokens)
@@ -80,7 +104,9 @@ void	tokenize(char *line, t_token **tokens)
 	{
 		while (ft_isspace(line[i]))
 			i++;
-		if (line[i] == '|' || line[i] == '>' || line[i] == '<')
+		if (line[i] == '|' && check_isspace(line, i))
+			handle_pipe_stdin(line, tokens, &i);
+		else if (line[i] == '|' || line[i] == '>' || line[i] == '<')
 			handle_redirection_and_pipes(line, &i, tokens);
 		else if (line[i] == '\'' || line[i] == '"')
 			handle_quotes(line, &i, tokens);
