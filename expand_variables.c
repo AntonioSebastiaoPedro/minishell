@@ -58,7 +58,7 @@ char	*allocate_result_buffer(char *str)
 {
 	char	*result;
 	size_t	capacity;
-	
+
 	capacity = 2097152;
 	if (ft_strlen(str) >= capacity)
 	{
