@@ -37,32 +37,15 @@ void	handle_redirection_and_pipes(const char *line, int *i, t_token **tokens)
 
 void	handle_quotes(const char *line, int *i, t_token **tokens)
 {
-	int		j;
-	int		capacity;
-	int		interpret;
 	char	quote;
+	int		interpret;
 	char	*buffer;
 
-	j = 0;
-	capacity = 256;
-	interpret = 0;
 	quote = line[(*i)++];
-	if (quote == '\'')
-		interpret = 1;
-	buffer = malloc(sizeof(char) * capacity);
+	interpret = (quote == '\'');
+	buffer = process_quotes(line, i, quote);
 	if (!buffer)
 		return ;
-	while (line[*i] && line[*i] != quote)
-	{
-		if (j >= capacity - 1)
-		{
-			buffer = realloc_token(buffer, &capacity);
-			if (!buffer)
-				return ;
-		}
-		buffer[j++] = line[(*i)++];
-	}
-	buffer[j] = '\0';
 	(*tokens) = add_token(*tokens, buffer, interpret);
 	(*i)++;
 	free(buffer);

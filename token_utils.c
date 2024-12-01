@@ -65,3 +65,28 @@ char	*realloc_token(char *buffer, int *capacity)
 	}
 	return (new_buffer);
 }
+
+char	*process_quotes(const char *line, int *i, char quote)
+{
+	int		capacity;
+	int		j;
+	char	*buffer;
+
+	capacity = 256;
+	j = 0;
+	buffer = malloc(sizeof(char) * capacity);
+	if (!buffer)
+		return (NULL);
+	while (line[*i] && line[*i] != quote)
+	{
+		if (j >= capacity - 1)
+		{
+			buffer = realloc_token(buffer, &capacity);
+			if (!buffer)
+				return (NULL);
+		}
+		buffer[j++] = line[(*i)++];
+	}
+	buffer[j] = '\0';
+	return (buffer);
+}

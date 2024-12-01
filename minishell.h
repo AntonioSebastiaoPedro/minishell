@@ -118,6 +118,7 @@ char		**env_list_to_array(t_env *env_list);
 char		*find_executable_path(char *command, t_env **env);
 char		**prepare_args(char *executable_path, char **original_args);
 char		*realloc_token(char *buffer, int *capacity);
+char		*process_quotes(const char *line, int *i, char quote);
 t_env		*add_env(t_env **envs, char *name);
 t_env		*ft_newenv(char *name);
 t_env		*last_env(t_env *head);
