@@ -94,8 +94,6 @@ int	process_output_redirection(t_command **cmd, t_command **command)
 	}
 	else
 	{
-		if ((*cmd)->read_pipe_fd != -1)
-			(*cmd)->command = ft_strdup("cat");
 		dup2(fd_write, STDOUT_FILENO);
 		close(fd_write);
 		*command = *cmd;
