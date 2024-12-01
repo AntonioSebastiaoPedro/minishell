@@ -54,11 +54,18 @@ int	handle_dollar_sign(char *str, int *i, t_expand_state *state)
 	return (state->pos);
 }
 
-char	*allocate_result_buffer(void)
+char	*allocate_result_buffer(char *str)
 {
 	char	*result;
-
-	result = malloc(sizeof(char) * 1024);
+	size_t	capacity;
+	
+	capacity = 2097152;
+	if (ft_strlen(str) >= capacity)
+	{
+		perror("Minishell: argument size exceeded");
+		return (NULL);
+	}
+	result = malloc(sizeof(char) * capacity);
 	if (!result)
 		perror("minishell: malloc failed");
 	return (result);
@@ -73,7 +80,7 @@ char	*expand_variables(char *str, t_command *cmd, int *arg_pos, t_env **env)
 	i = 0;
 	if (cmd->interpret[*arg_pos])
 		return (ft_strdup((char *)str));
-	result = allocate_result_buffer();
+	result = allocate_result_buffer((char *)str);
 	if (!result)
 		return (NULL);
 	state.result = result;
