@@ -47,7 +47,7 @@ void	child_process(t_token **tokens, int *pipe_fd)
 
 void	parent_process(int status, t_token **tokens, int *pipe_fd)
 {
-	char	new_line[8192];
+	char	new_line[2097152];
 	int		bytes;
 
 	if (WIFEXITED(status) && WEXITSTATUS(status) == 1)
@@ -62,14 +62,14 @@ void	parent_process(int status, t_token **tokens, int *pipe_fd)
 	}
 	else
 	{
-		bytes = read(pipe_fd[0], new_line, 8192);
-		if (bytes >= 0 && bytes < 8192)
+		bytes = read(pipe_fd[0], new_line, 2097152);
+		if (bytes >= 0 && bytes < 2097152)
 		{
 			new_line[bytes] = '\0';
 			tokenize(new_line, tokens);
 		}
 		else
-			perror("Erro de leitura ou tamanho excedido.\n");
+			perror("Read error or size exceeded");
 	}
 }
 
