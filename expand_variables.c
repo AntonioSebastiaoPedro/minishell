@@ -34,7 +34,7 @@ void	check_enval(char **env_val, char **result, int *pos)
 
 int	handle_dollar_sign(char *str, int *i, t_expand_state *state)
 {
-	char	var_name[1024];
+	char	var_name[2097152];
 	char	*env_val;
 
 	if (ft_isdigit(str[*i + 1]))
