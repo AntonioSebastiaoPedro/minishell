@@ -20,7 +20,7 @@ t_token	*add_token(t_token *head, char *value, int interpret)
 	new_token = malloc(sizeof(t_token));
 	if (!new_token)
 	{
-		perror("malloc");
+		perror("minishell: malloc failed");
 		return (NULL);
 	}
 	new_token->value = ft_strdup(value);
@@ -60,7 +60,7 @@ char	*realloc_token(char *buffer, int *capacity)
 	new_buffer = ft_realloc(buffer, 0, sizeof(char) * (*capacity));
 	if (!new_buffer)
 	{
-		perror("realloc failed");
+		perror("minishell: realloc failed");
 		return (NULL);
 	}
 	return (new_buffer);

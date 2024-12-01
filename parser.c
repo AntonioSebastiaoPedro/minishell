@@ -43,8 +43,8 @@ t_command	*process_current_token(t_token *tokens, t_command **commands,
 
 int	is_argument(const char *token)
 {
-	return (token != NULL && !is_redirection(token) && ft_strcmp(token,
-			"|") != 0);
+	return (token != NULL && !is_redirection(token)
+		&& ft_strcmp(token, "|") != 0);
 }
 
 void	add_argument(t_command *cmd, t_token *token)
