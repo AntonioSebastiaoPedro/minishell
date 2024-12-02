@@ -12,16 +12,29 @@
 
 #include "minishell.h"
 
-int	check_isspace(char *line, int i)
+int	is_command_pipe(char *line)
 {
-	i++;
-	while (line[i])
-	{
-		if (!ft_isspace(line[i]))
-			return (0);
+	int	i;
+
+	if (!line)
+		return (0);
+	i = 0;
+	if (!line[i] || line[i] == '|')
+		return (0);
+	while (line[i] && line[i] != '|')
 		i++;
+	if (line[i] == '|')
+	{
+		if (line[i + 1] == '|')
+			i += 2;
+		else
+			i++;
 	}
-	return (1);
+	else
+		return (0);
+	while (line[i] && ft_isspace(line[i]))
+		i++;
+	return (line[i] == '\0');
 }
 
 void	child_process(t_token **tokens, int *pipe_fd)

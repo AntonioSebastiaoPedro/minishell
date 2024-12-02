@@ -83,7 +83,7 @@ int			handle_redirections(t_command **cmd, int fd_stdout);
 int			is_redirection(const char *token);
 int			execute_external_command(t_command *cmd, t_env **envp);
 int			expects_stdin(char *cmd);
-int			check_isspace(char *line, int i);
+int			is_command_pipe(char *line);
 int			handle_input_redirection(t_command *cmd, int fd_stdout);
 int			handle_output_redirection(t_command **command);
 int			is_argument(const char *token);
