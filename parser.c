@@ -19,7 +19,7 @@ t_command	*process_current_token(t_token *tokens, t_command **commands,
 		current_cmd = add_command(commands, ft_strdup(tokens->value));
 	else if (current_cmd == NULL && tokens->next == NULL)
 	{
-		print_error_redirection_single(tokens->value);
+		print_error_redirection_single(tokens->value, commands);
 	}
 	else if (current_cmd == NULL && is_redirection(tokens->value))
 	{

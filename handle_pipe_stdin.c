@@ -24,12 +24,7 @@ int	is_command_pipe(char *line)
 	while (line[i] && line[i] != '|')
 		i++;
 	if (line[i] == '|')
-	{
-		if (line[i + 1] == '|')
-			i += 2;
-		else
-			i++;
-	}
+		i++;
 	else
 		return (0);
 	while (line[i] && ft_isspace(line[i]))

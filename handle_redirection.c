@@ -45,7 +45,7 @@ int	handle_redirections(t_command **cmd, int fd_stdout)
 	return (0);
 }
 
-void	print_error_redirection_single(char *redir)
+void	print_error_redirection_single(char *redir, t_command **commands)
 {
 	char	*program_name;
 	char	*error_message;
@@ -57,10 +57,14 @@ void	print_error_redirection_single(char *redir)
 	if (ft_strcmp(redir, ">") == 0 || ft_strcmp(redir, "<") == 0
 		|| ft_strcmp(redir, ">>") == 0 || ft_strcmp(redir, "<<") == 0)
 	{
+		free_commands(*commands);
+		*commands = NULL;
 		error_message = "syntax error near unexpected token `newline'";
 	}
 	else if (ft_strcmp(redir, "|") == 0)
 	{
+		free_commands(*commands);
+		*commands = NULL;
 		error_message = "syntax error near unexpected token `|'";
 	}
 	write(2, error_message, ft_strlen(error_message));
