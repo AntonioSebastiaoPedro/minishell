@@ -103,7 +103,8 @@ void		extract_variable_name(const char *str, int *i, char *var_name);
 void		update_env(t_env **env, char *name);
 void		update_shlvl(t_env **env);
 void		update_envvar(t_env **env, char *var, char *value);
-void		print_error_redirection_single(char *redir, t_command **commands);
+void		print_error_redir_single(char *token, t_command **cmds,
+				t_token **tks);
 void		handle_redirection(t_token *token, t_command *current_cmd);
 void		add_argument(t_command *cmd, t_token *token);
 void		print_error_redirection_file(char *file_redir);

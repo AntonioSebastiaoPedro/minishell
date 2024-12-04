@@ -12,17 +12,31 @@
 
 #include "minishell.h"
 
+int	is_operator(char *str)
+{
+	return (
+		(str[0] == '<' && str[1] == '<')
+		|| (str[0] == '>' && str[1] == '>')
+		|| (str[0] == '<')
+		|| (str[0] == '>')
+	);
+}
+
 int	is_command_pipe(char *line)
 {
-	int	i;
+	int		i;
+	char	*start;
 
 	if (!line)
 		return (0);
 	i = 0;
 	if (!line[i] || line[i] == '|')
 		return (0);
+	start = &line[i];
 	while (line[i] && line[i] != '|')
 		i++;
+	if (is_operator(start))
+		return (0);
 	if (line[i] == '|')
 		i++;
 	else

@@ -12,15 +12,29 @@
 
 #include "minishell.h"
 
-t_command	*process_current_token(t_token *tokens, t_command **commands,
+int	check_redir_error(t_command *current_cmd, t_token *tokens)
+{
+	if ((current_cmd == NULL && tokens->next == NULL)
+		|| (is_redirection(tokens->value) && tokens->next != NULL
+			&& ft_strcmp(tokens->next->value, "|") == 0)
+		|| (ft_strcmp(tokens->value, "|") == 0 && tokens->next != NULL
+			&& is_redirection(tokens->next->value)))
+	{
+		return (1);
+	}
+	return (0);
+}
+
+t_command	*process_current_token(t_token **tks, t_command **commands,
 		t_command *current_cmd, int *skip_file_redirection)
 {
+	t_token	*tokens;
+
+	tokens = *tks;
 	if (current_cmd == NULL && is_command(tokens->value))
 		current_cmd = add_command(commands, ft_strdup(tokens->value));
-	else if (current_cmd == NULL && tokens->next == NULL)
-	{
-		print_error_redirection_single(tokens->value, commands);
-	}
+	else if (check_redir_error(current_cmd, tokens))
+		print_error_redir_single(tokens->value, commands, tks);
 	else if (current_cmd == NULL && is_redirection(tokens->value))
 	{
 		*skip_file_redirection = 1;
@@ -28,9 +42,7 @@ t_command	*process_current_token(t_token *tokens, t_command **commands,
 		handle_redirection(tokens, current_cmd);
 	}
 	else if (current_cmd != NULL && ft_strcmp(tokens->value, "|") == 0)
-	{
 		current_cmd = NULL;
-	}
 	else if (current_cmd != NULL && is_redirection(tokens->value))
 	{
 		*skip_file_redirection = 1;
@@ -91,7 +103,7 @@ t_command	*parse_tokens(t_token *tokens)
 				current_cmd = NULL;
 		}
 		else
-			current_cmd = process_current_token(tokens, &commands, current_cmd,
+			current_cmd = process_current_token(&tokens, &commands, current_cmd,
 					&skip_file_redirection);
 		tokens = tokens->next;
 	}

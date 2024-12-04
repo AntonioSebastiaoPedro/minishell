@@ -45,30 +45,31 @@ int	handle_redirections(t_command **cmd, int fd_stdout)
 	return (0);
 }
 
-void	print_error_redirection_single(char *redir, t_command **commands)
+void	print_error_redir_single(char *token, t_command **cmds, t_token **tks)
 {
 	char	*program_name;
 	char	*error_message;
-	char	*newline;
 
-	newline = "\n";
 	program_name = "minishell: ";
+	error_message = "syntax error near unexpected token\n";
+	if ((*tks) && (*tks)->next && is_redirection(token)
+		&& ft_strcmp((*tks)->next->value, "|") == 0)
+	{
+		error_message = "syntax error near unexpected token `|'\n";
+	}
+	else if (is_redirection(token))
+	{
+		error_message = "syntax error near unexpected token `newline'\n";
+	}
+	else if (ft_strcmp(token, "|") == 0)
+	{
+		error_message = "syntax error near unexpected token `|'\n";
+	}
 	write(2, program_name, ft_strlen(program_name));
-	if (ft_strcmp(redir, ">") == 0 || ft_strcmp(redir, "<") == 0
-		|| ft_strcmp(redir, ">>") == 0 || ft_strcmp(redir, "<<") == 0)
-	{
-		free_commands(*commands);
-		*commands = NULL;
-		error_message = "syntax error near unexpected token `newline'";
-	}
-	else if (ft_strcmp(redir, "|") == 0)
-	{
-		free_commands(*commands);
-		*commands = NULL;
-		error_message = "syntax error near unexpected token `|'";
-	}
 	write(2, error_message, ft_strlen(error_message));
-	write(2, newline, ft_strlen(newline));
+	free_commands(*cmds);
+	*cmds = NULL;
+	(*tks)->next = NULL;
 }
 
 void	print_error_redirection_file(char *file_redir)
