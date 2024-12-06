@@ -51,7 +51,7 @@ void	handle_quotes(const char *line, int *i, t_token **tokens)
 	free(buffer);
 }
 
-void	handle_environment_variable(const char *line, int *i, t_token **tokens)
+void	handle_envi_var(const char *line, int *i, t_token **tokens, t_env **env)
 {
 	char	*buffer;
 	int		j;
@@ -74,11 +74,12 @@ void	handle_environment_variable(const char *line, int *i, t_token **tokens)
 		buffer[j++] = line[(*i)++];
 	}
 	buffer[j] = '\0';
-	(*tokens) = add_token(*tokens, buffer, 0);
+	buffer = expand_variables(buffer, NULL, 0, env);
+	tokenize(buffer, tokens, env);
 	free(buffer);
 }
 
-void	tokenize(char *line, t_token **tokens)
+void	tokenize(char *line, t_token **tokens, t_env **envp)
 {
 	int	i;
 
@@ -94,7 +95,7 @@ void	tokenize(char *line, t_token **tokens)
 		else if (line[i] == '\'' || line[i] == '"')
 			handle_quotes(line, &i, tokens);
 		else if (line[i] == '$')
-			handle_environment_variable(line, &i, tokens);
+			handle_envi_var(line, &i, tokens, envp);
 		else if (line[i])
 			handle_word(line, &i, tokens);
 	}

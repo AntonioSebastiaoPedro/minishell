@@ -71,7 +71,7 @@ void	print_error_redir_single(char *token, t_command **cmds, t_token **tks)
 	(*tks)->next = NULL;
 }
 
-void	print_error_redirection_file(char *file_redir)
+void	print_error_no_such_file_or_directory(char *file_redir)
 {
 	char	*program_name;
 	char	*colon_space;

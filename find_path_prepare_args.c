@@ -47,13 +47,41 @@ char	*get_env_(char **path, t_env **env)
 	return (*path);
 }
 
-char	*absolute_relative_path(char *command)
+char	*absolute_relative_path_(char *command)
 {
-	if (access(command, X_OK) == 0)
+	if (access(command, F_OK) == 0)
 		return (ft_strdup(command));
 	else
 	{
-		printf("minishell: %s: %s\n", strerror(errno), command);
+		print_error_no_such_file_or_directory(command);
+		exit(1);
+	}
+}
+
+char	*absolute_relative_path(char *path)
+{
+	struct stat	path_stat;
+
+	if (stat(path, &path_stat) == 0)
+	{
+		if (S_ISDIR(path_stat.st_mode))
+		{
+			write(2, "minishell: ", 11);
+			write(2, path, ft_strlen(path));
+			write(2, ": Is a directory\n", 17);
+			exit(126);
+		}
+		if (access(path, X_OK) == 0)
+			return (ft_strdup(path));
+		else
+		{
+			perror("minishell");
+			exit(126);
+		}
+	}
+	else
+	{
+		print_error_no_such_file_or_directory(path);
 		exit(1);
 	}
 }

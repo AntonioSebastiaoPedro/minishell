@@ -22,6 +22,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <sys/wait.h>
+# include <sys/stat.h>
 # include <unistd.h>
 
 typedef struct s_token
@@ -87,11 +88,12 @@ int			is_command_pipe(char *line, int i, t_token *tokens);
 int			handle_input_redirection(t_command *cmd, int fd_stdout);
 int			handle_output_redirection(t_command **command);
 int			is_argument(const char *token);
+int			handle_dollar_sign(char *str, int *i, t_expand_state *state);
 void		handle_heredoc(t_command *cmd);
 void		free_env(t_env **env);
 void		handle_sigint(int sig);
 void		handle_sigquit(int sig);
-void		tokenize(char *line, t_token **tokens);
+void		tokenize(char *line, t_token **tokens, t_env **envp);
 void		execute_commands(t_command *cmd, t_env **env);
 void		free_commands(t_command *commands);
 void		envcpy(t_env **env_dup, char **src);
@@ -107,7 +109,7 @@ void		print_error_redir_single(char *token, t_command **cmds,
 				t_token **tks);
 void		handle_redirection(t_token *token, t_command *current_cmd);
 void		add_argument(t_command *cmd, t_token *token);
-void		print_error_redirection_file(char *file_redir);
+void		print_error_no_such_file_or_directory(char *file_redir);
 void		handle_word(const char *line, int *i, t_token **tokens);
 void		handle_sigint_external_command(int signum);
 void		handle_sigint_heredoc(int signum);
@@ -120,6 +122,7 @@ char		*find_executable_path(char *command, t_env **env);
 char		**prepare_args(char *executable_path, char **original_args);
 char		*realloc_token(char *buffer, int *capacity);
 char		*process_quotes(const char *line, int *i, char quote);
+char		*allocate_result_buffer(char *str);
 t_env		*add_env(t_env **envs, char *name);
 t_env		*ft_newenv(char *name);
 t_env		*last_env(t_env *head);

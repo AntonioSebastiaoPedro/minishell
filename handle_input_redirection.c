@@ -19,7 +19,7 @@ int	handle_file_input_redirection(t_command *cmd)
 	fd_read = open(cmd->input_redir, O_RDONLY);
 	if (fd_read < 0)
 	{
-		print_error_redirection_file(cmd->input_redir);
+		print_error_no_such_file_or_directory(cmd->input_redir);
 		if (cmd->next != NULL && expects_stdin(cmd->next->command))
 			return (-2);
 		return (-3);

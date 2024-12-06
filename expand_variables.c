@@ -78,7 +78,7 @@ char	*expand_variables(char *str, t_command *cmd, int *arg_pos, t_env **env)
 	t_expand_state	state;
 
 	i = 0;
-	if (cmd->interpret[*arg_pos])
+	if (cmd != NULL && cmd->interpret[*arg_pos])
 		return (ft_strdup(str));
 	result = allocate_result_buffer(str);
 	if (!result)
