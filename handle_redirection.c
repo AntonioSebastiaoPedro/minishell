@@ -67,8 +67,7 @@ void	print_error_redir_single(char *token, t_command **cmds, t_token **tks)
 	}
 	write(2, program_name, ft_strlen(program_name));
 	write(2, error_message, ft_strlen(error_message));
-	free_commands(*cmds);
-	*cmds = NULL;
+	(*cmds) = NULL;
 	(*tks)->next = NULL;
 }
 

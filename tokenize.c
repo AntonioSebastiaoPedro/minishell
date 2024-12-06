@@ -87,7 +87,7 @@ void	tokenize(char *line, t_token **tokens)
 	{
 		while (line[i] && ft_isspace(line[i]))
 			i++;
-		if (is_command_pipe(line))
+		if (is_command_pipe(line, i, *tokens))
 			handle_pipe_stdin(line, tokens, &i);
 		else if (line[i] == '|' || line[i] == '>' || line[i] == '<')
 			handle_redirection_and_pipes(line, &i, tokens);

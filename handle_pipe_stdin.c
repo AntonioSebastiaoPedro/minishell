@@ -12,38 +12,30 @@
 
 #include "minishell.h"
 
-int	is_operator(char *str)
+int	check_isspace(char *line, int i)
 {
-	return (
-		(str[0] == '<' && str[1] == '<')
-		|| (str[0] == '>' && str[1] == '>')
-		|| (str[0] == '<')
-		|| (str[0] == '>')
-	);
+	i++;
+	while (line[i])
+	{
+		if (!ft_isspace(line[i]))
+			return (0);
+		i++;
+	}
+	return (1);
 }
 
-int	is_command_pipe(char *line)
+int	is_command_pipe(char *line, int i, t_token *tokens)
 {
-	int		i;
-	char	*start;
+	t_token	*last_token;
 
-	if (!line)
-		return (0);
-	i = 0;
-	if (!line[i] || line[i] == '|')
-		return (0);
-	start = &line[i];
-	while (line[i] && line[i] != '|')
-		i++;
-	if (is_operator(start))
-		return (0);
-	if (line[i] == '|')
-		i++;
-	else
-		return (0);
-	while (line[i] && ft_isspace(line[i]))
-		i++;
-	return (line[i] == '\0');
+	last_token = ft_lstlast_token(tokens);
+	if (last_token && line[i] == '|' && check_isspace(line, i))
+	{
+		if (ft_strcmp(last_token->value, "|") != 0
+			&& !is_redirection(last_token->value))
+			return (1);
+	}
+	return (0);
 }
 
 void	child_process(t_token **tokens, int *pipe_fd)

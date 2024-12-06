@@ -35,6 +35,14 @@ t_token	*add_token(t_token *head, char *value, int interpret)
 	return (head);
 }
 
+t_token	*ft_lstlast_token(t_token *head)
+{
+	if (head)
+		while (head->next)
+			head = head->next;
+	return (head);
+}
+
 void	free_tokens(t_token *tokens)
 {
 	t_token	*current;

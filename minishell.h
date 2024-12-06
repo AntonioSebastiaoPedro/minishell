@@ -83,7 +83,7 @@ int			handle_redirections(t_command **cmd, int fd_stdout);
 int			is_redirection(const char *token);
 int			execute_external_command(t_command *cmd, t_env **envp);
 int			expects_stdin(char *cmd);
-int			is_command_pipe(char *line);
+int			is_command_pipe(char *line, int i, t_token *tokens);
 int			handle_input_redirection(t_command *cmd, int fd_stdout);
 int			handle_output_redirection(t_command **command);
 int			is_argument(const char *token);
@@ -125,6 +125,7 @@ t_env		*ft_newenv(char *name);
 t_env		*last_env(t_env *head);
 t_env		*get_env(char *var, t_env **env, int (*cmp)());
 t_token		*add_token(t_token *head, char *value, int interpret);
+t_token		*ft_lstlast_token(t_token *head);
 t_command	*parse_tokens(t_token *tokens);
 t_command	*add_command(t_command **commands, char *command);
 
