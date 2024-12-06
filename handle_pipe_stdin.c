@@ -59,7 +59,7 @@ void	child_process(t_token **tokens, int *pipe_fd)
 	exit(0);
 }
 
-void	parent_process(int status, t_token **tokens, int *pipe_fd)
+void	parent_process(int status, t_token **tokens, int *pipe_fd, t_env **env)
 {
 	char	new_line[2097152];
 	int		bytes;
@@ -80,14 +80,14 @@ void	parent_process(int status, t_token **tokens, int *pipe_fd)
 		if (bytes >= 0 && bytes < 2097152)
 		{
 			new_line[bytes] = '\0';
-			tokenize(new_line, tokens);
+			tokenize(new_line, tokens, env);
 		}
 		else
 			perror("Read error or size exceeded");
 	}
 }
 
-void	handle_pipe_stdin(char *line, t_token **tokens, int *i)
+void	handle_pipe_stdin(char *line, t_token **tokens, int *i, t_env **env)
 {
 	pid_t	pid;
 	int		status;
@@ -111,6 +111,6 @@ void	handle_pipe_stdin(char *line, t_token **tokens, int *i)
 		*i = ft_strlen(line);
 		waitpid(pid, &status, 0);
 		signal(SIGINT, handle_sigint);
-		parent_process(status, tokens, pipe_fd);
+		parent_process(status, tokens, pipe_fd, env);
 	}
 }

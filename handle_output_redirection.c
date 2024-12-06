@@ -84,7 +84,7 @@ int	process_output_redirection(t_command **cmd, t_command **command)
 	fd_write = open((*cmd)->output_redir, flags, 0644);
 	if (fd_write < 0)
 	{
-		print_error_redirection_file((*cmd)->output_redir);
+		print_error_no_such_file_or_directory((*cmd)->output_redir);
 		return (-3);
 	}
 	if ((*cmd)->next && (*cmd)->next->output_redir)

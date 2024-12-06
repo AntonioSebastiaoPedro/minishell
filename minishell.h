@@ -113,7 +113,8 @@ void		print_error_no_such_file_or_directory(char *file_redir);
 void		handle_word(const char *line, int *i, t_token **tokens);
 void		handle_sigint_external_command(int signum);
 void		handle_sigint_heredoc(int signum);
-void		handle_pipe_stdin(char *line, t_token **tokens, int *i);
+void		handle_pipe_stdin(char *line, t_token **tokens, int *i,
+				t_env **env);
 char		*expand_variables(char *str, t_command *cmd, int *arg_pos,
 				t_env **env);
 char		*get_env_value(char *var, t_env **env);
