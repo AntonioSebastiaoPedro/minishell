@@ -35,19 +35,29 @@ void	handle_redirection_and_pipes(const char *line, int *i, t_token **tokens)
 	}
 }
 
-void	handle_quotes(const char *line, int *i, t_token **tokens)
+void	handle_quotes(const char *line, int *i, t_token **tokens, t_env **env)
 {
 	char	quote;
+	int		is_quote_double;
 	int		interpret;
 	char	*buffer;
 
 	quote = line[(*i)++];
 	interpret = (quote == '\'');
+	is_quote_double = (quote == '"');
 	buffer = process_quotes(line, i, quote);
 	if (!buffer)
 		return ;
-	(*tokens) = add_token(*tokens, buffer, interpret);
-	(*i)++;
+	if (is_quote_double && buffer[0] == '$')
+	{
+		buffer = expand_variables(buffer, NULL, 0, env);
+		tokenize(buffer, tokens, env);
+	}
+	else
+	{
+		(*tokens) = add_token(*tokens, buffer, interpret);
+		(*i)++;
+	}
 	free(buffer);
 }
 
@@ -93,7 +103,7 @@ void	tokenize(char *line, t_token **tokens, t_env **envp)
 		else if (line[i] == '|' || line[i] == '>' || line[i] == '<')
 			handle_redirection_and_pipes(line, &i, tokens);
 		else if (line[i] == '\'' || line[i] == '"')
-			handle_quotes(line, &i, tokens);
+			handle_quotes(line, &i, tokens, envp);
 		else if (line[i] == '$' && line[i + 1] != '\0' && line[i + 1] != '?')
 			handle_envi_var(line, &i, tokens, envp);
 		else if (line[i])
