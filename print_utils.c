@@ -12,6 +12,20 @@
 
 #include "minishell.h"
 
+void	check_cmd(char *exec_path, t_command *cmd)
+{
+	char	*msg;
+
+	if (!exec_path)
+	{
+		msg = ": command not found";
+		write(2, cmd->command, ft_strlen(cmd->command));
+		write(2, msg, ft_strlen(msg));
+		write(2, "\n", 1);
+		exit(127);
+	}
+}
+
 void	print_tokens(t_token *tokens)
 {
 	t_token	*temp;

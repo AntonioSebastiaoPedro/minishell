@@ -58,6 +58,19 @@ t_command	*add_command(t_command **commands, char *command)
 	return (new_command);
 }
 
+int	ft_lstsize_command(t_command *head)
+{
+	int	len;
+
+	len = 0;
+	while (head)
+	{
+		len++;
+		head = head->next;
+	}
+	return (len);
+}
+
 void	free_commands(t_command *commands)
 {
 	int			i;

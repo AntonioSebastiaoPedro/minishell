@@ -12,28 +12,12 @@
 
 #include "minishell.h"
 
-void	handle_parent_process(t_command *cmd, pid_t pid)
+void	handle_parent_process(t_command *cmd)
 {
-	waitpid(pid, NULL, 0);
 	if (cmd->read_pipe_fd != -1)
 		close(cmd->read_pipe_fd);
 	if (cmd->write_pipe_fd != -1)
 		close(cmd->write_pipe_fd);
-	signal(SIGINT, handle_sigint);
-}
-
-void	check_cmd(char *exec_path, t_command *cmd)
-{
-	char	*msg;
-
-	if (!exec_path)
-	{
-		msg = ": command not found";
-		write(2, cmd->command, ft_strlen(cmd->command));
-		write(2, msg, ft_strlen(msg));
-		write(2, "\n", 1);
-		exit(127);
-	}
 }
 
 void	execute_child_process(t_command *cmd, t_env **envp)
@@ -72,26 +56,58 @@ void	handle_pipes_in_child(t_command *cmd)
 	}
 }
 
-int	execute_external_command(t_command *cmd, t_env **envp)
+int	create_processes(t_command **cmd, t_env **envp, pid_t *pids, int num_cmds)
 {
-	pid_t	pid;
+	int	i;
+
+	i = 0;
+	while (*cmd != NULL && i < num_cmds)
+	{
+		pids[i] = fork();
+		if (pids[i] < 0)
+		{
+			perror("minishell: fork failed");
+			pids[i] = -1;
+			return (-1);
+		}
+		if (pids[i] == 0)
+		{
+			handle_pipes_in_child(*cmd);
+			execute_child_process(*cmd, envp);
+		}
+		handle_parent_process(*cmd);
+		*cmd = (*cmd)->next;
+		i++;
+	}
+	if ((*cmd) == NULL)
+		return (-1);
+	return (0);
+}
+
+int	execute_external_command(t_command **cmd, t_env **envp)
+{
+	int		num_commands;
+	int		result;
+	int		j;
+	pid_t	*pids;
 
 	signal(SIGINT, SIG_IGN);
 	signal(SIGINT, handle_sigint_external_command);
-	pid = fork();
-	if (pid == 0)
+	num_commands = ft_lstsize_command(*cmd);
+	pids = malloc(sizeof(pid_t) * num_commands);
+	if (!pids)
 	{
-		handle_pipes_in_child(cmd);
-		execute_child_process(cmd, envp);
-	}
-	else if (pid < 0)
-	{
-		perror("minishell: fork failed");
+		perror("minishell: malloc failed");
 		return (-1);
 	}
-	else
+	result = create_processes(cmd, envp, pids, num_commands);
+	j = 0;
+	while (j < num_commands && pids[j] != -1)
 	{
-		handle_parent_process(cmd, pid);
+		waitpid(pids[j], NULL, 0);
+		j++;
 	}
-	return (0);
+	free(pids);
+	signal(SIGINT, handle_sigint);
+	return (result);
 }

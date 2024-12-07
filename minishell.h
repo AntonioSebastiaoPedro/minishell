@@ -82,13 +82,14 @@ int			ft_unset(t_command *cmd, t_env **env);
 int			ft_exit(t_command *cmd);
 int			handle_redirections(t_command **cmd, int fd_stdout);
 int			is_redirection(const char *token);
-int			execute_external_command(t_command *cmd, t_env **envp);
+int			execute_external_command(t_command **cmd, t_env **envp);
 int			expects_stdin(char *cmd);
 int			is_command_pipe(char *line, int i, t_token *tokens);
 int			handle_input_redirection(t_command *cmd, int fd_stdout);
 int			handle_output_redirection(t_command **command);
 int			is_argument(const char *token);
 int			handle_dollar_sign(char *str, int *i, t_expand_state *state);
+int			ft_lstsize_command(t_command *head);
 void		handle_heredoc(t_command *cmd);
 void		free_env(t_env **env);
 void		handle_sigint(int sig);
@@ -115,6 +116,7 @@ void		handle_sigint_external_command(int signum);
 void		handle_sigint_heredoc(int signum);
 void		handle_pipe_stdin(char *line, t_token **tokens, int *i,
 				t_env **env);
+void		check_cmd(char *exec_path, t_command *cmd);
 char		*expand_variables(char *str, t_command *cmd, int *arg_pos,
 				t_env **env);
 char		*get_env_value(char *var, t_env **env);
