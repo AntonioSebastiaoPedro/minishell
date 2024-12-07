@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 11:25:08 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/28 15:18:48 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/12/07 17:47:42 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,12 +80,14 @@ int			ft_export(t_command *cmd, t_env **env);
 int			exec_builtin(t_command *cmd, int original_stdout, t_env **env);
 int			ft_unset(t_command *cmd, t_env **env);
 int			ft_exit(t_command *cmd);
-int			handle_redirections(t_command **cmd, int fd_stdout);
+int			handle_redirections(t_command **cmd, int fd_stdout, int *status);
 int			is_redirection(const char *token);
-int			execute_external_command(t_command **cmd, t_env **envp);
+int			execute_external_command(t_command **cmd, t_env **envp,
+				int *status);
 int			expects_stdin(char *cmd);
 int			is_command_pipe(char *line, int i, t_token *tokens);
-int			handle_input_redirection(t_command *cmd, int fd_stdout);
+int			handle_input_redirection(t_command *cmd, int fd_stdout,
+				int *status);
 int			handle_output_redirection(t_command **command);
 int			is_argument(const char *token);
 int			handle_dollar_sign(char *str, int *i, t_expand_state *state);

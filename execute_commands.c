@@ -6,31 +6,47 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 13:11:19 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/28 15:18:19 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/12/07 17:50:21 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	restore_stdio(int original_stdin, int original_stdout)
+void	restore_stdio(int original_stdin, int original_stdout, int status,
+		t_env **envp)
 {
+	char	*char_status;
+
+	char_status = ft_itoa(status);
+	update_envvar(envp, "XDG_CMD_STATUS", char_status);
+	free(char_status);
 	dup2(original_stdin, STDIN_FILENO);
 	dup2(original_stdout, STDOUT_FILENO);
 	close(original_stdin);
 	close(original_stdout);
 }
 
-int	execute_command(t_command **cmd, int original_stdout, t_env **envp)
+int	execute_command(t_command **cmd, int original_stdout, t_env **envp,
+		int *status)
 {
+	char	*char_status;
+	int		result;
+
+	result = 0;
 	if ((*cmd)->command != NULL && is_builtin((*cmd)->command))
 	{
-		exec_builtin((*cmd), original_stdout, envp);
+		*status = exec_builtin((*cmd), original_stdout, envp);
 	}
 	else
 	{
-		return (execute_external_command(cmd, envp));
+		result = execute_external_command(cmd, envp, status);
+		if (WIFEXITED(*status))
+			*status = WEXITSTATUS(*status);
 	}
-	return (0);
+	char_status = ft_itoa(*status);
+	update_envvar(envp, "XDG_CMD_STATUS", char_status);
+	free(char_status);
+	return (result);
 }
 
 void	expand_command_args(t_command *cmd, t_env **env)
@@ -78,9 +94,10 @@ int	setup_pipes(t_command *cmd)
 
 void	execute_commands(t_command *cmd, t_env **envp)
 {
-	int	result;
 	int	original_stdin;
 	int	original_stdout;
+	int	status;
+	int	result;
 
 	original_stdin = dup(STDIN_FILENO);
 	original_stdout = dup(STDOUT_FILENO);
@@ -89,7 +106,7 @@ void	execute_commands(t_command *cmd, t_env **envp)
 		if (setup_pipes(cmd) == -1)
 			break ;
 		expand_command_args(cmd, envp);
-		result = handle_redirections(&cmd, original_stdout);
+		result = handle_redirections(&cmd, original_stdout, &status);
 		if (result == -2)
 			break ;
 		else if (result == -3)
@@ -97,9 +114,9 @@ void	execute_commands(t_command *cmd, t_env **envp)
 			cmd = cmd->next;
 			continue ;
 		}
-		if (execute_command(&cmd, original_stdout, envp) == -1)
+		if (execute_command(&cmd, original_stdout, envp, &status) == -1)
 			break ;
 		cmd = cmd->next;
 	}
-	restore_stdio(original_stdin, original_stdout);
+	restore_stdio(original_stdin, original_stdout, status, envp);
 }

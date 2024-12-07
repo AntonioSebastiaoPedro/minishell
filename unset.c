@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 18:29:39 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/18 11:31:40 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/12/07 18:31:23 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ int	ft_unset(t_command *cmd, t_env **env)
 	int	i;
 
 	i = -1;
+	if (!cmd->args)
+		return (0);
 	while (cmd->args[++i])
 		ft_env_remove_if(env, cmd->args[i]);
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 11:45:18 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/22 14:41:57 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/12/07 17:30:08 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ int	create_processes(t_command **cmd, t_env **envp, pid_t *pids, int num_cmds)
 	return (0);
 }
 
-int	execute_external_command(t_command **cmd, t_env **envp)
+int	execute_external_command(t_command **cmd, t_env **envp, int *status)
 {
 	int		num_commands;
 	int		result;
@@ -104,7 +104,7 @@ int	execute_external_command(t_command **cmd, t_env **envp)
 	j = 0;
 	while (j < num_commands && pids[j] != -1)
 	{
-		waitpid(pids[j], NULL, 0);
+		waitpid(pids[j], status, 0);
 		j++;
 	}
 	free(pids);

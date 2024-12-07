@@ -6,19 +6,20 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 14:01:15 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/28 15:13:04 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/12/07 17:45:11 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	handle_file_input_redirection(t_command *cmd)
+int	handle_file_input_redirection(t_command *cmd, int *status)
 {
 	int	fd_read;
 
 	fd_read = open(cmd->input_redir, O_RDONLY);
 	if (fd_read < 0)
 	{
+		*status = 1;
 		print_error_no_such_file_or_directory(cmd->input_redir);
 		if (cmd->next != NULL && expects_stdin(cmd->next->command))
 			return (-2);
@@ -111,10 +112,10 @@ int	handle_heredoc_redirection(t_command *cmd, int fd_stdout)
 	return (handle_heredoc_parent_process(cmd, pid));
 }
 
-int	handle_input_redirection(t_command *cmd, int fd_stdout)
+int	handle_input_redirection(t_command *cmd, int fd_stdout, int *status)
 {
 	if (cmd->heredoc)
 		return (handle_heredoc_redirection(cmd, fd_stdout));
 	else
-		return (handle_file_input_redirection(cmd));
+		return (handle_file_input_redirection(cmd, status));
 }
