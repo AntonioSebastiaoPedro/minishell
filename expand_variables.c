@@ -37,10 +37,14 @@ int	handle_dollar_sign(char *str, int *i, t_expand_state *state)
 	char	var_name[2097152];
 	char	*env_val;
 
-	if (ft_isdigit(str[*i + 1]))
+	if (str[*i + 1] == '\0')
 	{
 		state->result[state->pos++] = str[(*i)++];
-		state->result[state->pos++] = str[(*i)++];
+	}
+	else if (ft_isdigit(str[*i + 1]))
+	{
+		(*i)++;
+		(*i)++;
 	}
 	else
 	{

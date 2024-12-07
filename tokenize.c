@@ -94,7 +94,7 @@ void	tokenize(char *line, t_token **tokens, t_env **envp)
 			handle_redirection_and_pipes(line, &i, tokens);
 		else if (line[i] == '\'' || line[i] == '"')
 			handle_quotes(line, &i, tokens);
-		else if (line[i] == '$')
+		else if (line[i] == '$' && line[i + 1] != '\0' && line[i + 1] != '?')
 			handle_envi_var(line, &i, tokens, envp);
 		else if (line[i])
 			handle_word(line, &i, tokens);
