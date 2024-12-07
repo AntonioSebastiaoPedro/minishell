@@ -6,15 +6,15 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 11:45:18 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/22 14:41:57 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/12/07 17:30:08 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	handle_parent_process(t_command *cmd, pid_t pid)
+void	handle_parent_process(t_command *cmd, pid_t pid, int *status)
 {
-	waitpid(pid, NULL, 0);
+	waitpid(pid, status, 0);
 	if (cmd->read_pipe_fd != -1)
 		close(cmd->read_pipe_fd);
 	if (cmd->write_pipe_fd != -1)
@@ -72,7 +72,7 @@ void	handle_pipes_in_child(t_command *cmd)
 	}
 }
 
-int	execute_external_command(t_command *cmd, t_env **envp)
+int	execute_external_command(t_command *cmd, t_env **envp, int *status)
 {
 	pid_t	pid;
 
@@ -91,7 +91,7 @@ int	execute_external_command(t_command *cmd, t_env **envp)
 	}
 	else
 	{
-		handle_parent_process(cmd, pid);
+		handle_parent_process(cmd, pid, status);
 	}
 	return (0);
 }
