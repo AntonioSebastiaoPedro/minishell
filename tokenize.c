@@ -39,25 +39,17 @@ void	handle_quotes(const char *line, int *i, t_token **tokens, t_env **env)
 {
 	char	quote;
 	int		is_quote_double;
-	int		interpret;
 	char	*buffer;
 
 	quote = line[(*i)++];
-	interpret = (quote == '\'');
 	is_quote_double = (quote == '"');
 	buffer = process_quotes(line, i, quote);
 	if (!buffer)
 		return ;
-	if (is_quote_double && buffer[0] == '$')
-	{
-		buffer = expand_variables(buffer, NULL, 0, env);
-		tokenize(buffer, tokens, env);
-	}
-	else
-	{
-		(*tokens) = add_token(*tokens, buffer, interpret);
-		(*i)++;
-	}
+	buffer = combine_with_next(line, i, buffer);
+	if (!buffer)
+		return ;
+	buffer = expand_or_add_token(buffer, is_quote_double, tokens, env);
 	free(buffer);
 }
 
