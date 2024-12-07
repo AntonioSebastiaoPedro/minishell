@@ -15,7 +15,7 @@ NAME = minishell
 SRCS = echo.c env_utils.c expand_variables.c handle_output_redirection.c handle_word.c print_utils.c unset.c \
 	builtins_utils.c env.c execute_commands.c export.c handle_pipe_stdin.c minishell.c pwd.c \
 	cd.c env_utils2.c execute_external_command.c find_path_prepare_args.c handle_redirection.c minishell_utils.c tokenize.c \
-	command_utils.c env_utils3.c exit.c handle_input_redirection.c handle_signal.c parser.c token_utils.c \
+	command_utils.c env_utils3.c exit.c handle_input_redirection.c handle_signal.c parser.c token_utils.c token_utils2.c \
 
 LIBFT = $(LIBSRC)/libft.a
 LIBSRC = ./libft

@@ -124,6 +124,9 @@ char		**prepare_args(char *executable_path, char **original_args);
 char		*realloc_token(char *buffer, int *capacity);
 char		*process_quotes(const char *line, int *i, char quote);
 char		*allocate_result_buffer(char *str);
+char		*combine_with_next(const char *line, int *i, char *buffer);
+char		*expand_or_add_token(char *buffer, int is_quote_doub,
+				t_token **tokens, t_env **env);
 t_env		*add_env(t_env **envs, char *name);
 t_env		*ft_newenv(char *name);
 t_env		*last_env(t_env *head);

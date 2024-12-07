@@ -18,7 +18,9 @@ int	check_redir_error(t_command *current_cmd, t_token *tokens)
 		|| (is_redirection(tokens->value) && tokens->next != NULL
 			&& ft_strcmp(tokens->next->value, "|") == 0)
 		|| (ft_strcmp(tokens->value, "|") == 0 && tokens->next != NULL
-			&& is_redirection(tokens->next->value)))
+			&& is_redirection(tokens->next->value))
+		|| (current_cmd == NULL && ft_strcmp(tokens->value, "|") == 0
+			&& tokens->next != NULL && is_command(tokens->next->value)))
 	{
 		return (1);
 	}
