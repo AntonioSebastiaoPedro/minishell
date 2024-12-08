@@ -6,17 +6,17 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/30 14:27:24 by ansebast          #+#    #+#             */
-/*   Updated: 2024/08/30 15:08:27 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/12/08 08:30:43 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-long int	ft_strtol(char *str, char **endptr)
+long long	ft_strtol(char *str, char **endptr)
 {
 	int		i;
 	int		signal;
-	long	num;
+	long long	num;
 
 	signal = 1;
 	num = 0;

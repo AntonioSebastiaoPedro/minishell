@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 11:32:38 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/18 04:23:24 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/12/08 08:31:00 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,11 @@ t_stack				*ft_lstlastprev(t_stack *head);
 void				ft_lstupdateindx(t_stack *head);
 void				ft_lstadd_back(t_stack **head, t_stack *new_node);
 int					ft_isint(char *str);
+long long			ft_islong(char *str);
 int					ft_isempty(char *str);
 int					ft_tablen(char **tab);
 
-long int			ft_strtol(char *str, char **endptr);
+long long			ft_strtol(char *str, char **endptr);
 int					ft_lstissorted(t_stack *stack);
 int					ft_lstsize(t_stack *lst);
 int					ft_lstgetindex(t_stack **head, t_stack *value);

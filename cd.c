@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 01:40:15 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/22 00:51:29 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/12/08 08:55:05 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,11 @@ int	ft_cd(char **args, t_env **env)
 	{
 		msg_err = "minishell: cd: with only a relative or absolute path\n";
 		write(2, msg_err, ft_strlen(msg_err));
+		return (1);
+	}
+	else if (ft_tablen(args) > 1)
+	{
+		write(2, "minishell: cd: too many arguments\n", 35);
 		return (1);
 	}
 	else if (chdir(path) == -1)
