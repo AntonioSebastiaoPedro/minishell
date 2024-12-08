@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 01:04:34 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/22 00:56:54 by ansebast         ###   ########.fr       */
+/*   Updated: 2024/12/08 08:11:11 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,21 @@ int	validate_args(t_command *cmd)
 	return (0);
 }
 
+int	is_option(char *arg)
+{
+	int	i;
+
+	i = 1;
+	if (arg[0] == '-')
+	{
+		while (arg[i] == 'n')
+			i++;
+		if (i > 1 && arg[i] == '\0')
+			return (0);
+	}
+	return (1);
+}
+
 int	ft_echo(t_command *cmd)
 {
 	int	newline;
@@ -33,7 +48,7 @@ int	ft_echo(t_command *cmd)
 	i = 0;
 	if (cmd->args)
 	{
-		if (cmd->args[0] && ft_strcmp(cmd->args[0], "-n") == 0)
+		while (cmd->args[i] && !is_option(cmd->args[i]))
 		{
 			newline = -1;
 			i++;
