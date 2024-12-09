@@ -34,7 +34,7 @@ t_command	*process_current_token(t_token **tks, t_command **commands,
 
 	tokens = *tks;
 	if (current_cmd == NULL && is_command(tokens->value))
-		current_cmd = add_command(commands, tokens->value);
+		current_cmd = add_command(commands, ft_strdup(tokens->value));
 	else if (check_redir_error(current_cmd, tokens))
 		print_error_redir_single(tokens->value, commands, tks);
 	else if (current_cmd == NULL && is_redirection(tokens->value))
@@ -78,7 +78,7 @@ void	add_argument(t_command *cmd, t_token *token)
 	}
 	cmd->args = ft_realloc(cmd->args, sizeof(char *) * current_size_i,
 			sizeof(char *) * (i + 2));
-	cmd->args[i] = token->value;
+	cmd->args[i] = ft_strdup(token->value);
 	cmd->args[i + 1] = NULL;
 	current_size_i = i + 2;
 	cmd->interpret = ft_realloc(cmd->interpret, sizeof(int) * current_size_j,

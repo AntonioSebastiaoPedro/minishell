@@ -39,7 +39,7 @@ int	main(void)
 		//print_commands(commands);
 		execute_commands(commands, &env_dup);
 		free_tokens(tokens);
-		//free_commands(commands);
+		free_commands(commands);
 	}
 	rl_clear_history();
 	free_env(&env_dup);
