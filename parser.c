@@ -34,7 +34,7 @@ t_command	*process_current_token(t_token **tks, t_command **commands,
 
 	tokens = *tks;
 	if (current_cmd == NULL && is_command(tokens->value))
-		current_cmd = add_command(commands, ft_strdup(tokens->value));
+		current_cmd = add_command(commands, tokens->value);
 	else if (check_redir_error(current_cmd, tokens))
 		print_error_redir_single(tokens->value, commands, tks);
 	else if (current_cmd == NULL && is_redirection(tokens->value))

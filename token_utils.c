@@ -48,13 +48,15 @@ void	free_tokens(t_token *tokens)
 	t_token	*current;
 	t_token	*next;
 
-	if (tokens == NULL)
-		return ;
 	current = tokens;
 	while (current != NULL)
 	{
 		next = current->next;
-		free(current->value);
+		if (current->value)
+		{
+			free(current->value);
+			current->value = NULL;
+		}
 		free(current);
 		current = next;
 	}

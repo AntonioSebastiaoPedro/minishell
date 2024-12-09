@@ -51,6 +51,7 @@ void	handle_quotes(const char *line, int *i, t_token **tokens, t_env **env)
 		return ;
 	buffer = expand_or_add_token(buffer, is_quote_double, tokens, env);
 	free(buffer);
+	buffer = NULL;
 }
 
 void	handle_envi_var(const char *line, int *i, t_token **tokens, t_env **env)
@@ -79,6 +80,7 @@ void	handle_envi_var(const char *line, int *i, t_token **tokens, t_env **env)
 	buffer = expand_variables(buffer, NULL, 0, env);
 	tokenize(buffer, tokens, env);
 	free(buffer);
+	buffer = NULL;
 }
 
 void	tokenize(char *line, t_token **tokens, t_env **envp)
