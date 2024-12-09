@@ -45,20 +45,18 @@ t_token	*ft_lstlast_token(t_token *head)
 
 void	free_tokens(t_token *tokens)
 {
-	t_token	*current;
 	t_token	*next;
 
-	current = tokens;
-	while (current != NULL)
+	while (tokens != NULL)
 	{
-		next = current->next;
-		if (current->value)
+		next = tokens->next;
+		if (tokens->value)
 		{
-			free(current->value);
-			current->value = NULL;
+			free(tokens->value);
+			tokens->value = NULL;
 		}
-		free(current);
-		current = next;
+		free(tokens);
+		tokens = next;
 	}
 }
 

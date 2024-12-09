@@ -78,7 +78,7 @@ void	add_argument(t_command *cmd, t_token *token)
 	}
 	cmd->args = ft_realloc(cmd->args, sizeof(char *) * current_size_i,
 			sizeof(char *) * (i + 2));
-	cmd->args[i] = ft_strdup(token->value);
+	cmd->args[i] = token->value;
 	cmd->args[i + 1] = NULL;
 	current_size_i = i + 2;
 	cmd->interpret = ft_realloc(cmd->interpret, sizeof(int) * current_size_j,

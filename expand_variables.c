@@ -78,16 +78,16 @@ char	*allocate_result_buffer(char *str)
 char	*expand_variables(char *str, t_command *cmd, int *arg_pos, t_env **env)
 {
 	int				i;
-	char			*result;
 	t_expand_state	state;
 
 	i = 0;
 	if (cmd != NULL && cmd->interpret[*arg_pos])
+	{
 		return (ft_strdup(str));
-	result = allocate_result_buffer(str);
-	if (!result)
+	}
+	state.result = allocate_result_buffer(str);
+	if (!state.result)
 		return (NULL);
-	state.result = result;
 	state.pos = 0;
 	state.env = env;
 	while (str[i] != '\0')

@@ -74,26 +74,27 @@ int	ft_lstsize_command(t_command *head)
 void	free_commands(t_command *commands)
 {
 	int			i;
-	t_command	*current;
 	t_command	*next;
 
-	if (commands == NULL)
-		return ;
-	current = commands;
-	while (current)
+	while (commands != NULL)
 	{
-		next = current->next;
-		free(current->command);
-		if (current->args)
+		next = commands->next;
+		if (commands->command)
+			free(commands->command);
+		if (commands->args)
 		{
 			i = -1;
-			while (current->args[++i] != NULL)
-				free(current->args[i]);
-			free(current->args);
+			while (commands->args[++i] != NULL)
+			{
+				free(commands->args[i]);
+				commands->args[i] = NULL;
+			}
+			free(commands->args);
+			commands->args = NULL;
 		}
-		if (current->interpret)
-			free(current->interpret);
-		free(current);
-		current = next;
+		if (commands->interpret)
+			free(commands->interpret);
+		free(commands);
+		commands = next;
 	}
 }
