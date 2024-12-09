@@ -26,7 +26,7 @@ void	restore_stdio(int original_stdin, int original_stdout, int status,
 	close(original_stdout);
 }
 
-int	execute_command(t_command **cmd, int original_stdout, t_env **envp,
+/*int	execute_command(t_command **cmd, int original_stdout, t_env **envp,
 		int *status)
 {
 	char	*char_status;
@@ -47,7 +47,7 @@ int	execute_command(t_command **cmd, int original_stdout, t_env **envp,
 	update_envvar(envp, "XDG_CMD_STATUS", char_status);
 	free(char_status);
 	return (result);
-}
+}*/
 
 void	expand_command_args(t_command *cmd, t_env **env)
 {
@@ -94,6 +94,45 @@ int	setup_pipes(t_command *cmd)
 
 void	execute_commands(t_command *cmd, t_env **envp)
 {
+	int		original_stdin;
+	int		original_stdout;
+	int		status = 0;
+	int		num_commands;
+	pid_t	*pids;
+
+	original_stdin = dup(STDIN_FILENO);
+	original_stdout = dup(STDOUT_FILENO);
+	num_commands = ft_lstsize_command(cmd);
+	pids = malloc(sizeof(pid_t) * num_commands);
+	if (!pids)
+	{
+		perror("minishell: malloc failed");
+		restore_stdio(original_stdin, original_stdout, status, envp);
+		return ;
+	}
+	if (create_processes_(cmd, envp, pids, num_commands, original_stdout) == -1)
+	{
+		free(pids);
+		restore_stdio(original_stdin, original_stdout, status, envp);
+		return ;
+	}
+	for (int i = 0; i < num_commands; i++)
+	{
+		if (pids[i] != -1)
+			waitpid(pids[i], &status, 0);
+	}
+	if (WIFEXITED(status))
+		status = WEXITSTATUS(status);
+
+	char *char_status = ft_itoa(status);
+	update_envvar(envp, "XDG_CMD_STATUS", char_status);
+	free(char_status);
+	free(pids);
+	restore_stdio(original_stdin, original_stdout, status, envp);
+}
+
+/*void	execute_commands(t_command *cmd, t_env **envp)
+{
 	int	original_stdin;
 	int	original_stdout;
 	int	status;
@@ -119,4 +158,4 @@ void	execute_commands(t_command *cmd, t_env **envp)
 		cmd = cmd->next;
 	}
 	restore_stdio(original_stdin, original_stdout, status, envp);
-}
+}*/

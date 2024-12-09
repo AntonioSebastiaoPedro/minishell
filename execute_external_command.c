@@ -84,7 +84,44 @@ int	create_processes(t_command **cmd, t_env **envp, pid_t *pids, int num_cmds)
 	return (0);
 }
 
-int	execute_external_command(t_command **cmd, t_env **envp, int *status)
+int	create_processes_(t_command *cmd, t_env **envp, pid_t *pids, int num_cmds, int original_stdout)
+{
+	int		i = 0;
+	t_command	*current = cmd;
+
+	while (current != NULL && i < num_cmds)
+	{
+		expand_command_args(current, envp);
+		if (setup_pipes(current) == -1)
+			return (-1);
+		if (handle_redirections(&current, original_stdout, NULL) == -2)
+			return (-1);
+		pids[i] = fork();
+		if (pids[i] < 0)
+		{
+			perror("minishell: fork failed");
+			pids[i] = -1;
+			return (-1);
+		}
+		if (pids[i] == 0)
+		{
+			handle_pipes_in_child(current);
+			if (current->command != NULL && is_builtin(current->command))
+			{
+				int status = exec_builtin(current, original_stdout, envp);
+				exit(status);
+			}
+			else
+				execute_child_process(current, envp);
+		}
+		handle_parent_process(current);
+		current = current->next;
+		i++;
+	}
+	return (0);
+}
+
+/*int	execute_external_command(t_command **cmd, t_env **envp, int *status)
 {
 	int		num_commands;
 	int		result;
@@ -110,4 +147,4 @@ int	execute_external_command(t_command **cmd, t_env **envp, int *status)
 	free(pids);
 	signal(SIGINT, handle_sigint);
 	return (result);
-}
+}*/
