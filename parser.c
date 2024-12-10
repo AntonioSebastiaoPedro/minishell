@@ -20,7 +20,11 @@ int	check_redir_error(t_command *current_cmd, t_token *tokens)
 		|| (ft_strcmp(tokens->value, "|") == 0 && tokens->next != NULL
 			&& is_redirection(tokens->next->value))
 		|| (current_cmd == NULL && ft_strcmp(tokens->value, "|") == 0
-			&& tokens->next != NULL && is_command(tokens->next->value)))
+			&& tokens->next != NULL && is_command(tokens->next->value))
+		|| (current_cmd != NULL && is_redirection(tokens->value)
+			&& tokens->next == NULL)
+		|| (current_cmd != NULL && is_redirection(tokens->value)
+			&& tokens->next != NULL && is_redirection(tokens->next->value)))
 	{
 		return (1);
 	}

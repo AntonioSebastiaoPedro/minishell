@@ -251,20 +251,24 @@ $: command not found
 ateca@c1r1s3:~/minishell_ansebastian$ $1
 ateca@c1r1s3:~/minishell_ansebastian$
 
-Akatsuki> ls > >>
-Akatsuki> bash
-ateca@c1r1s5:~/minishell_ansebastian$ ls > >>
+ateca@c1r3s6:~/minishell_ansebastian$ ls > >>
 bash: syntax error near unexpected token `>>'
-ateca@c1r1s5:~/minishell_ansebastian$ ls > >
-bash: syntax error near unexpected token `>'
-ateca@c1r3s6:~/minishell_ansebastian$ > <
+ateca@c1r3s6:~/minishell_ansebastian$ ls > >
+bash: syntax error near unexpected token `>
+ateca@c1r3s6:~/minishell_ansebastian$ ls < <<
+bash: syntax error near unexpected token `<<
+ateca@c1r3s6:~/minishell_ansebastian$ ls < <
+bash: syntax error near unexpected token `<
+ateca@c1r3s6:~/minishell_ansebastian$ ls < >
+bash: syntax error near unexpected token `>
+ateca@c1r3s6:~/minishell_ansebastian$ ls < >>
+bash: syntax error near unexpected token `>>
+ateca@c1r3s6:~/minishell_ansebastian$ ls > <
 bash: syntax error near unexpected token `<'
-ateca@c1r3s6:~/minishell_ansebastian$ > >>
-bash: syntax error near unexpected token `>>'
-ateca@c1r3s6:~/minishell_ansebastian$ > <<
+ateca@c1r3s6:~/minishell_ansebastian$ ls > <<
+bash: syntax error near unexpected token `<<
+ateca@c1r3s6:~/minishell_ansebastian$ ls >> <<
 bash: syntax error near unexpected token `<<'
-
-
 
 ateca@c1r2s4:~/minishell_ansebastian$ echo $$
 18294
