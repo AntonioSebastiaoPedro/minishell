@@ -42,6 +42,7 @@ t_command	*process_current_token(t_token **tks, t_command **commands,
 		*skip_file_redirection = 1;
 		current_cmd = add_command(commands, NULL);
 		handle_redirection(tokens, current_cmd);
+		current_cmd = NULL;
 	}
 	else if (current_cmd != NULL && ft_strcmp(tokens->value, "|") == 0)
 		current_cmd = NULL;

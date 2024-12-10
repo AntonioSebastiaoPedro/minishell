@@ -257,7 +257,13 @@ ateca@c1r1s5:~/minishell_ansebastian$ ls > >>
 bash: syntax error near unexpected token `>>'
 ateca@c1r1s5:~/minishell_ansebastian$ ls > >
 bash: syntax error near unexpected token `>'
-ateca@c1r1s5:~/minishell_ansebastian$ 
+ateca@c1r3s6:~/minishell_ansebastian$ > <
+bash: syntax error near unexpected token `<'
+ateca@c1r3s6:~/minishell_ansebastian$ > >>
+bash: syntax error near unexpected token `>>'
+ateca@c1r3s6:~/minishell_ansebastian$ > <<
+bash: syntax error near unexpected token `<<'
+
 
 
 ateca@c1r2s4:~/minishell_ansebastian$ echo $$

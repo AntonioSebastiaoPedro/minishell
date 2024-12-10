@@ -58,17 +58,22 @@ t_command	*add_command(t_command **commands, char *command)
 	return (new_command);
 }
 
-int	ft_lstsize_command(t_command *head)
+void	expand_command_args(t_command *cmd, t_env **env)
 {
-	int	len;
+	int	i;
+	int	arg_pos;
 
-	len = 0;
-	while (head)
+	i = 0;
+	arg_pos = 0;
+	if (cmd->args)
 	{
-		len++;
-		head = head->next;
+		while (cmd->args[i])
+		{
+			cmd->args[i] = expand_variables(cmd->args[i], cmd, &arg_pos, env);
+			i++;
+			arg_pos++;
+		}
 	}
-	return (len);
 }
 
 void	free_commands(t_command *commands)

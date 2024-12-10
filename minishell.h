@@ -55,6 +55,15 @@ typedef struct s_expand_state
 	t_env	**env;
 }					t_expand_state;
 
+typedef struct s_status_cmds
+{
+	int		status;
+	int		num_commands;
+	int		original_stdin;
+	int		original_stdout;
+	t_env	**env;
+}					t_status_cmd;
+
 typedef struct s_command
 {
 	char				*command;
@@ -80,10 +89,11 @@ int			ft_export(t_command *cmd, t_env **env);
 int			exec_builtin(t_command *cmd, int original_stdout, t_env **env);
 int			ft_unset(t_command *cmd, t_env **env);
 int			ft_exit(t_command *cmd);
-int			handle_redirections(t_command **cmd, int fd_stdout, int *status);
+int			handle_redirections(t_command **cmd, t_status_cmd st,
+				pid_t *pids, int *i);
 int			is_redirection(const char *token);
-//int			execute_external_command(t_command **cmd, t_env **envp,
-//				int *status);
+int			exec_builtin_exec_external(t_command *cmd, pid_t *pids,
+				t_status_cmd st);
 int			expects_stdin(char *cmd);
 int			is_command_pipe(char *line, int i, t_token *tokens);
 int			handle_input_redirection(t_command *cmd, int fd_stdout,
@@ -91,7 +101,7 @@ int			handle_input_redirection(t_command *cmd, int fd_stdout,
 int			handle_output_redirection(t_command **command);
 int			is_argument(const char *token);
 int			handle_dollar_sign(char *str, int *i, t_expand_state *state);
-int			ft_lstsize_command(t_command *head);
+int			setup_pipes(t_command *cmd);
 void		handle_heredoc(t_command *cmd);
 void		free_env(t_env **env);
 void		handle_sigint(int sig);
@@ -119,6 +129,7 @@ void		handle_sigint_heredoc(int signum);
 void		handle_pipe_stdin(char *line, t_token **tokens, int *i,
 				t_env **env);
 void		check_cmd(char *exec_path, t_command *cmd);
+void		expand_command_args(t_command *cmd, t_env **env);
 char		*expand_variables(char *str, t_command *cmd, int *arg_pos,
 				t_env **env);
 char		*get_env_value(char *var, t_env **env);
@@ -139,9 +150,5 @@ t_token		*add_token(t_token *head, char *value, int interpret);
 t_token		*ft_lstlast_token(t_token *head);
 t_command	*parse_tokens(t_token *tokens);
 t_command	*add_command(t_command **commands, char *command);
-
-void	expand_command_args(t_command *cmd, t_env **env);
-int	setup_pipes(t_command *cmd);
-int	create_processes_(t_command *cmd, t_env **envp, pid_t *pids, int num_cmds, int original_stdout);
 
 #endif

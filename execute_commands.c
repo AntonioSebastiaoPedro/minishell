@@ -12,61 +12,6 @@
 
 #include "minishell.h"
 
-void	restore_stdio(int original_stdin, int original_stdout, int status,
-		t_env **envp)
-{
-	char	*char_status;
-
-	char_status = ft_itoa(status);
-	update_envvar(envp, "XDG_CMD_STATUS", char_status);
-	free(char_status);
-	dup2(original_stdin, STDIN_FILENO);
-	dup2(original_stdout, STDOUT_FILENO);
-	close(original_stdin);
-	close(original_stdout);
-}
-
-/*int	execute_command(t_command **cmd, int original_stdout, t_env **envp,
-		int *status)
-{
-	char	*char_status;
-	int		result;
-
-	result = 0;
-	if ((*cmd)->command != NULL && is_builtin((*cmd)->command))
-	{
-		*status = exec_builtin((*cmd), original_stdout, envp);
-	}
-	else
-	{
-		result = execute_external_command(cmd, envp, status);
-		if (WIFEXITED(*status))
-			*status = WEXITSTATUS(*status);
-	}
-	char_status = ft_itoa(*status);
-	update_envvar(envp, "XDG_CMD_STATUS", char_status);
-	free(char_status);
-	return (result);
-}*/
-
-void	expand_command_args(t_command *cmd, t_env **env)
-{
-	int	i;
-	int	arg_pos;
-
-	i = 0;
-	arg_pos = 0;
-	if (cmd->args)
-	{
-		while (cmd->args[i])
-		{
-			cmd->args[i] = expand_variables(cmd->args[i], cmd, &arg_pos, env);
-			i++;
-			arg_pos++;
-		}
-	}
-}
-
 int	setup_pipes(t_command *cmd)
 {
 	int	pipe_fd[2];
@@ -92,70 +37,75 @@ int	setup_pipes(t_command *cmd)
 	return (0);
 }
 
+void	restore_stdio(int original_stdin, int original_stdout, int status,
+	t_env **envp)
+{
+	char	*char_status;
+
+	char_status = ft_itoa(status);
+	update_envvar(envp, "XDG_CMD_STATUS", char_status);
+	free(char_status);
+	dup2(original_stdin, STDIN_FILENO);
+	dup2(original_stdout, STDOUT_FILENO);
+	close(original_stdin);
+	close(original_stdout);
+}
+
+void	wait_for_processes(pid_t *pids, int num_commands, int *status)
+{
+	int	i;
+
+	i = 0;
+	while (i < num_commands)
+	{
+		if (pids[i] != -1)
+		{
+			waitpid(pids[i], status, 0);
+		}
+		i++;
+	}
+	if (WIFEXITED(*status))
+		*status = WEXITSTATUS(*status);
+	signal(SIGINT, handle_sigint);
+}
+
+int	ft_lstsize_command(t_command *head)
+{
+	int	len;
+
+	len = 0;
+	while (head)
+	{
+		len++;
+		head = head->next;
+	}
+	return (len);
+}
+
 void	execute_commands(t_command *cmd, t_env **envp)
 {
-	int		original_stdin;
-	int		original_stdout;
-	int		status = 0;
-	int		num_commands;
-	pid_t	*pids;
+	pid_t			*pids;
+	t_status_cmd	st;
 
-	original_stdin = dup(STDIN_FILENO);
-	original_stdout = dup(STDOUT_FILENO);
-	num_commands = ft_lstsize_command(cmd);
-	pids = malloc(sizeof(pid_t) * num_commands);
+	st.env = envp;
+	st.status = 0;
+	st.original_stdin = dup(STDIN_FILENO);
+	st.original_stdout = dup(STDOUT_FILENO);
+	st.num_commands = ft_lstsize_command(cmd);
+	pids = malloc(sizeof(pid_t) * st.num_commands);
 	if (!pids)
 	{
 		perror("minishell: malloc failed");
-		restore_stdio(original_stdin, original_stdout, status, envp);
+		restore_stdio(st.original_stdin, st.original_stdout, st.status, st.env);
 		return ;
 	}
-	if (create_processes_(cmd, envp, pids, num_commands, original_stdout) == -1)
+	if (exec_builtin_exec_external(cmd, pids, st) == -1)
 	{
 		free(pids);
-		restore_stdio(original_stdin, original_stdout, status, envp);
+		restore_stdio(st.original_stdin, st.original_stdout, st.status, st.env);
 		return ;
 	}
-	for (int i = 0; i < num_commands; i++)
-	{
-		if (pids[i] != -1)
-			waitpid(pids[i], &status, 0);
-	}
-	if (WIFEXITED(status))
-		status = WEXITSTATUS(status);
-
-	char *char_status = ft_itoa(status);
-	update_envvar(envp, "XDG_CMD_STATUS", char_status);
-	free(char_status);
+	wait_for_processes(pids, st.num_commands, &st.status);
+	restore_stdio(st.original_stdin, st.original_stdout, st.status, st.env);
 	free(pids);
-	restore_stdio(original_stdin, original_stdout, status, envp);
 }
-
-/*void	execute_commands(t_command *cmd, t_env **envp)
-{
-	int	original_stdin;
-	int	original_stdout;
-	int	status;
-	int	result;
-
-	original_stdin = dup(STDIN_FILENO);
-	original_stdout = dup(STDOUT_FILENO);
-	while (cmd != NULL)
-	{
-		if (setup_pipes(cmd) == -1)
-			break ;
-		expand_command_args(cmd, envp);
-		result = handle_redirections(&cmd, original_stdout, &status);
-		if (result == -2)
-			break ;
-		else if (result == -3)
-		{
-			cmd = cmd->next;
-			continue ;
-		}
-		if (execute_command(&cmd, original_stdout, envp, &status) == -1)
-			break ;
-		cmd = cmd->next;
-	}
-	restore_stdio(original_stdin, original_stdout, status, envp);
-}*/
