@@ -38,6 +38,51 @@ char	*print_error_unclosed_quote(char *buffer, char quote)
 	return (NULL);
 }
 
+void	print_error_redir_single(char *token, t_command **cmds, t_token **tks)
+{
+	char	*error_message;
+
+	error_message = "minishell: syntax error near unexpected token\n";
+	if ((*tks) && (*tks)->next && is_redirection(token)
+		&& ft_strcmp((*tks)->next->value, "|") == 0)
+		error_message = "minishell: syntax error near unexpected token `|'\n";
+	else if (is_redirection(token))
+	{
+		token = ft_strjoin("`newline'", "\n");
+		if ((*tks) && (*tks)->next != NULL
+			&& is_redirection((*tks)->next->value))
+		{
+			token = ft_strjoin("`", (*tks)->next->value);
+			token = ft_strjoin(token, "'\n");
+		}
+		error_message = "minishell: syntax error near unexpected token ";
+	}
+	else if (ft_strcmp(token, "|") == 0)
+		error_message = "minishell: syntax error near unexpected token `|'\n";
+	write(2, error_message, ft_strlen(error_message));
+	write(2, token, ft_strlen(token));
+	(*cmds) = NULL;
+	(*tks)->next = NULL;
+}
+
+void	print_error_no_such_file_or_directory(char *file_redir)
+{
+	char	*program_name;
+	char	*colon_space;
+	char	*newline;
+	char	*error_message;
+
+	program_name = "minishell: ";
+	colon_space = ": ";
+	newline = "\n";
+	error_message = strerror(errno);
+	write(2, program_name, ft_strlen(program_name));
+	write(2, file_redir, ft_strlen(file_redir));
+	write(2, colon_space, ft_strlen(colon_space));
+	write(2, error_message, ft_strlen(error_message));
+	write(2, newline, ft_strlen(newline));
+}
+
 void	print_tokens(t_token *tokens)
 {
 	t_token	*temp;
