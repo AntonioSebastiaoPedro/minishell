@@ -319,5 +319,15 @@ Akatsuki> export | wc -l >> a
 ateca@c1r3s6:~/minishell_ansebastian$ > a ls -l
 ateca@c1r3s6:~/minishell_ansebastian$ cat a
 
+ateca@c1r3s6:~/minishell_ansebastian$ "   "
+   : command not found
+ateca@c1r3s6:~/minishell_ansebastian$ "   ;"
+   ;: command not found
+ateca@c1r3s6:~/minishell_ansebastian$ "   ls"
+   ls: command not found
+ateca@c1r3s6:~/minishell_ansebastian$ "ls"
+ateca@c1r3s6:~/minishell_ansebastian$ "ls" | wc -l
+
+
 
 
