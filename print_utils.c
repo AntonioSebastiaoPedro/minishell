@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-void	check_cmd(char *exec_path, t_command *cmd)
+void	print_check_cmd(char *exec_path, t_command *cmd)
 {
 	char	*msg;
 
@@ -24,6 +24,18 @@ void	check_cmd(char *exec_path, t_command *cmd)
 		write(2, "\n", 1);
 		exit(127);
 	}
+}
+
+char	*print_error_unclosed_quote(char *buffer, char quote)
+{
+	char	*message_error;
+
+	message_error = "minishell: syntax error: unclosed quote ";
+	write(2, message_error, ft_strlen(message_error));
+	write(2, &quote, 1);
+	write(2, "\n", 1);
+	free(buffer);
+	return (NULL);
 }
 
 void	print_tokens(t_token *tokens)

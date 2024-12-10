@@ -128,7 +128,7 @@ void		handle_sigint_external_command(int signum);
 void		handle_sigint_heredoc(int signum);
 void		handle_pipe_stdin(char *line, t_token **tokens, int *i,
 				t_env **env);
-void		check_cmd(char *exec_path, t_command *cmd);
+void		print_check_cmd(char *exec_path, t_command *cmd);
 void		expand_command_args(t_command *cmd, t_env **env);
 char		*expand_variables(char *str, t_command *cmd, int *arg_pos,
 				t_env **env);
@@ -142,6 +142,7 @@ char		*allocate_result_buffer(char *str);
 char		*combine_with_next(const char *line, int *i, char *buffer);
 char		*expand_or_add_token(char *buffer, int is_quote_doub,
 				t_token **tokens, t_env **env);
+char		*print_error_unclosed_quote(char *buffer, char quote);
 t_env		*add_env(t_env **envs, char *name);
 t_env		*ft_newenv(char *name);
 t_env		*last_env(t_env *head);

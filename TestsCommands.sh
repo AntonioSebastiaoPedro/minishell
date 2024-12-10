@@ -159,7 +159,7 @@ ls > a << vc
 echo e" "f
 echo tete"tete"
 echo "teste"tete
-echo "ccc"fff'hhhh'""ddd
+zecho "ccc"fff'hhhh'""ddd
 ///////////////////////////////////////////////////////////////////////////////
 
 ateca@c1r2s4:~/minishell_ansebastian$ echo $1USER

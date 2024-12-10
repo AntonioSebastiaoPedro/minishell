@@ -58,27 +58,25 @@ int	handle_redirections(t_command **cmd, t_status_cmd st, pid_t *pids, int *i)
 
 void	print_error_redir_single(char *token, t_command **cmds, t_token **tks)
 {
-	char	*program_name;
 	char	*error_message;
 
-	program_name = "minishell: ";
-	error_message = "syntax error near unexpected token\n";
+	error_message = "minishell: syntax error near unexpected token\n";
 	if ((*tks) && (*tks)->next && is_redirection(token)
 		&& ft_strcmp((*tks)->next->value, "|") == 0)
-		error_message = "syntax error near unexpected token `|'\n";
+		error_message = "minishell: syntax error near unexpected token `|'\n";
 	else if (is_redirection(token))
 	{
 		token = ft_strjoin("`newline'", "\n");
-		if ((*tks) && (*tks)->next != NULL && is_redirection((*tks)->next->value))
+		if ((*tks) && (*tks)->next != NULL
+			&& is_redirection((*tks)->next->value))
 		{
 			token = ft_strjoin("`", (*tks)->next->value);
 			token = ft_strjoin(token, "'\n");
 		}
-		error_message = "syntax error near unexpected token ";
+		error_message = "minishell: syntax error near unexpected token ";
 	}
 	else if (ft_strcmp(token, "|") == 0)
-		error_message = "syntax error near unexpected token `|'\n";
-	write(2, program_name, ft_strlen(program_name));
+		error_message = "minishell: syntax error near unexpected token `|'\n";
 	write(2, error_message, ft_strlen(error_message));
 	write(2, token, ft_strlen(token));
 	(*cmds) = NULL;

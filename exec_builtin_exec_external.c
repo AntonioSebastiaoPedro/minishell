@@ -27,7 +27,7 @@ void	execute_child_process(t_command *cmd, t_env **envp)
 	char	**env_array;
 
 	executable_path = find_executable_path(cmd->command, envp);
-	check_cmd(executable_path, cmd);
+	print_check_cmd(executable_path, cmd);
 	new_args = prepare_args(executable_path, cmd->args);
 	if (!new_args)
 	{
