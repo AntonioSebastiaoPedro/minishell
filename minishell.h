@@ -89,11 +89,11 @@ int			ft_export(t_command *cmd, t_env **env);
 int			exec_builtin(t_command *cmd, int original_stdout, t_env **env);
 int			ft_unset(t_command *cmd, t_env **env);
 int			ft_exit(t_command *cmd);
-int			handle_redirections(t_command **cmd, t_status_cmd st,
+int			handle_redirections(t_command **cmd, t_status_cmd *st,
 				pid_t *pids, int *i);
 int			is_redirection(const char *token);
 int			exec_builtin_exec_external(t_command *cmd, pid_t *pids,
-				t_status_cmd st);
+				t_status_cmd *st);
 int			expects_stdin(char *cmd);
 int			is_command_pipe(char *line, int i, t_token *tokens);
 int			handle_input_redirection(t_command *cmd, int fd_stdout,

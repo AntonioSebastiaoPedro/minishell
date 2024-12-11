@@ -36,14 +36,15 @@ void	handle_redirection(t_token *token, t_command *current_cmd)
 	}
 }
 
-int	handle_redirections(t_command **cmd, t_status_cmd st, pid_t *pids, int *i)
+int	handle_redirections(t_command **cmd, t_status_cmd *st, pid_t *pids, int *i)
 {
 	int	result;
 
 	result = 0;
 	if ((*cmd)->input_redir != NULL)
 	{
-		result = handle_input_redirection(*cmd, st.original_stdout, &st.status);
+		result = handle_input_redirection(*cmd, st->original_stdout,
+				&st->status);
 		if (result == -3)
 		{
 			*cmd = (*cmd)->next;

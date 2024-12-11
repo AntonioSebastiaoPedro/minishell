@@ -56,44 +56,43 @@ void	handle_pipes_in_child(t_command *cmd)
 	}
 }
 
-int	create_processes(t_command *current, pid_t *pids, int i, t_status_cmd st)
+int	create_processes(t_command *current, pid_t *pids, int i, t_status_cmd *st)
 {
-	int	status;
-
-	signal(SIGINT, SIG_IGN);
-	signal(SIGINT, handle_sigint_external_command);
-	pids[i] = fork();
-	if (pids[i] < 0)
+	if (current->command != NULL && is_builtin(current->command))
 	{
-		perror("minishell: fork failed");
-		pids[i] = -1;
-		return (-1);
+		st->status = exec_builtin(current, st->original_stdout, st->env);
 	}
-	if (pids[i] == 0)
+	else
 	{
-		handle_pipes_in_child(current);
-		if (current->command != NULL && is_builtin(current->command))
+		signal(SIGINT, SIG_IGN);
+		signal(SIGINT, handle_sigint_external_command);
+		pids[i] = fork();
+		if (pids[i] < 0)
 		{
-			status = exec_builtin(current, st.original_stdout, st.env);
-			exit(status);
+			perror("minishell: fork failed");
+			pids[i] = -1;
+			return (-1);
 		}
-		else
-			execute_child_process(current, st.env);
+		if (pids[i] == 0)
+		{
+			handle_pipes_in_child(current);
+			execute_child_process(current, st->env);
+		}
+		handle_parent_process(current);
 	}
-	handle_parent_process(current);
 	return (0);
 }
 
-int	exec_builtin_exec_external(t_command *cmd, pid_t *pids, t_status_cmd st)
+int	exec_builtin_exec_external(t_command *cmd, pid_t *pids, t_status_cmd *st)
 {
 	int			i;
 	t_command	*current;
 
 	i = 0;
 	current = cmd;
-	while (current != NULL && i < st.num_commands)
+	while (current != NULL && i < st->num_commands)
 	{
-		expand_command_args(current, st.env);
+		expand_command_args(current, st->env);
 		if (setup_pipes(current) == -1)
 			return (-1);
 		if (handle_redirections(&current, st, pids, &i) == -2)

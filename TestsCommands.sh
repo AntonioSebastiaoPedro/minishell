@@ -227,29 +227,7 @@ ls '|'
 
 ateca@c1r1s3:~/minishell_ansebastian$ cd ./qwewqe
 bash: cd: ./qwewqe: No such file or directory
-ateca@c1r1s3:~/minishell_ansebastian$ echo $?
-1
-ateca@c1r1s3:~/minishell_ansebastian$ ./minishell 
-Akatsuki> cd ./weeewrewr
-No such file or directory: Akatsuki> echo $?
- ?
-Akatsuki> echo $?$?
- ?0
-Akatsuki> 
 
-ateca@c1r1s3:~/minishell_ansebastian$ echo $1;
-
-ateca@c1r1s3:~/minishell_ansebastian$ echo $2;
-
-ateca@c1r1s3:~/minishell_ansebastian$ echo $7;
-
-ateca@c1r1s3:~/minishell_ansebastian$ echo $ 7;
-$ 7
-ateca@c1r1s3:~/minishell_ansebastian$ $1
-ateca@c1r1s3:~/minishell_ansebastian$ $ 1
-$: command not found
-ateca@c1r1s3:~/minishell_ansebastian$ $1
-ateca@c1r1s3:~/minishell_ansebastian$
 
 ateca@c1r3s6:~/minishell_ansebastian$ ls > >>
 bash: syntax error near unexpected token `>>'
@@ -270,23 +248,41 @@ bash: syntax error near unexpected token `<<
 ateca@c1r3s6:~/minishell_ansebastian$ ls >> <<
 bash: syntax error near unexpected token `<<'
 
-ateca@c1r2s4:~/minishell_ansebastian$ echo $$
-18294
-ateca@c1r2s4:~/minishell_ansebastian$ echo $?
+ateca@c1r3s6:~/minishell_ansebastian$ echo $
+$
+ateca@c1r3s6:~/minishell_ansebastian$ echo $?
 0
-ateca@c1r2s4:~/minishell_ansebastian$ echo $??
-0?
-ateca@c1r2s4:~/minishell_ansebastian$
+ateca@c1r3s6:~/minishell_ansebastian$ echo $?$?
+00
+ateca@c1r3s6:~/minishell_ansebastian$ echo $1
 
-ateca@c1r2s4:~/minishell_ansebastian$ echo $?
-0
-ateca@c1r2s4:~/minishell_ansebastian$ echo $??
-0?
-ateca@c1r2s4:~/minishell_ansebastian$ $?
-0: command not found
-ateca@c1r2s4:~/minishell_ansebastian$ $1?
-?: command not found
-ateca@c1r2s4:~/minishell_ansebastian$ 
+ateca@c1r3s6:~/minishell_ansebastian$ echo $ 7
+$ 7
+ateca@c1r3s6:~/minishell_ansebastian$ echo $$
+9450
+ateca@c1r3s6:~/minishell_ansebastian$ echo $$$
+9450$
+ateca@c1r3s6:~/minishell_ansebastian$ echo $$$$
+94509450
+ateca@c1r3s6:~/minishell_ansebastian$ echo $$$$$
+
+
+ateca@c1r3s6:~/minishell_ansebastian$ $
+$: command not found
+ateca@c1r3s6:~/minishell_ansebastian$ $?
+127: command not found
+ateca@c1r3s6:~/minishell_ansebastian$ $?$?
+127127: command not found
+ateca@c1r3s6:~/minishell_ansebastian$ $1
+ateca@c1r3s6:~/minishell_ansebastian$ $ 7
+$: command not found
+ateca@c1r3s6:~/minishell_ansebastian$ $$
+9450: command not found
+ateca@c1r3s6:~/minishell_ansebastian$ $$$
+9450$: command not found
+ateca@c1r3s6:~/minishell_ansebastian$ $$$$
+
+
 
 ateca@c1r2s4:~/minishell_ansebastian$ echo "TEste Escola
 > TEste Escola

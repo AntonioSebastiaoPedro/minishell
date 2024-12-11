@@ -99,7 +99,7 @@ void	execute_commands(t_command *cmd, t_env **envp)
 		restore_stdio(st.original_stdin, st.original_stdout, st.status, st.env);
 		return ;
 	}
-	if (exec_builtin_exec_external(cmd, pids, st) == -1)
+	if (exec_builtin_exec_external(cmd, pids, &st) == -1)
 	{
 		free(pids);
 		restore_stdio(st.original_stdin, st.original_stdout, st.status, st.env);
