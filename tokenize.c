@@ -80,7 +80,17 @@ void	handle_envi_var(const char *line, int *i, t_token **tokens, t_env **env)
 	buffer = expand_variables(buffer, NULL, 0, env);
 	tokenize(buffer, tokens, env);
 	free(buffer);
-	buffer = NULL;
+	isspace_add(line, i, tokens, &buffer);
+}
+
+void	isspace_add(const char *line, int *i, t_token **tokens, char **buffer)
+{
+	(*buffer) = NULL;
+	if (line[(*i)] && ft_isspace(line[(*i)]))
+	{
+		add_token(*tokens, " ", 0);
+		(*i)++;
+	}
 }
 
 void	tokenize(char *line, t_token **tokens, t_env **envp)

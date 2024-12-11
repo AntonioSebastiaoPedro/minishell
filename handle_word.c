@@ -92,5 +92,5 @@ void	handle_word(const char *line, int *i, t_token **tokens)
 		return ;
 	(*tokens) = add_token(*tokens, word, state.interpret);
 	free(word);
-	word = NULL;
+	isspace_add(line, i, tokens, &word);
 }
