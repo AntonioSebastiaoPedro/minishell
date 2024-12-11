@@ -14,9 +14,12 @@
 
 int	validate_args(t_command *cmd)
 {
+	char	*error_message;
+
+	error_message = "minishell: syntax error\n";
 	if (cmd->invalid_redir)
 	{
-		printf("akatsuki: syntax error\n");
+		write(2, error_message, ft_strlen(error_message));
 		return (2);
 	}
 	return (0);
