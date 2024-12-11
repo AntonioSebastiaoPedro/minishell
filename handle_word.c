@@ -40,10 +40,13 @@ int	interpret_quotes(const char *line, int *i, t_quote_state *state)
 
 char	*expand_buffer(char *buffer, int *capacity)
 {
-	buffer = realloc(buffer, sizeof(char) * (*capacity) * 2);
+	int	old_capacity;
+
+	old_capacity = *capacity;
+	(*capacity) *= 2;
+	buffer = ft_realloc(buffer, old_capacity, sizeof(char) * (*capacity));
 	if (!buffer)
 		return (NULL);
-	*capacity *= 2;
 	return (buffer);
 }
 

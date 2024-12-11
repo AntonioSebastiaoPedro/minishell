@@ -63,9 +63,11 @@ void	free_tokens(t_token *tokens)
 char	*realloc_token(char *buffer, int *capacity)
 {
 	char	*new_buffer;
+	int	old_capacity;
 
+	old_capacity = *capacity;
 	(*capacity) *= 2;
-	new_buffer = ft_realloc(buffer, 0, sizeof(char) * (*capacity));
+	new_buffer = ft_realloc(buffer, old_capacity, sizeof(char) * (*capacity));
 	if (!new_buffer)
 	{
 		perror("minishell: realloc failed");
