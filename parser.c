@@ -24,6 +24,8 @@ int	check_redir_error(t_command *current_cmd, t_token *tokens)
 		|| (current_cmd != NULL && is_redirection(tokens->value)
 			&& tokens->next == NULL)
 		|| (current_cmd != NULL && is_redirection(tokens->value)
+			&& tokens->next != NULL && is_redirection(tokens->next->value))
+		|| (is_redirection(tokens->value)
 			&& tokens->next != NULL && is_redirection(tokens->next->value)))
 	{
 		return (1);
