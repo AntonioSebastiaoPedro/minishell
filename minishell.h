@@ -81,7 +81,7 @@ typedef struct s_command
 
 int			ft_env(t_command *cmd, t_env **env);
 int			is_builtin(const char *cmd);
-int			is_command(const char *token);
+int			is_command(const char *token, int interpret);
 int			ft_echo(t_command *cmd);
 int			ft_pwd(void);
 int			ft_cd(char **args, t_env **env);

@@ -12,11 +12,12 @@
 
 #include "minishell.h"
 
-int	is_command(const char *token)
+int	is_command(const char *token, int interpret)
 {
-	return (token != NULL && !ft_isdigit(token[0]) && ft_strcmp(token, "|") != 0
-		&& ft_strcmp(token, "<") != 0 && ft_strcmp(token, ">") != 0
-		&& ft_strcmp(token, ">>") != 0 && ft_strcmp(token, "<<") != 0);
+	return (token && ((!ft_isdigit(token[0]) && ft_strcmp(token, "|") != 0
+				&& ft_strcmp(token, "<") != 0 && ft_strcmp(token, ">") != 0
+				&& ft_strcmp(token, ">>") != 0 && ft_strcmp(token, "<<") != 0)
+			|| interpret == 2));
 }
 
 void	atribute_cmd_values(t_command **cmd)
