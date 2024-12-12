@@ -347,3 +347,6 @@ ateca@c1r2s5:~/minishell_ansebastian$ $ateca
 ateca=ateca=ateca=ateca=ateca=ateca=ateca=ateca=ateca=ateca=ateca: command not found
 Akatsuki> export $USER=$USER
 
+Akatsuki> echo "paula""maria
+minishell: syntax error: unclosed quote "
+
