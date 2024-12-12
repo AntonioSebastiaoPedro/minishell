@@ -12,21 +12,18 @@
 
 #include "minishell.h"
 
-char	**prepare_args(char *executable_path, char **original_args)
+char	**prepare_args(char *executable_path, char **args)
 {
 	int		i;
 	int		arg_count;
 	char	**new_args;
 
 	arg_count = 0;
-	while (original_args && original_args[arg_count])
+	while (args && args[arg_count] && ft_strcmp(args[arg_count], " ") != 0)
 		arg_count++;
 	new_args = malloc((arg_count + 2) * sizeof(char *));
 	if (!new_args)
-	{
-		perror("minishell: malloc failed");
-		exit(1);
-	}
+		return (new_args);
 	new_args[0] = ft_strdup(executable_path);
 	if (!new_args[0])
 	{
@@ -36,7 +33,8 @@ char	**prepare_args(char *executable_path, char **original_args)
 	}
 	i = -1;
 	while (++i < arg_count)
-		new_args[i + 1] = original_args[i];
+		if (ft_strcmp(args[arg_count], " ") != 0)
+			new_args[i + 1] = args[i];
 	new_args[arg_count + 1] = NULL;
 	return (new_args);
 }

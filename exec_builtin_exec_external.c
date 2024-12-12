@@ -31,7 +31,7 @@ void	execute_child_process(t_command *cmd, t_env **envp)
 	new_args = prepare_args(executable_path, cmd->args);
 	if (!new_args)
 	{
-		perror("minishell: prepare_args failed");
+		perror("minishell: malloc failed");
 		exit(1);
 	}
 	env_array = env_list_to_array(*envp);
