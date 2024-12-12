@@ -12,32 +12,48 @@
 
 #include "minishell.h"
 
+int	count_valid_args(char **original_args)
+{
+	int	count;
+	int	i;
+
+	count = 0;
+	i = 0;
+	while (original_args && original_args[i])
+	{
+		if (ft_strcmp(original_args[i], " ") != 0)
+			count++;
+		i++;
+	}
+	return (count);
+}
+
 char	**prepare_args(char *executable_path, char **original_args)
 {
 	int		i;
-	int		arg_count;
+	int		j;
+	int		valid_arg_count;
 	char	**new_args;
 
-	arg_count = 0;
-	while (original_args && original_args[arg_count])
-		arg_count++;
-	new_args = malloc((arg_count + 2) * sizeof(char *));
+	valid_arg_count = count_valid_args(original_args);
+	new_args = malloc((valid_arg_count + 2) * sizeof(char *));
 	if (!new_args)
-	{
-		perror("minishell: malloc failed");
-		exit(1);
-	}
+		return (NULL);
 	new_args[0] = ft_strdup(executable_path);
 	if (!new_args[0])
 	{
-		perror("minishell: malloc failed");
 		free(new_args);
-		exit(1);
+		return (NULL);
 	}
-	i = -1;
-	while (++i < arg_count)
-		new_args[i + 1] = original_args[i];
-	new_args[arg_count + 1] = NULL;
+	i = 0;
+	j = 1;
+	while (original_args && original_args[i])
+	{
+		if (ft_strcmp(original_args[i], " ") != 0)
+			new_args[j++] = original_args[i];
+		i++;
+	}
+	new_args[j] = NULL;
 	return (new_args);
 }
 
@@ -47,17 +63,6 @@ char	*get_env_(char **path, t_env **env, char *command)
 		return (NULL);
 	(*path) = get_env_value("PATH", env);
 	return (*path);
-}
-
-char	*absolute_relative_path_(char *command)
-{
-	if (access(command, F_OK) == 0)
-		return (ft_strdup(command));
-	else
-	{
-		print_error_no_such_file_or_directory(command);
-		exit(1);
-	}
 }
 
 char	*absolute_relative_path(char *path)
