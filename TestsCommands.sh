@@ -338,5 +338,12 @@ ateca@c1r1s3:~/minishell_ansebastian$ ls <<
 bash: syntax error near unexpected token `newline
 
 
+Akatsuki> echo "wdadsds" "wdasdsad"
+Akatsuki> > teste ls -l | > teste
+Akatsuki> echo "|" ls
 
+ateca@c1r2s5:~/minishell_ansebastian$ export $USER=$USER=$USER=$USER=$USER=$USER=$USER=$USER=$USER=$USER=$USER=$USER
+ateca@c1r2s5:~/minishell_ansebastian$ $ateca
+ateca=ateca=ateca=ateca=ateca=ateca=ateca=ateca=ateca=ateca=ateca: command not found
+Akatsuki> export $USER=$USER
 

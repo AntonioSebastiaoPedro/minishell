@@ -55,7 +55,7 @@ char	*expand_or_add_token(char *buffer, int is_quote_doub, t_token **tokens,
 	}
 	else
 	{
-		(*tokens) = add_token(*tokens, buffer, 0);
+		(*tokens) = add_token(*tokens, buffer, 2);
 	}
 	return (buffer);
 }

@@ -24,8 +24,8 @@ t_token	*add_token(t_token *head, char *value, int interpret)
 		return (NULL);
 	}
 	new_token->value = ft_strdup(value);
-	new_token->next = NULL;
 	new_token->interpret = interpret;
+	new_token->next = NULL;
 	if (!head)
 		return (new_token);
 	temp = head;
