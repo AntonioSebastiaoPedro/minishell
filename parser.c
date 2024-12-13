@@ -20,7 +20,7 @@ int	check_redir_error(t_command *current_cmd, t_token *tokens)
 		|| (ft_strcmp(tokens->value, "|") == 0 && tokens->next != NULL
 			&& is_redirection(tokens->next->value))
 		|| (current_cmd == NULL && ft_strcmp(tokens->value, "|") == 0
-			&& tokens->next != NULL && is_command(tokens->next->value))
+			&& tokens->next != NULL && is_command(tokens->next->value, 0))
 		|| (current_cmd != NULL && is_redirection(tokens->value)
 			&& tokens->next == NULL)
 		|| (current_cmd != NULL && is_redirection(tokens->value)
@@ -34,38 +34,39 @@ int	check_redir_error(t_command *current_cmd, t_token *tokens)
 }
 
 t_command	*process_current_token(t_token **tks, t_command **commands,
-		t_command *current_cmd, int *skip_file_redirection)
+		t_command *cmd, int *skip_file_redirection)
 {
 	t_token	*tokens;
 
 	tokens = *tks;
-	if (current_cmd == NULL && is_command(tokens->value))
-		current_cmd = add_command(commands, ft_strdup(tokens->value));
-	else if (check_redir_error(current_cmd, tokens))
+	if (cmd == NULL && is_command(tokens->value, tokens->interpret))
+		cmd = add_command(commands, ft_strdup(tokens->value));
+	else if (check_redir_error(cmd, tokens) && tokens->interpret != 2)
 		print_error_redir_single(tokens->value, commands, tks);
-	else if (current_cmd == NULL && is_redirection(tokens->value))
+	else if (cmd == NULL && is_redirection(tokens->value))
 	{
 		*skip_file_redirection = 1;
-		current_cmd = add_command(commands, NULL);
-		handle_redirection(tokens, current_cmd);
-		current_cmd = NULL;
+		cmd = add_command(commands, NULL);
+		handle_redirection(tokens, cmd);
+		cmd = NULL;
 	}
-	else if (current_cmd != NULL && ft_strcmp(tokens->value, "|") == 0)
-		current_cmd = NULL;
-	else if (current_cmd != NULL && is_redirection(tokens->value))
+	else if (cmd != NULL && ft_strcmp(tokens->value, "|") == 0
+		&& tokens->interpret != 2)
+		cmd = NULL;
+	else if (cmd && is_redirection(tokens->value) && tokens->interpret != 2)
 	{
 		*skip_file_redirection = 1;
-		handle_redirection(tokens, current_cmd);
+		handle_redirection(tokens, cmd);
 	}
-	else if (current_cmd != NULL && is_argument(tokens->value))
-		add_argument(current_cmd, tokens);
-	return (current_cmd);
+	else if (cmd != NULL && is_argument(tokens->value, tokens->interpret))
+		add_argument(cmd, tokens);
+	return (cmd);
 }
 
-int	is_argument(const char *token)
+int	is_argument(const char *token, int interpret)
 {
-	return (token != NULL && !is_redirection(token)
-		&& ft_strcmp(token, "|") != 0);
+	return (token != NULL && ((!is_redirection(token)
+				&& ft_strcmp(token, "|") != 0) || interpret == 2));
 }
 
 void	add_argument(t_command *cmd, t_token *token)

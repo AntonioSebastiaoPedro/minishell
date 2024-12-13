@@ -80,7 +80,12 @@ void	handle_envi_var(const char *line, int *i, t_token **tokens, t_env **env)
 	buffer = expand_variables(buffer, NULL, 0, env);
 	tokenize(buffer, tokens, env);
 	free(buffer);
-	isspace_add(line, i, tokens, &buffer);
+	if (line[(*i)] == ' ')
+	{
+		dprintf(2, "tem espaço\n");
+		isspace_add(line, i, tokens, &buffer);	
+	}
+	//isspace_add(line, i, tokens, &buffer);
 }
 
 void	isspace_add(const char *line, int *i, t_token **tokens, char **buffer)
