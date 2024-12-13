@@ -41,11 +41,11 @@ int	ft_echo(t_command *cmd)
 			newline = -1;
 			i++;
 		}
-		if (ft_strcmp(cmd->args[0], " ") == 0)
-			i++;
 		while (cmd->args[i])
 		{
 			printf("%s", cmd->args[i]);
+			if (cmd->args[i + 1])
+				printf(" ");
 			i++;
 		}
 	}

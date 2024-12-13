@@ -66,7 +66,7 @@ void	handle_envi_var(const char *line, int *i, t_token **tokens, t_env **env)
 	if (!buffer)
 		return ;
 	buffer[j++] = line[(*i)++];
-	while (ft_isalnum(line[*i]) || line[*i] == '_')
+	while (line[(*i)])
 	{
 		if (j >= capacity - 1)
 		{
@@ -80,12 +80,7 @@ void	handle_envi_var(const char *line, int *i, t_token **tokens, t_env **env)
 	buffer = expand_variables(buffer, NULL, 0, env);
 	tokenize(buffer, tokens, env);
 	free(buffer);
-	if (line[(*i)] == ' ')
-	{
-		dprintf(2, "tem espaço\n");
-		isspace_add(line, i, tokens, &buffer);	
-	}
-	//isspace_add(line, i, tokens, &buffer);
+	buffer = NULL;
 }
 
 void	isspace_add(const char *line, int *i, t_token **tokens, char **buffer)
