@@ -80,7 +80,7 @@ void	parent_process(int status, t_token **tokens, int *pipe_fd, t_env **env)
 		if (bytes >= 0 && bytes < 2097152)
 		{
 			new_line[bytes] = '\0';
-			tokenize(new_line, tokens, env);
+			tokenize(new_line, tokens, env, 0);
 		}
 		else
 			perror("Read error or size exceeded");
