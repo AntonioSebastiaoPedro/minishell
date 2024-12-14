@@ -78,7 +78,7 @@ void	handle_envi_var(const char *line, int *i, t_token **tokens, t_env **env)
 	}
 	buffer[j] = '\0';
 	buffer = expand_variables(buffer, NULL, 0, env);
-	tokenize(buffer, tokens, env);
+	tokenize(buffer, tokens, env, 1);
 	free(buffer);
 	buffer = NULL;
 }
@@ -93,7 +93,7 @@ void	isspace_add(const char *line, int *i, t_token **tokens, char **buffer)
 	}
 }
 
-void	tokenize(char *line, t_token **tokens, t_env **envp)
+void	tokenize(char *line, t_token **tokens, t_env **envp, int is_recursive)
 {
 	int	i;
 
@@ -108,7 +108,8 @@ void	tokenize(char *line, t_token **tokens, t_env **envp)
 			handle_redirection_and_pipes(line, &i, tokens);
 		else if (line[i] == '\'' || line[i] == '"')
 			handle_quotes(line, &i, tokens, envp);
-		else if (line[i] == '$' && line[i + 1] != '\0' && line[i + 1] != '?')
+		else if (line[i] == '$' && line[i + 1] != '\0' && line[i + 1] != '?'
+			&& !is_recursive)
 			handle_envi_var(line, &i, tokens, envp);
 		else if (line[i])
 			handle_word(line, &i, tokens);

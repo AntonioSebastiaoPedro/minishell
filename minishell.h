@@ -106,7 +106,8 @@ void		handle_heredoc(t_command *cmd);
 void		free_env(t_env **env);
 void		handle_sigint(int sig);
 void		handle_sigquit(int sig);
-void		tokenize(char *line, t_token **tokens, t_env **envp);
+void		tokenize(char *line, t_token **tokens, t_env **envp,
+				int is_recursive);
 void		execute_commands(t_command *cmd, t_env **env);
 void		free_commands(t_command *commands);
 void		envcpy(t_env **env_dup, char **src);

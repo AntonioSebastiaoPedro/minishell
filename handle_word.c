@@ -14,7 +14,7 @@
 
 int	is_special_char(char c)
 {
-	return (c == '|' || c == '>' || c == '<' || c == '$');
+	return (c == '|' || c == '>' || c == '<');
 }
 
 int	interpret_quotes(const char *line, int *i, t_quote_state *state)

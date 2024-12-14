@@ -69,32 +69,6 @@ int	is_argument(const char *token, int interpret)
 				&& ft_strcmp(token, "|") != 0) || interpret == 2));
 }
 
-void	add_argument(t_command *cmd, t_token *token)
-{
-	int			i;
-	int			j;
-	static int	current_size_i;
-	static int	current_size_j;
-
-	i = 0;
-	j = 0;
-	if (cmd->args)
-	{
-		while (cmd->args[i])
-			i++;
-		j = i;
-	}
-	cmd->args = ft_realloc(cmd->args, sizeof(char *) * current_size_i,
-			sizeof(char *) * (i + 2));
-	cmd->args[i] = token->value;
-	cmd->args[i + 1] = NULL;
-	current_size_i = i + 2;
-	cmd->interpret = ft_realloc(cmd->interpret, sizeof(int) * current_size_j,
-			sizeof(int) * (j + 1));
-	cmd->interpret[j] = token->interpret;
-	current_size_j = i + 1;
-}
-
 t_command	*parse_tokens(t_token *tokens)
 {
 	t_command	*commands;

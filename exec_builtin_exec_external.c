@@ -92,7 +92,6 @@ int	exec_builtin_exec_external(t_command *cmd, pid_t *pids, t_status_cmd *st)
 	current = cmd;
 	while (current != NULL && i < st->num_commands)
 	{
-		expand_command_args(current, st->env);
 		if (setup_pipes(current) == -1)
 			return (-1);
 		if (handle_redirections(&current, st, pids, &i) == -2)

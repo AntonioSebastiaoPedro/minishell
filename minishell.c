@@ -32,10 +32,10 @@ int	main(void)
 		if (!line)
 			break ;
 		add_history(line);
-		tokenize(line, &tokens, &env_dup);
+		tokenize(line, &tokens, &env_dup, 0);
 		free(line);
 		commands = parse_tokens(tokens);
-		print_tokens(tokens);
+		//print_tokens(tokens);
 		//print_commands(commands);
 		execute_commands(commands, &env_dup);
 		free_tokens(tokens);
