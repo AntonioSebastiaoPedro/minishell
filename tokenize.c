@@ -83,16 +83,6 @@ void	handle_envi_var(const char *line, int *i, t_token **tokens, t_env **env)
 	buffer = NULL;
 }
 
-void	isspace_add(const char *line, int *i, t_token **tokens, char **buffer)
-{
-	(*buffer) = NULL;
-	if (line[(*i)] && ft_isspace(line[(*i)]))
-	{
-		add_token(*tokens, " ", 0);
-		(*i)++;
-	}
-}
-
 void	tokenize(char *line, t_token **tokens, t_env **envp, int is_recursive)
 {
 	int	i;
