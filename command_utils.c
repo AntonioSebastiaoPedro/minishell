@@ -14,7 +14,7 @@
 
 int	is_command(const char *token, int interpret)
 {
-	return (token && ((!ft_isdigit(token[0]) && ft_strcmp(token, "|") != 0
+	return (token && ((ft_strcmp(token, "|") != 0
 				&& ft_strcmp(token, "<") != 0 && ft_strcmp(token, ">") != 0
 				&& ft_strcmp(token, ">>") != 0 && ft_strcmp(token, "<<") != 0)
 			|| interpret == 2));
