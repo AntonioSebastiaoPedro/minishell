@@ -91,8 +91,7 @@ int	add_args_env(char **args, t_env **env)
 	{
 		if (!ft_isword(args[i]))
 		{
-			printf("minishell: export: Invalid identifier %s\n",
-				ft_strtok_2(args[i], "="));
+			print_invalid_identifier_error(args[i]);
 			status = 1;
 			continue ;
 		}
