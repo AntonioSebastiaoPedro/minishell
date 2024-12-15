@@ -85,6 +85,21 @@ void	print_error_no_such_file_or_directory(char *file_redir)
 	write(2, newline, ft_strlen(newline));
 }
 
+void	print_invalid_identifier_error(char *arg)
+{
+	char	*error_msg_prefix;
+	char	error_msg[70000];
+
+	error_msg[0] = '\0';
+	error_msg_prefix = "minishell: export: `";
+	ft_strlcat(error_msg, error_msg_prefix, sizeof(error_msg));
+	ft_strlcat(error_msg, ft_strtok_2(arg, "="), sizeof(error_msg));
+	ft_strlcat(error_msg, "': ", sizeof(error_msg));
+	ft_strlcat(error_msg, "not a valid identifier", sizeof(error_msg));
+	ft_strlcat(error_msg, "\n", sizeof(error_msg));
+	write(2, error_msg, ft_strlen(error_msg));
+}
+
 void	print_tokens(t_token *tokens)
 {
 	t_token	*temp;
