@@ -133,6 +133,7 @@ void		print_check_cmd(char *exec_path, t_command *cmd);
 void		expand_command_args(t_command *cmd, t_env **env);
 void		isspace_add(const char *line, int *i, t_token **tokens,
 				char **buffer);
+void		print_invalid_identifier_error(char *arg);
 char		*expand_variables(char *str, t_command *cmd, int *arg_pos,
 				t_env **env);
 char		*get_env_value(char *var, t_env **env);
