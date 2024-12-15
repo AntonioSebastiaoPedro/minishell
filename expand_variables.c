@@ -19,7 +19,16 @@ void	extract_variable_name(const char *str, int *i, char *var_name)
 	j = 0;
 	(*i)++;
 	while (str[*i] && (ft_isalnum(str[*i]) || str[*i] == '_' || str[*i] == '?'))
+	{
+		if (str[(*i)] == '?' && str[(*i) - 1] == '$')
+		{
+			var_name[j++] = str[(*i)++];
+			break ;
+		}
+		if (str[(*i)] == '?')
+			break ;
 		var_name[j++] = str[(*i)++];
+	}
 	var_name[j] = '\0';
 }
 
@@ -50,7 +59,9 @@ int	handle_dollar_sign(char *str, int *i, t_expand_state *state)
 	{
 		extract_variable_name(str, i, var_name);
 		if (ft_strcmp("?", var_name) == 0)
+		{
 			env_val = get_env_value("XDG_CMD_STATUS", state->env);
+		}
 		else
 			env_val = get_env_value(var_name, state->env);
 		check_enval(&env_val, &(state->result), &(state->pos));
