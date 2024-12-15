@@ -44,19 +44,24 @@ void	child_process(t_token **tokens, int *pipe_fd)
 
 	signal(SIGINT, handle_sigint_heredoc);
 	*tokens = add_token(*tokens, "|", 0);
-	next_line = readline("> ");
-	if (next_line == NULL)
+	while (1)
 	{
-		write(2, "minishell: ", 11);
-		write(2, "syntax error: unexpected end of file\n", 37);
-		write(2, "exit\n", 5);
-		exit(1);
+		next_line = readline("> ");
+		if (check_isspace(next_line, -1))
+			continue ;
+		if (next_line == NULL)
+		{
+			write(2, "minishell: ", 11);
+			write(2, "syntax error: unexpected end of file\n", 37);
+			write(2, "exit\n", 5);
+			exit(1);
+		}
+		close(pipe_fd[0]);
+		write(pipe_fd[1], next_line, ft_strlen(next_line));
+		close(pipe_fd[1]);
+		free(next_line);
+		exit(0);
 	}
-	close(pipe_fd[0]);
-	write(pipe_fd[1], next_line, ft_strlen(next_line));
-	close(pipe_fd[1]);
-	free(next_line);
-	exit(0);
 }
 
 void	parent_process(int status, t_token **tokens, int *pipe_fd, t_env **env)
