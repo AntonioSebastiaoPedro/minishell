@@ -89,7 +89,7 @@ void	handle_envi_var(const char *line, int *i, t_token **tokens, t_env **env)
 {
 	char	*expanded_buffer;
 	char	*buffer;
-	
+
 	buffer = extract_variable(line, i);
 	if (!buffer)
 	{
@@ -118,7 +118,7 @@ void	tokenize(char *line, t_token **tokens, t_env **envp, int is_recursive)
 			handle_redirection_and_pipes(line, &i, tokens);
 		else if (line[i] == '\'' || line[i] == '"')
 			handle_quotes(line, &i, tokens, envp);
-		else if (line[i] == '$' && line[i + 1] != '\0'
+		else if (ft_strchr(&line[i], '$') && line[i + 1] != '\0'
 			&& !is_recursive)
 			handle_envi_var(line, &i, tokens, envp);
 		else if (line[i])
