@@ -40,7 +40,6 @@ void	envcpy(t_env **env_dup, char **src)
 		add_env(env_dup, src[i]);
 		i++;
 	}
-	add_env(env_dup, "XDG_CMD_STATUS=0");
 }
 
 static int	count_visible_vars(t_env *env_list)

@@ -45,6 +45,7 @@ int	handle_dollar_sign(char *str, int *i, t_expand_state *state)
 {
 	char	var_name[2097152];
 	char	*env_val;
+	char	*exit_status;
 
 	if (str[*i + 1] == '\0')
 	{
@@ -60,12 +61,14 @@ int	handle_dollar_sign(char *str, int *i, t_expand_state *state)
 		extract_variable_name(str, i, var_name);
 		if (ft_strcmp("?", var_name) == 0)
 		{
-			env_val = get_env_value("XDG_CMD_STATUS", state->env);
+			exit_status = ft_itoa(g_exit_status);
+			env_val = exit_status;
 		}
 		else
 			env_val = get_env_value(var_name, state->env);
 		check_enval(&env_val, &(state->result), &(state->pos));
 	}
+	//free(exit_status);
 	return (state->pos);
 }
 

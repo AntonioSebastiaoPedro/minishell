@@ -54,33 +54,53 @@ void	handle_quotes(const char *line, int *i, t_token **tokens, t_env **env)
 	buffer = NULL;
 }
 
-void	handle_envi_var(const char *line, int *i, t_token **tokens, t_env **env)
+char *extract_variable(const char *line, int *i)
 {
-	char	*buffer;
-	int		j;
-	int		capacity;
+	char    *buffer;
+	char	*new_buffer;
+	int     j;
+	int     capacity;
 
-	j = 0;
 	capacity = 256;
 	buffer = malloc(sizeof(char) * capacity);
 	if (!buffer)
-		return ;
+		return (NULL);
+	j = 0;
 	buffer[j++] = line[(*i)++];
-	while (line[(*i)])
+	while (line[*i])
 	{
 		if (j >= capacity - 1)
 		{
-			buffer = realloc_token(buffer, &capacity);
-			if (!buffer)
-				return ;
+			new_buffer = realloc_token(buffer, &capacity);
+			if (!new_buffer)
+			{
+				free(buffer);
+				return (NULL);
+			}
+			buffer = new_buffer;
 		}
 		buffer[j++] = line[(*i)++];
 	}
 	buffer[j] = '\0';
-	buffer = expand_variables(buffer, NULL, 0, env);
-	tokenize(buffer, tokens, env, 1);
-	free(buffer);
-	buffer = NULL;
+	return (buffer);
+}
+
+void	handle_envi_var(const char *line, int *i, t_token **tokens, t_env **env)
+{
+	char	*expanded_buffer;
+	char	*buffer;
+	
+	buffer = extract_variable(line, i);
+	if (!buffer)
+	{
+		perror("minishell: malloc failed");
+		return ;
+	}
+	expanded_buffer = expand_variables(buffer, NULL, 0, env);
+	if (expanded_buffer != buffer)
+		free(buffer);
+	tokenize(expanded_buffer, tokens, env, 1);
+	free(expanded_buffer);
 }
 
 void	tokenize(char *line, t_token **tokens, t_env **envp, int is_recursive)

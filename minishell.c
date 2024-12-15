@@ -12,6 +12,8 @@
 
 #include "minishell.h"
 
+int	g_exit_status = 0;
+
 int	main(void)
 {
 	char		*line;
@@ -37,8 +39,8 @@ int	main(void)
 		commands = parse_tokens(tokens);
 		//print_tokens(tokens);
 		//print_commands(commands);
-		execute_commands(commands, &env_dup);
 		free_tokens(tokens);
+		execute_commands(commands, &env_dup);
 		free_commands(commands);
 	}
 	rl_clear_history();

@@ -28,6 +28,7 @@ void	handle_sigint_heredoc(int signum)
 void	handle_sigint(int sig)
 {
 	(void)sig;
+	g_exit_status = 130;
 	write(STDERR_FILENO, "\n", 1);
 	rl_on_new_line();
 	rl_replace_line("", 0);

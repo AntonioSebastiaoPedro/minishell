@@ -79,6 +79,8 @@ typedef struct s_command
 	struct s_command	*next;
 }						t_command;
 
+extern int	g_exit_status;
+
 int			ft_env(t_command *cmd, t_env **env);
 int			is_builtin(const char *cmd);
 int			is_command(const char *token, int interpret);

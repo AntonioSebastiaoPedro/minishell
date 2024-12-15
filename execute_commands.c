@@ -40,11 +40,8 @@ int	setup_pipes(t_command *cmd)
 void	restore_stdio(int original_stdin, int original_stdout, int status,
 	t_env **envp)
 {
-	char	*char_status;
-
-	char_status = ft_itoa(status);
-	update_envvar(envp, "XDG_CMD_STATUS", char_status);
-	free(char_status);
+	(void)envp;
+	g_exit_status = status;
 	dup2(original_stdin, STDIN_FILENO);
 	dup2(original_stdout, STDOUT_FILENO);
 	close(original_stdin);
@@ -52,6 +49,27 @@ void	restore_stdio(int original_stdin, int original_stdout, int status,
 }
 
 void	wait_for_processes(pid_t *pids, int num_commands, int *status)
+{
+	int	i;
+	int	local_status;
+
+	i = 0;
+	local_status = 0;
+	while (i < num_commands)
+	{
+		if (pids[i] != -1)
+		{
+			waitpid(pids[i], &local_status, 0);
+			if (WIFEXITED(local_status))
+				*status = WEXITSTATUS(local_status);
+		}
+		i++;
+	}
+	signal(SIGINT, handle_sigint);
+}
+
+
+/*void	wait_for_processes(pid_t *pids, int num_commands, int *status)
 {
 	int	i;
 
@@ -67,7 +85,7 @@ void	wait_for_processes(pid_t *pids, int num_commands, int *status)
 	if (WIFEXITED(*status))
 		*status = WEXITSTATUS(*status);
 	signal(SIGINT, handle_sigint);
-}
+}*/
 
 int	ft_lstsize_command(t_command *head)
 {
@@ -105,7 +123,8 @@ void	execute_commands(t_command *cmd, t_env **envp)
 		restore_stdio(st.original_stdin, st.original_stdout, st.status, st.env);
 		return ;
 	}
-	wait_for_processes(pids, st.num_commands, &st.status);
+	if (cmd->command != NULL && !is_builtin(cmd->command))
+		wait_for_processes(pids, st.num_commands, &st.status);
 	restore_stdio(st.original_stdin, st.original_stdout, st.status, st.env);
 	free(pids);
 }
