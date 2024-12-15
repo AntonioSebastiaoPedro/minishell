@@ -28,7 +28,5 @@ int	ft_exit(t_command *cmd)
 		printf("minishell: exit: too many arguments\n");
 		return (1);
 	}
-	//free_tokens(tokens);
-	free_commands(cmd);
 	exit(ft_atoi(cmd->args[0]));
 }
