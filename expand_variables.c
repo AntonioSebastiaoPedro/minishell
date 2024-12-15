@@ -92,7 +92,7 @@ char	*expand_variables(char *str, t_command *cmd, int *arg_pos, t_env **env)
 	state.env = env;
 	while (str[i] != '\0')
 	{
-		if (str[i] == '$' && str[i + 1] != '$')
+		if (str[i] == '$' && str[i + 1] != '$' && str[i + 1] != ' ')
 			handle_dollar_sign(str, &i, &state);
 		else
 			state.result[state.pos++] = str[i++];
