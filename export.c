@@ -42,26 +42,22 @@ void	sort_str_list(t_env *tab)
 
 void	update_env(t_env **env, char *name)
 {
-	char	*var;
-	char	*value;
-	char	*name_copy;
+	char	name_copy[70000];
+	char	*new_value;
 	int		show;
 
-	name_copy = ft_strdup(name);
 	show = 0;
+	ft_strcpy(name_copy, name);
 	if (ft_strchr(name_copy, '='))
 		show = 1;
-	var = ft_strtok_2(name_copy, "=");
-	value = ft_strtok_2(NULL, "=");
-	(*env)->var = var;
-	(*env)->value = value;
-	if (!var)
-		(*env)->var = ft_strdup("");
-	if (!value)
-		(*env)->value = ft_strdup("");
+	new_value = ft_strtok_2(NULL, "=");
+	free((*env)->value);
 	(*env)->index = 0;
 	(*env)->show = show;
-	(*env)->next = NULL;
+	if (!new_value)
+		(*env)->value = ft_strdup("");
+	else
+		(*env)->value = ft_strdup(new_value);
 }
 
 t_env	*get_env(char *var, t_env **env, int (*cmp)())
