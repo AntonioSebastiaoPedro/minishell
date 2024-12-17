@@ -47,15 +47,13 @@ int	handle_dollar_sign(char *str, int *i, t_expand_state *state)
 	char	*env_val;
 	char	*exit_status;
 
+	exit_status = NULL;
 	if (str[*i + 1] == '\0')
 	{
 		state->result[state->pos++] = str[(*i)++];
 	}
 	else if (ft_isdigit(str[*i + 1]))
-	{
-		(*i)++;
-		(*i)++;
-	}
+		(*i) += 2;
 	else
 	{
 		extract_variable_name(str, i, var_name);
@@ -68,7 +66,7 @@ int	handle_dollar_sign(char *str, int *i, t_expand_state *state)
 			env_val = get_env_value(var_name, state->env);
 		check_enval(&env_val, &(state->result), &(state->pos));
 	}
-	//free(exit_status);
+	free(exit_status);
 	return (state->pos);
 }
 
