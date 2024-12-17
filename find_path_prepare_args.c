@@ -105,7 +105,7 @@ char	*find_executable_path(char *command, t_env **env)
 		return (absolute_relative_path(command));
 	if (!get_env_(&path, env, command))
 		return (NULL);
-	path_copy = ft_strdup(path);
+	path_copy = ft_strjoin(path, ":");
 	dir = ft_strtok(path_copy, ':', &next_path);
 	while (dir)
 	{
