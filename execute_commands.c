@@ -68,25 +68,6 @@ void	wait_for_processes(pid_t *pids, int num_commands, int *status)
 	signal(SIGINT, handle_sigint);
 }
 
-
-/*void	wait_for_processes(pid_t *pids, int num_commands, int *status)
-{
-	int	i;
-
-	i = 0;
-	while (i < num_commands)
-	{
-		if (pids[i] != -1)
-		{
-			waitpid(pids[i], status, 0);
-		}
-		i++;
-	}
-	if (WIFEXITED(*status))
-		*status = WEXITSTATUS(*status);
-	signal(SIGINT, handle_sigint);
-}*/
-
 int	ft_lstsize_command(t_command *head)
 {
 	int	len;
