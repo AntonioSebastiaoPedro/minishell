@@ -40,17 +40,15 @@ void	sort_str_list(t_env *tab)
 	}
 }
 
-void	update_env(t_env **env, char *name)
+void	update_env(t_env **env, char *argument)
 {
-	char	name_copy[70000];
 	char	*new_value;
 	int		show;
 
 	show = 0;
-	ft_strcpy(name_copy, name);
-	if (ft_strchr(name_copy, '='))
+	if (ft_strchr(argument, '='))
 		show = 1;
-	new_value = ft_strtok_2(NULL, "=");
+	new_value = ft_strchr(argument, '=') + 1;
 	free((*env)->value);
 	(*env)->index = 0;
 	(*env)->show = show;
