@@ -104,8 +104,7 @@ void	execute_commands(t_command *cmd, t_env **envp)
 		restore_stdio(st.original_stdin, st.original_stdout, st.status, st.env);
 		return ;
 	}
-	if (cmd->command != NULL && !is_builtin(cmd->command))
-		wait_for_processes(pids, st.num_commands, &st.status);
+	wait_for_processes(pids, st.num_commands, &st.status);
 	restore_stdio(st.original_stdin, st.original_stdout, st.status, st.env);
 	free(pids);
 }
