@@ -70,7 +70,7 @@ char	*realloc_token(char *buffer, int *capacity)
 	new_buffer = ft_realloc(buffer, old_capacity, sizeof(char) * (*capacity));
 	if (!new_buffer)
 	{
-		perror("minishell: realloc failed");
+		free(buffer);
 		return (NULL);
 	}
 	return (new_buffer);

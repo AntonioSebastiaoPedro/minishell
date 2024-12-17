@@ -45,21 +45,27 @@ void	handle_quotes(const char *line, int *i, t_token **tokens, t_env **env)
 	is_quote_double = (quote == '"');
 	buffer = process_quotes(line, i, quote);
 	if (!buffer)
+	{
+		perror("minishell: malloc failed");
 		return ;
+	}
 	buffer = combine_with_next(line, i, buffer);
 	if (!buffer)
+	{
+		perror("minishell: malloc failed");
 		return ;
+	}
 	buffer = expand_or_add_token(buffer, is_quote_double, tokens, env);
 	free(buffer);
 	buffer = NULL;
 }
 
-char *extract_variable(const char *line, int *i)
+char	*extract_variable(const char *line, int *i)
 {
-	char    *buffer;
+	char	*buffer;
 	char	*new_buffer;
-	int     j;
-	int     capacity;
+	int		j;
+	int		capacity;
 
 	capacity = 256;
 	buffer = malloc(sizeof(char) * capacity);
@@ -73,10 +79,7 @@ char *extract_variable(const char *line, int *i)
 		{
 			new_buffer = realloc_token(buffer, &capacity);
 			if (!new_buffer)
-			{
-				free(buffer);
 				return (NULL);
-			}
 			buffer = new_buffer;
 		}
 		buffer[j++] = line[(*i)++];
