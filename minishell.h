@@ -104,6 +104,7 @@ int			handle_output_redirection(t_command **command);
 int			is_argument(const char *token, int interpret);
 int			handle_dollar_sign(char *str, int *i, t_expand_state *state);
 int			setup_pipes(t_command *cmd);
+int			has_unclsed_quotes(const char *line, int *j);
 void		handle_heredoc(t_command *cmd);
 void		free_env(t_env **env);
 void		handle_sigint(int sig);
@@ -136,6 +137,8 @@ void		expand_command_args(t_command *cmd, t_env **env);
 void		isspace_add(const char *line, int *i, t_token **tokens,
 				char **buffer);
 void		print_invalid_identifier_error(char *arg);
+void		print_error_unclosed_quote(char *buffer, char quote,
+				const char *line, int *i);
 char		*expand_variables(char *str, t_command *cmd, int *arg_pos,
 				t_env **env);
 char		*get_env_value(char *var, t_env **env);
@@ -148,7 +151,6 @@ char		*allocate_result_buffer(char *str);
 char		*combine_with_next(const char *line, int *i, char *buffer);
 char		*expand_or_add_token(char *buffer, int is_quote_doub,
 				t_token **tokens, t_env **env);
-char		*print_error_unclosed_quote(char *buffer, char quote);
 t_env		*add_env(t_env **envs, char *name);
 t_env		*ft_newenv(char *name);
 t_env		*last_env(t_env *head);

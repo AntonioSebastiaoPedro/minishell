@@ -18,6 +18,8 @@ char	*combine_with_next(const char *line, int *i, char *buffer)
 	char	*combined;
 	int		start;
 
+	if (!buffer)
+		return (NULL);
 	while (line[*i] && (line[*i] == '"' || line[*i] == '\''
 			|| !ft_isspace(line[*i])))
 	{
@@ -58,4 +60,31 @@ char	*expand_or_add_token(char *buffer, int is_quote_doub, t_token **tokens,
 		(*tokens) = add_token(*tokens, buffer, 2);
 	}
 	return (buffer);
+}
+
+int	has_unclsed_quotes(const char *line, int *j)
+{
+	int	i;
+	int	single_quote_count;
+	int	double_quote_count;
+	int	inside_double_quotes;
+
+	i = *j;
+	single_quote_count = 0;
+	double_quote_count = 0;
+	inside_double_quotes = 0;
+	while (line[i])
+	{
+		if (line[i] == '"')
+		{
+			double_quote_count++;
+			inside_double_quotes = !inside_double_quotes;
+		}
+		else if (line[i] == '\'' && !inside_double_quotes)
+			single_quote_count++;
+		i++;
+	}
+	if (single_quote_count % 2 != 0 || double_quote_count % 2 != 0)
+		return (1);
+	return (0);
 }

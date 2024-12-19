@@ -41,17 +41,18 @@ void	handle_quotes(const char *line, int *i, t_token **tokens, t_env **env)
 	int		is_quote_double;
 	char	*buffer;
 
+	if (has_unclsed_quotes(line, i))
+	{
+		print_error_unclosed_quote(NULL, '\0', line, i);
+		return ;
+	}
 	quote = line[(*i)++];
 	is_quote_double = (quote == '"');
 	buffer = process_quotes(line, i, quote);
-	if (!buffer)
-	{
-		perror("minishell: malloc failed");
-		return ;
-	}
 	buffer = combine_with_next(line, i, buffer);
 	if (!buffer)
 	{
+		(*i) = ft_strlen(line);
 		perror("minishell: malloc failed");
 		return ;
 	}

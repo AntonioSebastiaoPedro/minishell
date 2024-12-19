@@ -87,6 +87,11 @@ void	handle_word(const char *line, int *i, t_token **tokens)
 	state.dob_quote = 0;
 	state.sin_quote = 0;
 	state.interpret = 0;
+	if (has_unclsed_quotes(line, i))
+	{
+		print_error_unclosed_quote(NULL, '\0', line, i);
+		return ;
+	}
 	word = extract_word(line, i, &state);
 	if (!word)
 		return ;

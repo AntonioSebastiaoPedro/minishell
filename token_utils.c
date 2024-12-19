@@ -97,8 +97,6 @@ char	*process_quotes(const char *line, int *i, char quote)
 		}
 		buffer[j++] = line[(*i)++];
 	}
-	if (line[*i] != quote)
-		return (print_error_unclosed_quote(buffer, quote));
 	(*i)++;
 	buffer[j] = '\0';
 	return (buffer);

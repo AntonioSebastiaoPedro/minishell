@@ -26,16 +26,18 @@ void	print_check_cmd(char *exec_path, t_command *cmd)
 	}
 }
 
-char	*print_error_unclosed_quote(char *buffer, char quote)
+void	print_error_unclosed_quote(char *buffer, char quote, const char *line,
+		int *i)
 {
 	char	*message_error;
 
+	(*i) = ft_strlen(line);
 	message_error = "minishell: syntax error: unclosed quote ";
 	write(2, message_error, ft_strlen(message_error));
 	write(2, &quote, 1);
 	write(2, "\n", 1);
 	free(buffer);
-	return (NULL);
+	buffer = NULL;
 }
 
 void	print_error_redir_single(char *token, t_command **cmds, t_token **tks)
