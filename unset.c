@@ -12,18 +12,20 @@
 
 #include "minishell.h"
 
-void	ft_env_remove_if(t_env **envs, char *var)
+void	ft_env_remove_if(t_env **env, char *var)
 {
 	t_env	*remove;
 	t_env	*current;
 
-	current = *envs;
+	current = *env;
 	while (current && current->next)
 	{
 		if (ft_strcmp(current->next->var, var) == 0)
 		{
 			remove = current->next;
 			current->next = current->next->next;
+			free(remove->value);
+			free(remove->var);
 			free(remove);
 			break ;
 		}
