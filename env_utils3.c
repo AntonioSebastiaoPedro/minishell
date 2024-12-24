@@ -55,7 +55,8 @@ void	update_envvar(t_env **env, char *var, char *value)
 	ft_memset(var_value, '\0', sizeof(var_value));
 	ft_strappend(var_value, var);
 	ft_strappend(var_value, "=");
-	ft_strappend(var_value, value);
+	if (value != NULL)
+		ft_strappend(var_value, value);
 	add_env(env, var_value);
 }
 
