@@ -41,13 +41,6 @@ typedef struct s_env
 	struct s_env		*next;
 }						t_env;
 
-typedef struct s_quote_state
-{
-	int	dob_quote;
-	int	sin_quote;
-	int	interpret;
-}					t_quote_state;
-
 typedef struct s_expand_state
 {
 	char	*result;
@@ -127,7 +120,6 @@ void		print_error_redir_single(char *token, t_command **cmds,
 void		handle_redirection(t_token *token, t_command *current_cmd);
 void		add_argument(t_command *cmd, t_token *token);
 void		print_error_no_such_file_or_directory(char *file_redir);
-void		handle_word(const char *line, int *i, t_token **tokens);
 void		handle_sigint_external_command(int signum);
 void		handle_sigint_heredoc(int signum);
 void		handle_pipe_stdin(char *line, t_token **tokens, int *i,
@@ -139,8 +131,7 @@ void		isspace_add(const char *line, int *i, t_token **tokens,
 void		print_invalid_identifier_error(char *arg);
 void		print_error_unclosed_quote(char *buffer, char quote,
 				const char *line, int *i);
-char		*expand_variables(char *str, t_command *cmd, int *arg_pos,
-				t_env **env);
+char		*expand_variables(char *str, t_env **env);
 char		*get_env_value(char *var, t_env **env);
 char		**env_list_to_array(t_env *env_list);
 char		*find_executable_path(char *command, t_env **env);
@@ -148,9 +139,8 @@ char		**prepare_args(char *executable_path, char **original_args);
 char		*realloc_token(char *buffer, int *capacity);
 char		*process_quotes(const char *line, int *i, char quote);
 char		*allocate_result_buffer(char *str);
-char		*combine_with_next(const char *line, int *i, char *buffer);
-char		*expand_or_add_token(char *buffer, int is_quote_doub,
-				t_token **tokens, t_env **env);
+char		*combine_with_next(const char *line, int *i, t_token **tokens,
+				t_expand_state *est);
 t_env		*add_env(t_env **envs, char *name);
 t_env		*ft_newenv(char *name);
 t_env		*last_env(t_env *head);

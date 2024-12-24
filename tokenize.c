@@ -35,76 +35,34 @@ void	handle_redirection_and_pipes(const char *line, int *i, t_token **tokens)
 	}
 }
 
-void	handle_quotes(const char *line, int *i, t_token **tokens, t_env **env)
+void	handle_line(const char *line, int *i, t_token **tokens, t_env **envp)
 {
-	char	quote;
-	int		is_quote_double;
-	char	*buffer;
-
+	char			quote;
+	int				is_quote_double;
+	char			*buffer;
+	t_expand_state	est;
+	
+	est.pos = 0;
+	est.env = envp;
+	est.result = ft_strdup("");
 	if (has_unclsed_quotes(line, i))
 	{
 		print_error_unclosed_quote(NULL, '\0', line, i);
 		return ;
 	}
-	quote = line[(*i)++];
-	is_quote_double = (quote == '"');
-	buffer = process_quotes(line, i, quote);
-	buffer = combine_with_next(line, i, buffer);
+	quote = line[(*i)];
+	is_quote_double = (quote == '"') && !(*tokens);
+	buffer = combine_with_next(line, i, tokens, &est);
 	if (!buffer)
 	{
 		(*i) = ft_strlen(line);
 		perror("minishell: malloc failed");
 		return ;
 	}
-	buffer = expand_or_add_token(buffer, is_quote_double, tokens, env);
+	if (ft_strcmp(buffer, "") != 0)
+		(*tokens) = add_token(*tokens, buffer, is_quote_double);
 	free(buffer);
 	buffer = NULL;
-}
-
-char	*extract_variable(const char *line, int *i)
-{
-	char	*buffer;
-	char	*new_buffer;
-	int		j;
-	int		capacity;
-
-	capacity = 256;
-	buffer = malloc(sizeof(char) * capacity);
-	if (!buffer)
-		return (NULL);
-	j = 0;
-	buffer[j++] = line[(*i)++];
-	while (line[*i])
-	{
-		if (j >= capacity - 1)
-		{
-			new_buffer = realloc_token(buffer, &capacity);
-			if (!new_buffer)
-				return (NULL);
-			buffer = new_buffer;
-		}
-		buffer[j++] = line[(*i)++];
-	}
-	buffer[j] = '\0';
-	return (buffer);
-}
-
-void	handle_envi_var(const char *line, int *i, t_token **tokens, t_env **env)
-{
-	char	*expanded_buffer;
-	char	*buffer;
-
-	buffer = extract_variable(line, i);
-	if (!buffer)
-	{
-		perror("minishell: malloc failed");
-		return ;
-	}
-	expanded_buffer = expand_variables(buffer, NULL, 0, env);
-	if (expanded_buffer != buffer)
-		free(buffer);
-	tokenize(expanded_buffer, tokens, env, 1);
-	free(expanded_buffer);
 }
 
 void	tokenize(char *line, t_token **tokens, t_env **envp, int is_recursive)
@@ -121,11 +79,10 @@ void	tokenize(char *line, t_token **tokens, t_env **envp, int is_recursive)
 		else if (line[i] == '|' || line[i] == '>' || line[i] == '<')
 			handle_redirection_and_pipes(line, &i, tokens);
 		else if (line[i] == '\'' || line[i] == '"')
-			handle_quotes(line, &i, tokens, envp);
-		else if (ft_strchr(&line[i], '$') && line[i + 1] != '\0'
-			&& !is_recursive)
-			handle_envi_var(line, &i, tokens, envp);
+			handle_line(line, &i, tokens, envp);
+		else if (line[i] == '$' && line[i + 1] != '\0' && !is_recursive)
+			handle_line(line, &i, tokens, envp);
 		else if (line[i])
-			handle_word(line, &i, tokens);
+			handle_line(line, &i, tokens, envp);
 	}
 }

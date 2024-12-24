@@ -12,54 +12,72 @@
 
 #include "minishell.h"
 
-char	*combine_with_next(const char *line, int *i, char *buffer)
+char	*expand_join(char *temp_line, int single_quote, t_token **tokens,
+	t_expand_state *est)
 {
-	char	*temp;
-	char	*combined;
-	int		start;
+	char		*expanded;
+	char		*combined;
 
-	if (!buffer)
-		return (NULL);
+	if (!single_quote)
+	{
+		expanded = expand_variables(temp_line, est->env);
+		dprintf(2, "temp_line2: %s\n", temp_line);
+		dprintf(2, "expanded: %s\n", expanded);
+		if (temp_line[0] == '$' && temp_line[1] != '$'
+			&& !ft_strchr(expanded, '\'') && ft_strchr(expanded, ' ')
+			&& !ft_isspace(temp_line[1]) && temp_line[1] != '\0')
+		{
+			dprintf(2, "recursiva: %s\n", expanded);
+			tokenize(expanded, tokens, est->env, 0);
+			free(expanded);
+			free(temp_line);
+			free(est->result);
+			return (ft_strdup(""));
+		}
+		free(temp_line);
+		temp_line = expanded;
+	}
+	combined = ft_strjoin(est->result, temp_line);
+	free(temp_line);
+	free(est->result);
+	est->result = combined;
+	return (est->result);
+}
+
+char	*combine_with_next(const char *line, int *i, t_token **tokens,
+	t_expand_state *est)
+{
+	char	*temp_line;
+	int		start;
+	int		single_quote;
+
 	while (line[*i] && (line[*i] == '"' || line[*i] == '\''
 			|| !ft_isspace(line[*i])))
 	{
+		single_quote = line[*i] == '\'';
 		if (line[*i] == '"' || line[*i] == '\'')
-			temp = process_quotes(line, i, line[(*i)++]);
+			temp_line = process_quotes(line, i, line[(*i)++]);
 		else
 		{
 			start = *i;
 			while (line[*i] && !ft_isspace(line[*i]) && line[*i] != '"'
 				&& line[*i] != '\'')
 				(*i)++;
-			temp = ft_substr(line, start, *i - start);
+			temp_line = ft_substr(line, start, *i - start);
 		}
-		combined = ft_strjoin(buffer, temp);
-		free(buffer);
-		free(temp);
-		buffer = combined;
+		dprintf(2, "temp_line1: %s\n", temp_line);
+		est->result = expand_join(temp_line, single_quote, tokens, est);
 	}
-	return (buffer);
+	return (est->result);
 }
 
-char	*expand_or_add_token(char *buffer, int is_quote_doub, t_token **tokens,
-	t_env **env)
+void	init_variables(int *single_quote_count, int *double_quote_count,
+	int *inside_single_quotes, int *inside_double_quotes)
 {
-	char	*temp;
-
-	if (is_quote_doub && buffer[0] == '$')
-	{
-		temp = expand_variables(buffer, NULL, 0, env);
-		free(buffer);
-		buffer = temp;
-		if (!buffer)
-			return (NULL);
-		tokenize(buffer, tokens, env, 0);
-	}
-	else
-	{
-		(*tokens) = add_token(*tokens, buffer, 2);
-	}
-	return (buffer);
+	*single_quote_count = 0;
+	*double_quote_count = 0;
+	*inside_single_quotes = 0;
+	*inside_double_quotes = 0;
 }
 
 int	has_unclsed_quotes(const char *line, int *j)
@@ -67,24 +85,25 @@ int	has_unclsed_quotes(const char *line, int *j)
 	int	i;
 	int	single_quote_count;
 	int	double_quote_count;
+	int	inside_single_quotes;
 	int	inside_double_quotes;
 
 	i = *j;
-	single_quote_count = 0;
-	double_quote_count = 0;
-	inside_double_quotes = 0;
+	init_variables(&single_quote_count, &double_quote_count,
+		&inside_single_quotes, &inside_double_quotes);
 	while (line[i])
 	{
-		if (line[i] == '"')
+		if (line[i] == '"' && !inside_single_quotes)
 		{
 			double_quote_count++;
 			inside_double_quotes = !inside_double_quotes;
 		}
 		else if (line[i] == '\'' && !inside_double_quotes)
+		{
 			single_quote_count++;
+			inside_single_quotes = !inside_single_quotes;
+		}
 		i++;
 	}
-	if (single_quote_count % 2 != 0 || double_quote_count % 2 != 0)
-		return (1);
-	return (0);
+	return (single_quote_count % 2 != 0 || double_quote_count % 2 != 0);
 }

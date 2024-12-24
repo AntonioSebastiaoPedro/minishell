@@ -41,7 +41,7 @@ t_command	*process_current_token(t_token **tks, t_command **commands,
 	tokens = *tks;
 	if (cmd == NULL && is_command(tokens->value, tokens->interpret))
 		cmd = add_command(commands, ft_strdup(tokens->value));
-	else if (check_redir_error(cmd, tokens) && tokens->interpret != 2)
+	else if (check_redir_error(cmd, tokens) && tokens->interpret != 1)
 		print_error_redir_single(tokens->value, commands, tks);
 	else if (cmd == NULL && is_redirection(tokens->value))
 	{
@@ -51,9 +51,9 @@ t_command	*process_current_token(t_token **tks, t_command **commands,
 		cmd = NULL;
 	}
 	else if (cmd != NULL && ft_strcmp(tokens->value, "|") == 0
-		&& tokens->interpret != 2)
+		&& tokens->interpret != 1)
 		cmd = NULL;
-	else if (cmd && is_redirection(tokens->value) && tokens->interpret != 2)
+	else if (cmd && is_redirection(tokens->value) && tokens->interpret != 1)
 	{
 		*skip_file_redirection = 1;
 		handle_redirection(tokens, cmd);
@@ -66,7 +66,7 @@ t_command	*process_current_token(t_token **tks, t_command **commands,
 int	is_argument(const char *token, int interpret)
 {
 	return (token != NULL && ((!is_redirection(token)
-				&& ft_strcmp(token, "|") != 0) || interpret == 2));
+				&& ft_strcmp(token, "|") != 0) || interpret == 1));
 }
 
 t_command	*parse_tokens(t_token *tokens)

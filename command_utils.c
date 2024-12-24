@@ -17,7 +17,7 @@ int	is_command(const char *token, int interpret)
 	return (token && ((ft_strcmp(token, "|") != 0
 				&& ft_strcmp(token, "<") != 0 && ft_strcmp(token, ">") != 0
 				&& ft_strcmp(token, ">>") != 0 && ft_strcmp(token, "<<") != 0)
-			|| interpret == 2));
+			|| interpret == 1));
 }
 
 void	atribute_cmd_values(t_command **cmd)

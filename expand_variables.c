@@ -87,16 +87,12 @@ char	*allocate_result_buffer(char *str)
 	return (result);
 }
 
-char	*expand_variables(char *str, t_command *cmd, int *arg_pos, t_env **env)
+char	*expand_variables(char *str, t_env **env)
 {
 	int				i;
 	t_expand_state	state;
 
 	i = 0;
-	if (cmd != NULL && cmd->interpret[*arg_pos] == 1)
-	{
-		return (ft_strdup(str));
-	}
 	state.result = allocate_result_buffer(str);
 	if (!state.result)
 		return (NULL);
@@ -105,7 +101,9 @@ char	*expand_variables(char *str, t_command *cmd, int *arg_pos, t_env **env)
 	while (str[i] != '\0')
 	{
 		if (str[i] == '$' && str[i + 1] != '$' && str[i + 1] != ' ')
+		{
 			handle_dollar_sign(str, &i, &state);
+		}
 		else
 			state.result[state.pos++] = str[i++];
 	}
