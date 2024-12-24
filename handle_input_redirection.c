@@ -21,8 +21,8 @@ int	handle_file_input_redirection(t_command *cmd, int *status)
 	{
 		*status = 1;
 		print_error_no_such_file_or_directory(cmd->input_redir);
-		if (cmd->next != NULL && expects_stdin(cmd->next->command))
-			return (-2);
+		//if (cmd->next != NULL && expects_stdin(cmd->next->command))
+		//	return (-2);
 		return (-3);
 	}
 	dup2(fd_read, STDIN_FILENO);

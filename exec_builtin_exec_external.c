@@ -56,13 +56,13 @@ void	handle_pipes_in_child(t_command *cmd)
 	}
 }
 
-int	create_processes(t_command *current, pid_t *pids, int i, t_status_cmd *st)
+int	create_processes(t_command *cmd, pid_t *pids, int i, t_status_cmd *st)
 {
-	if (current->command != NULL && is_builtin(current->command))
+	if (cmd != NULL && cmd->command != NULL && is_builtin(cmd->command))
 	{
-		st->status = exec_builtin(current, st->original_stdout, st->env);
+		st->status = exec_builtin(cmd, st->original_stdout, st->env);
 	}
-	else
+	else if (cmd != NULL)
 	{
 		signal(SIGINT, SIG_IGN);
 		signal(SIGINT, handle_sigint_external_command);
@@ -75,10 +75,10 @@ int	create_processes(t_command *current, pid_t *pids, int i, t_status_cmd *st)
 		}
 		if (pids[i] == 0)
 		{
-			handle_pipes_in_child(current);
-			execute_child_process(current, st->env);
+			handle_pipes_in_child(cmd);
+			execute_child_process(cmd, st->env);
 		}
-		handle_parent_process(current);
+		handle_parent_process(cmd);
 	}
 	return (0);
 }
@@ -99,7 +99,8 @@ int	exec_builtin_exec_external(t_command *cmd, pid_t *pids, t_status_cmd *st)
 			return (-1);
 		if (create_processes(current, pids, i, st) == -1)
 			return (-1);
-		current = current->next;
+		if (current)
+			current = current->next;
 		i++;
 	}
 	return (0);
