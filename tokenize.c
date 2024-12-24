@@ -35,16 +35,14 @@ void	handle_redirection_and_pipes(const char *line, int *i, t_token **tokens)
 	}
 }
 
-void	handle_line(const char *line, int *i, t_token **tokens, t_env **envp)
+void	handle_line(const char *line, int *i, t_token **tokens,
+	t_expand_state *est)
 {
-	char			quote;
-	int				is_quote_double;
-	char			*buffer;
-	t_expand_state	est;
-	
-	est.pos = 0;
-	est.env = envp;
-	est.result = ft_strdup("");
+	char	quote;
+	int		is_quote_double;
+	char	*buffer;
+
+	est->result = ft_strdup("");
 	if (has_unclsed_quotes(line, i))
 	{
 		print_error_unclosed_quote(NULL, '\0', line, i);
@@ -52,7 +50,7 @@ void	handle_line(const char *line, int *i, t_token **tokens, t_env **envp)
 	}
 	quote = line[(*i)];
 	is_quote_double = (quote == '"') && !(*tokens);
-	buffer = combine_with_next(line, i, tokens, &est);
+	buffer = combine_with_next(line, i, tokens, est);
 	if (!buffer)
 	{
 		(*i) = ft_strlen(line);
@@ -67,9 +65,12 @@ void	handle_line(const char *line, int *i, t_token **tokens, t_env **envp)
 
 void	tokenize(char *line, t_token **tokens, t_env **envp, int is_recursive)
 {
-	int	i;
+	t_expand_state	est;
+	int				i;
 
 	i = 0;
+	est.env = envp;
+	est.recursive = is_recursive;
 	while (line[i])
 	{
 		while (line[i] && ft_isspace(line[i]))
@@ -79,10 +80,10 @@ void	tokenize(char *line, t_token **tokens, t_env **envp, int is_recursive)
 		else if (line[i] == '|' || line[i] == '>' || line[i] == '<')
 			handle_redirection_and_pipes(line, &i, tokens);
 		else if (line[i] == '\'' || line[i] == '"')
-			handle_line(line, &i, tokens, envp);
-		else if (line[i] == '$' && line[i + 1] != '\0' && !is_recursive)
-			handle_line(line, &i, tokens, envp);
+			handle_line(line, &i, tokens, &est);
+		else if (line[i] == '$' && line[i + 1] != '\0')
+			handle_line(line, &i, tokens, &est);
 		else if (line[i])
-			handle_line(line, &i, tokens, envp);
+			handle_line(line, &i, tokens, &est);
 	}
 }

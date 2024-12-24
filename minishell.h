@@ -45,6 +45,8 @@ typedef struct s_expand_state
 {
 	char	*result;
 	int		pos;
+	int		i;
+	int		recursive;
 	t_env	**env;
 }					t_expand_state;
 

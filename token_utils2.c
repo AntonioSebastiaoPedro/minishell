@@ -21,14 +21,11 @@ char	*expand_join(char *temp_line, int single_quote, t_token **tokens,
 	if (!single_quote)
 	{
 		expanded = expand_variables(temp_line, est->env);
-		dprintf(2, "temp_line2: %s\n", temp_line);
-		dprintf(2, "expanded: %s\n", expanded);
 		if (temp_line[0] == '$' && temp_line[1] != '$'
-			&& !ft_strchr(expanded, '\'') && ft_strchr(expanded, ' ')
+			&& ft_strchr(expanded, ' ') && !est->recursive
 			&& !ft_isspace(temp_line[1]) && temp_line[1] != '\0')
 		{
-			dprintf(2, "recursiva: %s\n", expanded);
-			tokenize(expanded, tokens, est->env, 0);
+			tokenize(expanded, tokens, est->env, 1);
 			free(expanded);
 			free(temp_line);
 			free(est->result);
@@ -65,7 +62,6 @@ char	*combine_with_next(const char *line, int *i, t_token **tokens,
 				(*i)++;
 			temp_line = ft_substr(line, start, *i - start);
 		}
-		dprintf(2, "temp_line1: %s\n", temp_line);
 		est->result = expand_join(temp_line, single_quote, tokens, est);
 	}
 	return (est->result);
