@@ -1,0 +1,24 @@
+quando se dá 'ctrl-D', têm que imprimir exit\n e sair com o valor do exit status atual, ou seja, do último comando
+o exit status para o erro 'No such file or directory' deve ser 127
+o comando '', ou mesmo "" é uma tentativa de executar um comando vazio, ou seja, na primeira posição tem o terminador, então isso não pode ser ignorado, mas sim, tem que ser o erro 'Command not found', podem comparar com o bash
+o bash não guarda inputs vazios no history, ou seja, quando vc dá apenas enter numa linha vazia, ele não guarda isso, o que é diferente de escrever uma linha com alguns espaços
+echo -nnnnnnnn n está a funcionar como no bash
+o erro 'unclosed quote' não actualiza o exit status para um valor de erro
+o comando exit com os limites do long long int não está a reconhecer como número
+esse mambo tem a ver com aquela cena do comando vazio tbm, tipo quando vc dá um exit '', o vosso shell está a ignorar o argumento '', mas n devia, tinha que dizer 'numeric argument required', porque apesar de ser uma str vazia, ainda deve ser considerado um argumento
+quando se dá um ctrl-C dentro do processo-filho que está a executar o comando cat simples, e em seguida um $? para pegar o exit status, o vosso shell está a apresentar 0 ao invés de 130
+e no caso do ctrl-\ tbm n está a sair do modo de bloqueio
+o pipe e os redirecionamentos dentro de aspas têm que perder o seu poder, ou seja, têm que ser considerados caracteres normais, no vosso shell, um input como "echo edson '|'" ou "echo edson '>'" aaa está a considerar '|' e '>' como caracteres especiais, mas n devia
+exportar uma variavel sem valor quando ela já existe está a dar segfault
+variaveis sem valor, exportadas com apenas o nome delas, sem o sinal de igualdade, ao serem impressas com export, tbm apare apenas o seu nome
+n podes exportar variaveis cujo nome comece com um digito ou com o sinal de igualdade
+ao apresentar uma mensagem de erro de um comando que exist, como por exemplo ls fdgsd, estão a escrever o caminho absoluto do comando na mensagem, ao invés de apenas o nome do comando
+a verificação das aspas fechadas tem que ser feita logo depois de se receber a linha porque se eu fizer"export a='edson  "  finda'" e em seguida der um "echo $a" o teu me diz q tem aspas n fechadas, mas n deveria, ele tinha apenas que imprimir o valor da variavel preservando a aspa que está lá dentro. E está a dar memory leaks tbm
+isso é apenas uma sugestão: vcs criam as variaveis PWD e OLDPWD quando elas n existem e alguém faz cd,  o q é muito bom, mas nesse caso, vcs apenas põem valor na PWD, e a OLDPWD deixam sem valor, ficaria mais lógico, se tbm dessem valor à OLDPWD
+está a dar segfault quando eu faço "> a.txt" ou "<< .", praticamente em todos os redirs quando n tem um comando antes dele
+a expansão de $"USER" e $'USER' ou de $@ e outras desse tipo n estão a ser feitas de forma correcta. Algumas entradas como echo "$USER está em '$PWD'" estão a eliminar aspas quando n deviam
+na seção go crazy tem um teste que eles puseram "cat | cat | ls", nesse teste, com dois enters, tem q sair desse modo de bloqueio, porque os dois cat ficam à espera de alguma entrada, então o número de enters seja igual ao de cats que tiver na linha de comando
+ao tokenizarem, é importante tratar os chars especiais, no caso, redirs e pipe de forma especial tbm, por exemplo se eu pôr o input "env| cat", o vosso shell está a dizer que o comando env| n existe, ou seja, a tokenização n está a levar em conta o facto de | ser especial e por isso apesar de estar colado com env, tem q ser separado, o mesmo deve acomtecer com os redirs. Deu leak numa entrada "env> cat" após já ter testado outras coisas, mas como dei ctrl-D, perdi os comandos antecessores
+tentar redirecionar conteúdo para um file que n tem permissão está a apresentar o conteúdo no terminal ao invés de apenas dizer permission denied
+o input "|aaa" está a dar leaks
+
