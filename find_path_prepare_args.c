@@ -82,15 +82,14 @@ char	*absolute_relative_path(char *path)
 			return (ft_strdup(path));
 		else
 		{
-			perror("minishell");
+			write(2, "minishell: ", 11);
+			write(2, path, ft_strlen(path));
+			write(2, ": Permission denied\n", 20);
 			exit(126);
 		}
 	}
-	else
-	{
-		print_error_no_such_file_or_directory(path);
-		exit(1);
-	}
+	print_error_no_such_file_or_directory(path);
+	exit(127);
 }
 
 char	*find_executable_path(char *command, t_env **env)

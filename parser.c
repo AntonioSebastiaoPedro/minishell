@@ -28,6 +28,7 @@ int	check_redir_error(t_command *current_cmd, t_token *tokens)
 		|| (is_redirection(tokens->value)
 			&& tokens->next != NULL && is_redirection(tokens->next->value)))
 	{
+		g_exit_status = 2;
 		return (1);
 	}
 	return (0);

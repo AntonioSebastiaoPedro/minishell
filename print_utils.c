@@ -31,6 +31,7 @@ void	print_error_unclosed_quote(char *buffer, char quote, const char *line,
 {
 	char	*message_error;
 
+	g_exit_status = 1;
 	(*i) = ft_strlen(line);
 	message_error = "minishell: syntax error: unclosed quote ";
 	write(2, message_error, ft_strlen(message_error));

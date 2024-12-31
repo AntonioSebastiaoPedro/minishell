@@ -30,19 +30,20 @@ int	handle_file_input_redirection(t_command *cmd, int *status)
 	return (0);
 }
 
-int	handle_heredoc_parent_process(t_command *cmd, pid_t pid)
+int	handle_heredoc_parent_process(t_command *cmd, pid_t pid, int *status)
 {
-	int	status;
+	int	local_status;
 
 	close(cmd->write_pipe_fd);
 	dup2(cmd->read_pipe_fd, STDIN_FILENO);
 	if (cmd->read_pipe_fd != -1)
 		close(cmd->read_pipe_fd);
-	waitpid(pid, &status, 0);
+	waitpid(pid, &local_status, 0);
 	cmd->write_pipe_fd = -1;
 	cmd->read_pipe_fd = -1;
 	signal(SIGINT, handle_sigint);
-	if (WIFEXITED(status) && WEXITSTATUS(status) == 0)
+	*status = WEXITSTATUS(local_status);
+	if (WIFEXITED(local_status) && WEXITSTATUS(local_status) == 0)
 	{
 		if (cmd->next != NULL)
 		{
@@ -86,7 +87,7 @@ void	handle_heredoc(t_command *cmd)
 	exit(0);
 }
 
-int	handle_heredoc_redirection(t_command *cmd, int fd_stdout)
+int	handle_heredoc_redirection(t_command *cmd, int fd_stdout, int *status)
 {
 	pid_t	pid;
 
@@ -109,13 +110,13 @@ int	handle_heredoc_redirection(t_command *cmd, int fd_stdout)
 		perror("minishell: fork failed");
 		return (-2);
 	}
-	return (handle_heredoc_parent_process(cmd, pid));
+	return (handle_heredoc_parent_process(cmd, pid, status));
 }
 
 int	handle_input_redirection(t_command *cmd, int fd_stdout, int *status)
 {
 	if (cmd->heredoc)
-		return (handle_heredoc_redirection(cmd, fd_stdout));
+		return (handle_heredoc_redirection(cmd, fd_stdout, status));
 	else
 		return (handle_file_input_redirection(cmd, status));
 }

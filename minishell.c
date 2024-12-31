@@ -14,6 +14,22 @@
 
 int	g_exit_status = 0;
 
+void	start(t_env **env_dup, char **environ)
+{
+	*env_dup = NULL;
+	signal(SIGINT, handle_sigint);
+	signal(SIGQUIT, SIG_IGN);
+	envcpy(env_dup, environ);
+	update_shlvl(env_dup);
+}
+
+void	end(t_env **env_dup)
+{
+	printf("exit\n");
+	rl_clear_history();
+	free_env(env_dup);
+}
+
 int	main(void)
 {
 	char		*line;
@@ -22,11 +38,7 @@ int	main(void)
 	t_command	*commands;
 	extern char	**environ;
 
-	signal(SIGINT, handle_sigint);
-	signal(SIGQUIT, SIG_IGN);
-	env_dup = NULL;
-	envcpy(&env_dup, environ);
-	update_shlvl(&env_dup);
+	start(&env_dup, environ);
 	while (1)
 	{
 		tokens = NULL;
@@ -39,11 +51,11 @@ int	main(void)
 		commands = parse_tokens(tokens);
 		//print_tokens(tokens);
 		//print_commands(commands);
-		execute_commands(commands, &env_dup);
+		if (commands)
+			execute_commands(commands, &env_dup);
 		free_tokens(tokens);
 		free_commands(commands);
 	}
-	rl_clear_history();
-	free_env(&env_dup);
-	return (0);
+	end(&env_dup);
+	return (g_exit_status);
 }

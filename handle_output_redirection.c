@@ -75,7 +75,7 @@ int	prepare_flags(int append)
 	return (flags);
 }
 
-int	process_output_redirection(t_command **cmd, t_command **command)
+int	process_output_redirection(t_command **cmd, t_command **command, int *st)
 {
 	int	flags;
 	int	fd_write;
@@ -84,6 +84,7 @@ int	process_output_redirection(t_command **cmd, t_command **command)
 	fd_write = open((*cmd)->output_redir, flags, 0644);
 	if (fd_write < 0)
 	{
+		*st = 1;
 		print_error_no_such_file_or_directory((*cmd)->output_redir);
 		return (-3);
 	}
@@ -101,20 +102,20 @@ int	process_output_redirection(t_command **cmd, t_command **command)
 	}
 }
 
-int	handle_output_redirection(t_command **command)
+int	handle_output_redirection(t_command **command, int *status)
 {
-	int			status;
+	int			local_status;
 	t_command	*cmd;
 
-	status = 0;
+	local_status = 0;
 	cmd = *command;
 	if (cmd->write_pipe_fd != -1)
 		close(cmd->write_pipe_fd);
 	while (cmd && cmd->output_redir)
 	{
-		status = process_output_redirection(&cmd, command);
-		if (status != 0)
+		local_status = process_output_redirection(&cmd, command, status);
+		if (local_status != 0)
 			break ;
 	}
-	return (status);
+	return (local_status);
 }
