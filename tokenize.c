@@ -63,6 +63,26 @@ void	handle_line(const char *line, int *i, t_token **tokens,
 	buffer = NULL;
 }
 
+int	front_isspace(char *line)
+{
+	int	i;
+
+	i = 0;
+	while (line[i])
+	{
+		if (!ft_isspace(line[i]))
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+void	add_quote(int *i, t_token **tokens)
+{
+	(*tokens) = add_token(*tokens, "''", 0);
+	*i += 2;
+}
+
 void	tokenize(char *line, t_token **tokens, t_env **envp, int is_recursive)
 {
 	t_expand_state	est;
@@ -79,6 +99,9 @@ void	tokenize(char *line, t_token **tokens, t_env **envp, int is_recursive)
 			handle_pipe_stdin(line, tokens, &i, envp);
 		else if (line[i] == '|' || line[i] == '>' || line[i] == '<')
 			handle_redirection_and_pipes(line, &i, tokens);
+		else if (((line[i] == '\'' && line[i + 1] == '\'') || (line[i] == '"'
+					&& line[i + 1] == '"')) && front_isspace(&line[i] + 2))
+			add_quote(&i, tokens);
 		else if (line[i] == '\'' || line[i] == '"')
 			handle_line(line, &i, tokens, &est);
 		else if (line[i] == '$' && line[i + 1] != '\0')

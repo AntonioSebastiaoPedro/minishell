@@ -47,7 +47,7 @@ char	*combine_with_next(const char *line, int *i, t_token **tokens,
 	char	*temp_line;
 	int		start;
 	int		single_quote;
-
+	
 	while (line[*i] && (line[*i] == '"' || line[*i] == '\''
 			|| !ft_isspace(line[*i])))
 	{
