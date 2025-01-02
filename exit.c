@@ -19,7 +19,7 @@ int	ft_exit(t_command *cmd)
 		exit(g_exit_status);
 	if (!ft_isint(cmd->args[0]))
 	{
-		printf("minishell: exit: %s: requires a numeric argument\n",
+		printf("minishell: exit: %s: numeric argument required\n",
 			cmd->args[0]);
 		exit(2);
 	}
