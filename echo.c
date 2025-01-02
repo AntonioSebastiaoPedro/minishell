@@ -25,6 +25,20 @@ int	validate_args(t_command *cmd)
 	return (0);
 }
 
+int	is_newline(char *first_arg)
+{
+	int	i;
+
+	i = 1;
+	while (first_arg[i])
+	{
+		if (first_arg[i] != 'n')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 int	ft_echo(t_command *cmd)
 {
 	int	newline;
@@ -36,7 +50,7 @@ int	ft_echo(t_command *cmd)
 	i = 0;
 	if (cmd->args)
 	{
-		if (cmd->args[0] && ft_strcmp(cmd->args[0], "-n") == 0)
+		if (cmd->args[0] && cmd->args[0][0] == '-' && is_newline(cmd->args[0]))
 		{
 			newline = -1;
 			i++;
