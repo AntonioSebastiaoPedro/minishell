@@ -39,7 +39,7 @@ void	handle_line(const char *line, int *i, t_token **tokens,
 	t_expand_state *est)
 {
 	char	quote;
-	int		is_quote_double;
+	int		is_quote;
 	char	*buffer;
 
 	est->result = ft_strdup("");
@@ -49,7 +49,7 @@ void	handle_line(const char *line, int *i, t_token **tokens,
 		return ;
 	}
 	quote = line[(*i)];
-	is_quote_double = (quote == '"') && !(*tokens);
+	is_quote = ((quote == '\'') || (quote == '"'));
 	buffer = combine_with_next(line, i, tokens, est);
 	if (!buffer)
 	{
@@ -58,7 +58,7 @@ void	handle_line(const char *line, int *i, t_token **tokens,
 		return ;
 	}
 	if (ft_strcmp(buffer, "") != 0)
-		(*tokens) = add_token(*tokens, buffer, is_quote_double);
+		(*tokens) = add_token(*tokens, buffer, is_quote);
 	free(buffer);
 	buffer = NULL;
 }
