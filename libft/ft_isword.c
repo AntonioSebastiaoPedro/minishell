@@ -17,7 +17,7 @@ int	ft_isword(const char *str)
 	int	i;
 
 	i = 0;
-	if (!str || str[0] == '\0')
+	if (!str || str[0] == '\0' || str[0] == '=' || ft_isdigit(str[0]))
 		return (0);
 	while (str[i] != '\0' && str[i] != '=')
 	{

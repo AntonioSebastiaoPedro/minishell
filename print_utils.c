@@ -96,7 +96,7 @@ void	print_invalid_identifier_error(char *arg)
 	error_msg[0] = '\0';
 	error_msg_prefix = "minishell: export: `";
 	ft_strlcat(error_msg, error_msg_prefix, sizeof(error_msg));
-	ft_strlcat(error_msg, ft_strtok_2(arg, "="), sizeof(error_msg));
+	ft_strlcat(error_msg, arg, sizeof(error_msg));
 	ft_strlcat(error_msg, "': ", sizeof(error_msg));
 	ft_strlcat(error_msg, "not a valid identifier", sizeof(error_msg));
 	ft_strlcat(error_msg, "\n", sizeof(error_msg));

@@ -48,14 +48,14 @@ void	update_env(t_env **env, char *argument)
 	show = 0;
 	if (ft_strchr(argument, '='))
 		show = 1;
-	new_value = ft_strchr(argument, '=') + 1;
+	new_value = ft_strchr(argument, '=');
 	free((*env)->value);
 	(*env)->index = 0;
 	(*env)->show = show;
-	if (!new_value)
+	if (new_value == NULL)
 		(*env)->value = ft_strdup("");
 	else
-		(*env)->value = ft_strdup(new_value);
+		(*env)->value = ft_strdup(new_value + 1);
 }
 
 t_env	*get_env(char *var, t_env **env, int (*cmp)())
