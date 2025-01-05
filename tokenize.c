@@ -42,12 +42,12 @@ void	handle_line(const char *line, int *i, t_token **tokens,
 	int		is_quote;
 	char	*buffer;
 
-	est->result = ft_strdup("");
 	if (has_unclsed_quotes(line, i))
 	{
 		print_error_unclosed_quote(NULL, '\0', line, i);
 		return ;
 	}
+	est->result = ft_strdup("");
 	quote = line[(*i)];
 	is_quote = ((quote == '\'') || (quote == '"'));
 	buffer = combine_with_next(line, i, tokens, est);
