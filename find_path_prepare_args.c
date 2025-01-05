@@ -39,7 +39,7 @@ char	**prepare_args(char *executable_path, char **original_args)
 	new_args = malloc((valid_arg_count + 2) * sizeof(char *));
 	if (!new_args)
 		return (NULL);
-	new_args[0] = ft_strdup(executable_path);
+	new_args[0] = ft_strdup(ft_strrchr(executable_path, '/') + 1);
 	if (!new_args[0])
 	{
 		free(new_args);
