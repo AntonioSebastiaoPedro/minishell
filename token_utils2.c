@@ -51,6 +51,8 @@ char	*combine_with_next(const char *line, int *i, t_token **tokens,
 	while (line[*i] && (line[*i] == '"' || line[*i] == '\''
 			|| !ft_isspace(line[*i])))
 	{
+		if (line[*i] == '|' || line[*i] == '>' || line[*i] == '<')
+			break ;
 		single_quote = line[*i] == '\'';
 		if (line[*i] == '"' || line[*i] == '\'')
 			temp_line = process_quotes(line, i, line[(*i)++]);
@@ -58,7 +60,8 @@ char	*combine_with_next(const char *line, int *i, t_token **tokens,
 		{
 			start = *i;
 			while (line[*i] && !ft_isspace(line[*i]) && line[*i] != '"'
-				&& line[*i] != '\'')
+				&& line[*i] != '\'' && line[*i] != '|' && line[*i] != '>'
+				&& line[*i] != '<')
 				(*i)++;
 			temp_line = ft_substr(line, start, *i - start);
 		}
