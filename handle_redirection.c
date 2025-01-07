@@ -53,6 +53,14 @@ int	handle_redirections(t_command **cmd, t_status_cmd *st, pid_t *pids, int *i)
 		}
 	}
 	else if ((*cmd)->output_redir != NULL)
-		return (handle_output_redirection(cmd, &st->status));
+	{
+		result = handle_output_redirection(cmd, &st->status);
+		if (result == -3)
+		{
+			*cmd = (*cmd)->next;
+			pids[(*i)] = -1;
+			(*i)++;
+		}
+	}
 	return (result);
 }
