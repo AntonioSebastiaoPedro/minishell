@@ -90,7 +90,8 @@ t_command	*parse_tokens(t_token *tokens)
 		else
 			current_cmd = process_current_token(&tokens, &commands, current_cmd,
 					&skip_file_redirection);
-		tokens = tokens->next;
+		if (tokens)
+			tokens = tokens->next;
 	}
 	return (commands);
 }
