@@ -95,6 +95,8 @@ int	process_output_redirection(t_command **cmd, t_command **command, int *st)
 	}
 	else
 	{
+		if ((*cmd)->command == NULL)
+			(*cmd)->command = ft_strdup("echo");
 		dup2(fd_write, STDOUT_FILENO);
 		close(fd_write);
 		*command = *cmd;
