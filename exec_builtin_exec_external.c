@@ -15,9 +15,15 @@
 void	handle_parent_process(t_command *cmd)
 {
 	if (cmd->read_pipe_fd != -1)
+	{
 		close(cmd->read_pipe_fd);
+		cmd->read_pipe_fd = -1;
+	}
 	if (cmd->write_pipe_fd != -1)
+	{
 		close(cmd->write_pipe_fd);
+		cmd->write_pipe_fd = -1;
+	}
 }
 
 void	execute_child_process(t_command *cmd, t_env **envp)
@@ -54,6 +60,10 @@ void	handle_pipes_in_child(t_command *cmd)
 		dup2(cmd->read_pipe_fd, STDIN_FILENO);
 		close(cmd->read_pipe_fd);
 	}
+	if (cmd->next && cmd->next->read_pipe_fd != -1)
+		close(cmd->next->read_pipe_fd);
+	if (cmd->next && cmd->next->write_pipe_fd != -1)
+		close(cmd->next->write_pipe_fd);
 }
 
 int	create_processes(t_command *cmd, pid_t *pids, int i, t_status_cmd *st)
