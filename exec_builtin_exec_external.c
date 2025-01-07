@@ -96,6 +96,7 @@ int	create_processes(t_command *cmd, pid_t *pids, int i, t_status_cmd *st)
 int	exec_builtin_exec_external(t_command *cmd, pid_t *pids, t_status_cmd *st)
 {
 	int			i;
+	int			result;
 	t_command	*current;
 
 	i = 0;
@@ -105,8 +106,11 @@ int	exec_builtin_exec_external(t_command *cmd, pid_t *pids, t_status_cmd *st)
 		pids[i] = -1;
 		if (setup_pipes(current) == -1)
 			return (-1);
-		if (handle_redirections(&current, st, pids, &i) == -2)
+		result = handle_redirections(&current, st, pids, &i);
+		if (result == -2)
 			return (-1);
+		else if (result == -3)
+			continue ;
 		if (create_processes(current, pids, i, st) == -1)
 			return (-1);
 		if (current)

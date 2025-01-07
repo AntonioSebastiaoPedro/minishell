@@ -27,6 +27,13 @@ int	handle_file_input_redirection(t_command *cmd, int *status)
 	}
 	dup2(fd_read, STDIN_FILENO);
 	close(fd_read);
+	/*if (cmd->next != NULL)
+	{
+		cmd->next->command = ft_strdup(cmd->command);
+		cmd->next->args[0] = ft_strdup("a");
+		dprintf(2, "command: %s\n", cmd->next->command);
+		return (-3);
+	}*/
 	return (0);
 }
 
