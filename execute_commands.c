@@ -52,6 +52,8 @@ void	wait_for_processes(pid_t *pids, int num_commands, int *status)
 {
 	int	i;
 	int	local_status;
+	int	signal_code;
+	int	exit_status;
 
 	i = 0;
 	local_status = 0;
@@ -60,7 +62,13 @@ void	wait_for_processes(pid_t *pids, int num_commands, int *status)
 		if (pids[i] != -1)
 		{
 			waitpid(pids[i], &local_status, 0);
-			if (WIFEXITED(local_status))
+			if (WIFSIGNALED(local_status))
+			{
+				signal_code = WTERMSIG(local_status);
+				exit_status = 128 + signal_code;
+				*status = exit_status;
+			}
+			else if (WIFEXITED(local_status))
 				*status = WEXITSTATUS(local_status);
 		}
 		i++;
