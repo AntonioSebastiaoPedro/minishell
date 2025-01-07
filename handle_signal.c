@@ -15,6 +15,7 @@
 void	handle_sigint_external_command(int signum)
 {
 	(void)signum;
+	g_exit_status = 130;
 	write(STDERR_FILENO, "\n", 1);
 }
 
