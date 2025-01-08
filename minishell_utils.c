@@ -36,3 +36,27 @@ int	expects_stdin(char *cmd)
 	}
 	return (0);
 }
+
+void	restore_stdio(int original_stdin, int original_stdout, int status)
+{
+	g_exit_status = status;
+	dup2(original_stdin, STDIN_FILENO);
+	dup2(original_stdout, STDOUT_FILENO);
+	close(original_stdin);
+	close(original_stdout);
+}
+
+void	free_arguments(char **args)
+{
+	int	i;
+
+	i = 0;
+	if (!args)
+		return ;
+	while (args[i])
+	{
+		free(args[i]);
+		i++;
+	}
+	free(args);
+}

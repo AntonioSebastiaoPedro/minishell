@@ -20,6 +20,8 @@ int	copy_arguments(char **args, t_command *next_cmd)
 	count = 0;
 	while (args && args[count])
 		count++;
+	if (next_cmd->args)
+		free_arguments(next_cmd->args);
 	next_cmd->args = (char **)malloc(sizeof(char *) * (count + 1));
 	if (!next_cmd->args)
 	{
@@ -38,7 +40,9 @@ int	copy_arguments(char **args, t_command *next_cmd)
 
 int	handle_chained_redirection(t_command **cmd)
 {
-	if ((*cmd)->command != NULL && ft_strcmp((*cmd)->command, "echo") == 0)
+	if ((*cmd)->next && (*cmd)->next->command)
+		free((*cmd)->next->command);
+	if ((*cmd)->command != NULL && (*cmd)->args != NULL)
 	{
 		(*cmd)->next->command = ft_strdup((*cmd)->command);
 		if (copy_arguments((*cmd)->args, (*cmd)->next) == -2)

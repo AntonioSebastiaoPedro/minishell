@@ -50,7 +50,7 @@ void	execute_child_process(t_command *cmd, t_env **envp)
 
 void	handle_pipes_in_child(t_command *cmd)
 {
-	if (cmd->write_pipe_fd != -1)
+	if (cmd->write_pipe_fd != -1 && !cmd->output_redir)
 	{
 		dup2(cmd->write_pipe_fd, STDOUT_FILENO);
 		close(cmd->write_pipe_fd);
@@ -72,7 +72,7 @@ int	create_processes(t_command *cmd, pid_t *pids, int i, t_status_cmd *st)
 	{
 		st->status = exec_builtin(cmd, st->original_stdout, st->env);
 	}
-	else if (cmd != NULL)
+	else if (cmd != NULL && cmd->command != NULL)
 	{
 		signal(SIGINT, SIG_IGN);
 		signal(SIGINT, handle_sigint_external_command);
@@ -103,7 +103,6 @@ int	exec_builtin_exec_external(t_command *cmd, pid_t *pids, t_status_cmd *st)
 	current = cmd;
 	while (current != NULL && i < st->num_commands)
 	{
-		pids[i] = -1;
 		if (setup_pipes(current) == -1)
 			return (-1);
 		result = handle_redirections(&current, st, pids, &i);

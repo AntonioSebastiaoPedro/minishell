@@ -37,17 +37,6 @@ int	setup_pipes(t_command *cmd)
 	return (0);
 }
 
-void	restore_stdio(int original_stdin, int original_stdout, int status,
-	t_env **envp)
-{
-	(void)envp;
-	g_exit_status = status;
-	dup2(original_stdin, STDIN_FILENO);
-	dup2(original_stdout, STDOUT_FILENO);
-	close(original_stdin);
-	close(original_stdout);
-}
-
 void	wait_for_processes(pid_t *pids, int num_commands, int *status)
 {
 	int	i;
@@ -89,6 +78,18 @@ int	ft_lstsize_command(t_command *head)
 	return (len);
 }
 
+void	init_pids(pid_t *pids, int num_commands)
+{
+	int	i;
+
+	i = 0;
+	while (i < num_commands)
+	{
+		pids[i] = -1;
+		i++;
+	}
+}
+
 void	execute_commands(t_command *cmd, t_env **envp)
 {
 	pid_t			*pids;
@@ -103,16 +104,17 @@ void	execute_commands(t_command *cmd, t_env **envp)
 	if (!pids)
 	{
 		perror("minishell: malloc failed");
-		restore_stdio(st.original_stdin, st.original_stdout, st.status, st.env);
+		restore_stdio(st.original_stdin, st.original_stdout, st.status);
 		return ;
 	}
+	init_pids(pids, st.num_commands);
 	if (exec_builtin_exec_external(cmd, pids, &st) == -1)
 	{
 		free(pids);
-		restore_stdio(st.original_stdin, st.original_stdout, st.status, st.env);
+		restore_stdio(st.original_stdin, st.original_stdout, st.status);
 		return ;
 	}
 	wait_for_processes(pids, st.num_commands, &st.status);
-	restore_stdio(st.original_stdin, st.original_stdout, st.status, st.env);
+	restore_stdio(st.original_stdin, st.original_stdout, st.status);
 	free(pids);
 }

@@ -133,6 +133,8 @@ void		isspace_add(const char *line, int *i, t_token **tokens,
 void		print_invalid_identifier_error(char *arg);
 void		print_error_unclosed_quote(char *buffer, char quote,
 				const char *line, int *i);
+void		restore_stdio(int original_stdin, int original_stdout, int status);
+void		free_arguments(char **args);
 char		*expand_variables(char *str, t_env **env);
 char		*get_env_value(char *var, t_env **env);
 char		**env_list_to_array(t_env *env_list);
