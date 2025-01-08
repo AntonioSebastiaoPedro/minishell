@@ -55,7 +55,7 @@ void	handle_pipes_in_child(t_command *cmd)
 		dup2(cmd->write_pipe_fd, STDOUT_FILENO);
 		close(cmd->write_pipe_fd);
 	}
-	if (cmd->read_pipe_fd != -1)
+	if (cmd->read_pipe_fd != -1 && !cmd->input_redir)
 	{
 		dup2(cmd->read_pipe_fd, STDIN_FILENO);
 		close(cmd->read_pipe_fd);
