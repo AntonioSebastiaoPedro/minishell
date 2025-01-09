@@ -103,13 +103,15 @@ int			handle_dollar_sign(char *str, int *i, t_expand_state *state);
 int			setup_pipes(t_command *cmd);
 int			has_unclsed_quotes(const char *line, int *j);
 int			handle_chained_redirection(t_command **cmd);
+int			setup_pipes(t_command *cmd);
 void		handle_heredoc(t_command *cmd, t_status_cmd *st);
 void		free_env(t_env **env);
 void		handle_sigint(int sig);
 void		tokenize(char *line, t_token **tokens, t_env **envp,
 				int is_recursive);
 void		execute_commands(t_command *cmd, t_env **env, t_token **tokens);
-void		exit_free_resources(int status_exit, t_command *cmd, t_status_cmd *st);
+void		exit_free_resources(int status_exit, t_command *cmd,
+				t_status_cmd *st);
 void		free_commands(t_command *commands);
 void		envcpy(t_env **env_dup, char **src);
 void		print_tokens(t_token *tokens);

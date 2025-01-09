@@ -99,7 +99,8 @@ void	handle_heredoc(t_command *cmd, t_status_cmd *st)
 	exit_free_resources(0, cmd, st);
 }
 
-int	handle_heredoc_redirection(t_command *cmd, int fd_stdout, int *status, t_status_cmd *st)
+int	handle_heredoc_redirection(t_command *cmd, int fd_stdout, int *status,
+		t_status_cmd *st)
 {
 	pid_t	pid;
 
@@ -125,7 +126,8 @@ int	handle_heredoc_redirection(t_command *cmd, int fd_stdout, int *status, t_sta
 	return (handle_heredoc_parent_process(cmd, pid, status));
 }
 
-int	handle_input_redirection(t_command **command, int fd_stdout, int *status, t_status_cmd *st)
+int	handle_input_redirection(t_command **command, int fd_stdout, int *status,
+		t_status_cmd *st)
 {
 	int			local_status;
 	t_command	*cmd;

@@ -12,31 +12,6 @@
 
 #include "minishell.h"
 
-int	setup_pipes(t_command *cmd)
-{
-	int	pipe_fd[2];
-
-	if (cmd->next != NULL || (cmd->command && cmd->input_redir && cmd->heredoc))
-	{
-		if (pipe(pipe_fd) == -1)
-		{
-			perror("minishell: pipe failed");
-			return (-1);
-		}
-		if (cmd->next != NULL)
-		{
-			cmd->write_pipe_fd = pipe_fd[1];
-			cmd->next->read_pipe_fd = pipe_fd[0];
-		}
-		else if (cmd->command && cmd->input_redir && cmd->heredoc)
-		{
-			cmd->write_pipe_fd = pipe_fd[1];
-			cmd->read_pipe_fd = pipe_fd[0];
-		}
-	}
-	return (0);
-}
-
 void	wait_for_processes(pid_t *pids, int num_commands, int *status)
 {
 	int	i;
