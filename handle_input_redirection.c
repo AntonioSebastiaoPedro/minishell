@@ -24,6 +24,7 @@ int	handle_file_input_redirection(t_command **cmd, t_command **command,
 		print_error_no_such_file_or_directory((*cmd)->input_redir);
 		//if (cmd->next != NULL && expects_stdin(cmd->next->command))
 		//	return (-2);
+		*command = (*cmd)->next;
 		return (-3);
 	}
 	if ((*cmd)->next && (*cmd)->next->input_redir)
@@ -99,7 +100,7 @@ void	handle_heredoc(t_command *cmd, t_status_cmd *st)
 	exit_free_resources(0, cmd, st);
 }
 
-int	handle_heredoc_redirection(t_command *cmd, int fd_stdout, int *status,
+int	handle_heredoc_redir(t_command *cmd, int fd_stdout, int *status,
 		t_status_cmd *st)
 {
 	pid_t	pid;
@@ -133,7 +134,12 @@ int	handle_input_redirection(t_command **command, int fd_stdout, int *status,
 	t_command	*cmd;
 
 	if ((*command)->heredoc)
-		return (handle_heredoc_redirection(*command, fd_stdout, status, st));
+	{
+		local_status = handle_heredoc_redir(*command, fd_stdout, status, st);
+		if (local_status == -3)
+			*command = (*command)->next;
+		return (local_status);
+	}
 	else
 	{
 		cmd = *command;
