@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 11:45:18 by ateca             #+#    #+#             */
-/*   Updated: 2024/12/10 12:40:47 by ateca            ###   ########.fr       */
+/*   Updated: 2025/01/09 17:57:27 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,21 +26,21 @@ void	handle_parent_process(t_command *cmd)
 	}
 }
 
-void	execute_child_process(t_command *cmd, t_env **envp)
+void	execute_child_process(t_command *cmd, t_status_cmd *st)
 {
 	char	**new_args;
 	char	*executable_path;
 	char	**env_array;
 
-	executable_path = find_executable_path(cmd->command, envp);
-	print_check_cmd(executable_path, cmd);
+	executable_path = find_executable_path(cmd->command, st->env);
+	print_check_cmd(executable_path, &cmd, st);
 	new_args = prepare_args(executable_path, cmd->args);
 	if (!new_args)
 	{
 		perror("minishell: malloc failed");
 		exit(1);
 	}
-	env_array = env_list_to_array(*envp);
+	env_array = env_list_to_array(*st->env);
 	execve(executable_path, new_args, env_array);
 	free(executable_path);
 	ft_freearray(env_array);
@@ -86,7 +86,7 @@ int	create_processes(t_command *cmd, pid_t *pids, int i, t_status_cmd *st)
 		if (pids[i] == 0)
 		{
 			handle_pipes_in_child(cmd);
-			execute_child_process(cmd, st->env);
+			execute_child_process(cmd, st);
 		}
 		handle_parent_process(cmd);
 	}

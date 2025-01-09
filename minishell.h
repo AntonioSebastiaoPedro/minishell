@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 11:25:08 by ateca             #+#    #+#             */
-/*   Updated: 2024/12/07 17:47:42 by ansebast         ###   ########.fr       */
+/*   Updated: 2025/01/09 17:55:41 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ typedef struct s_status_cmds
 	int		num_commands;
 	int		original_stdin;
 	int		original_stdout;
+	t_token	**tokens;
+	pid_t	*pids;
 	t_env	**env;
 }					t_status_cmd;
 
@@ -107,7 +109,7 @@ void		handle_sigint(int sig);
 void		handle_sigquit(int sig);
 void		tokenize(char *line, t_token **tokens, t_env **envp,
 				int is_recursive);
-void		execute_commands(t_command *cmd, t_env **env);
+void		execute_commands(t_command *cmd, t_env **env, t_token **tokens);
 void		free_commands(t_command *commands);
 void		envcpy(t_env **env_dup, char **src);
 void		print_tokens(t_token *tokens);
@@ -127,7 +129,7 @@ void		handle_sigint_external_command(int signum);
 void		handle_sigint_heredoc(int signum);
 void		handle_pipe_stdin(char *line, t_token **tokens, int *i,
 				t_env **env);
-void		print_check_cmd(char *exec_path, t_command *cmd);
+void		print_check_cmd(char *exec_path, t_command **cmd, t_status_cmd *st);
 void		expand_command_args(t_command *cmd, t_env **env);
 void		isspace_add(const char *line, int *i, t_token **tokens,
 				char **buffer);

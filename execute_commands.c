@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 13:11:19 by ansebast          #+#    #+#             */
-/*   Updated: 2024/12/07 17:50:21 by ansebast         ###   ########.fr       */
+/*   Updated: 2025/01/09 17:55:29 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,9 +90,8 @@ void	init_pids(pid_t *pids, int num_commands)
 	}
 }
 
-void	execute_commands(t_command *cmd, t_env **envp)
+t_status_cmd	init_status_cmd(t_env **envp, t_command *cmd)
 {
-	pid_t			*pids;
 	t_status_cmd	st;
 
 	st.env = envp;
@@ -100,7 +99,18 @@ void	execute_commands(t_command *cmd, t_env **envp)
 	st.original_stdin = dup(STDIN_FILENO);
 	st.original_stdout = dup(STDOUT_FILENO);
 	st.num_commands = ft_lstsize_command(cmd);
+	return (st);
+}
+
+void	execute_commands(t_command *cmd, t_env **envp, t_token **tokens)
+{
+	pid_t			*pids;
+	t_status_cmd	st;
+
+	st = init_status_cmd(envp, cmd);
 	pids = malloc(sizeof(pid_t) * st.num_commands);
+	st.tokens = tokens;
+	st.pids = pids;
 	if (!pids)
 	{
 		perror("minishell: malloc failed");
