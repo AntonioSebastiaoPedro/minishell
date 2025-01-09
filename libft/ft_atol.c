@@ -1,32 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exit.c                                             :+:      :+:    :+:   */
+/*   ft_atol.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/09 19:00:41 by ansebast          #+#    #+#             */
-/*   Updated: 2025/01/09 10:12:58 by ansebast         ###   ########.fr       */
+/*   Created: 2025/01/09 09:42:43 by ansebast          #+#    #+#             */
+/*   Updated: 2025/01/09 10:10:19 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	ft_exit(t_command *cmd)
+long	ft_atol(char *str)
 {
-	printf("exit\n");
-	if (!cmd->args)
-		exit(g_exit_status);
-	if (!ft_islong(cmd->args[0]))
+	long	i;
+	long	sign;
+	long	result;
+
+	i = 0;
+	sign = 1;
+	result = 0;
+	while (str[i] == ' ' || (str[i] >= 9 && str[i] <= 13))
+		i++;
+	if (str[i] == '-' || str[i] == '+')
 	{
-		printf("minishell: exit: %s: numeric argument required\n",
-			cmd->args[0]);
-		exit(2);
+		if (str[i] == '-')
+			sign = -1;
+		i++;
 	}
-	if (cmd->args[1])
+	while (str[i] >= '0' && str[i] <= '9')
 	{
-		printf("minishell: exit: too many arguments\n");
-		return (1);
+		result = result * 10 + str[i] - '0';
+		i++;
 	}
-	exit(ft_atoi(cmd->args[0]));
+	return (result * sign);
 }

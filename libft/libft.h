@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 11:32:38 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/18 04:23:24 by ansebast         ###   ########.fr       */
+/*   Updated: 2025/01/09 10:12:19 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 #  define MAX_FD 1023
 # endif
 
+# include <limits.h>
 # include <stdlib.h>
 # include <unistd.h>
 
@@ -43,6 +44,8 @@ t_stack				*ft_lstlastprev(t_stack *head);
 void				ft_lstupdateindx(t_stack *head);
 void				ft_lstadd_back(t_stack **head, t_stack *new_node);
 int					ft_isint(char *str);
+int					ft_islong(char *str);
+long				ft_atol(char *str);
 int					ft_isempty(char *str);
 int					ft_tablen(char **tab);
 

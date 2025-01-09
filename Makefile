@@ -6,7 +6,7 @@
 #    By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/30 11:44:28 by ateca             #+#    #+#              #
-#    Updated: 2024/11/28 15:15:49 by ansebast         ###   ########.fr        #
+#    Updated: 2025/01/09 05:42:13 by ansebast         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ LIBSRC = ./libft
 
 CC = cc
 RM = rm -f
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 
 OBJS = ${SRCS:.c=.o}
 
