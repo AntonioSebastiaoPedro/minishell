@@ -66,7 +66,7 @@ int	ft_echo(t_command *cmd)
 			i++;
 		}
 	}
-	if (newline != -1)
+	if (newline != -1 || !isatty(STDOUT_FILENO))
 		printf("\n");
 	return (0);
 }
