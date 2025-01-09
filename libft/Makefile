@@ -6,7 +6,7 @@
 #    By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/29 11:32:47 by ansebast          #+#    #+#              #
-#    Updated: 2025/01/09 05:42:23 by ansebast         ###   ########.fr        #
+#    Updated: 2025/01/09 10:10:30 by ansebast         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ SRC = ft_atoi.c ft_bzero.c ft_calloc.c ft_realloc.c ft_isalnum.c ft_isalpha.c ft
 	ft_lstadd_back.c ft_lstadd_front.c ft_lstclear.c ft_lstdelone.c ft_lstlast.c ft_lstmin.c ft_lstnew.c  ft_freearray.c ft_isint.c \
 	ft_isempty.c ft_lstissorted.c ft_tablen.c ft_issorted.c ft_lstmax.c ft_puterror.c ft_lstupdateindx.c ft_lstprint.c ft_strtol.c\
 	ft_lstsize.c get_next_line_bonus.c ft_lstgetindex.c  ft_lstlastprev.c ft_isword.c ft_strtok.c ft_strjoin_delimiter.c ft_strtok_2.c \
-	ft_strappend.c
+	ft_strappend.c ft_atol.c
 
 OBJS = $(SRC:.c=.o)
 
