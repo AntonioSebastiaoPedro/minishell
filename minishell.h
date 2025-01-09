@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 11:25:08 by ateca             #+#    #+#             */
-/*   Updated: 2025/01/09 18:30:01 by ansebast         ###   ########.fr       */
+/*   Updated: 2025/01/09 18:45:22 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,17 +96,16 @@ int			exec_builtin_exec_external(t_command *cmd, pid_t *pids,
 int			expects_stdin(char *cmd);
 int			is_command_pipe(char *line, int i, t_token *tokens);
 int			handle_input_redirection(t_command **cmd, int fd_stdout,
-				int *status);
+				int *status, t_status_cmd *st);
 int			handle_output_redirection(t_command **command, int *status);
 int			is_argument(const char *token, int interpret);
 int			handle_dollar_sign(char *str, int *i, t_expand_state *state);
 int			setup_pipes(t_command *cmd);
 int			has_unclsed_quotes(const char *line, int *j);
 int			handle_chained_redirection(t_command **cmd);
-void		handle_heredoc(t_command *cmd);
+void		handle_heredoc(t_command *cmd, t_status_cmd *st);
 void		free_env(t_env **env);
 void		handle_sigint(int sig);
-void		handle_sigquit(int sig);
 void		tokenize(char *line, t_token **tokens, t_env **envp,
 				int is_recursive);
 void		execute_commands(t_command *cmd, t_env **env, t_token **tokens);

@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 14:01:15 by ateca             #+#    #+#             */
-/*   Updated: 2024/12/07 17:45:11 by ansebast         ###   ########.fr       */
+/*   Updated: 2025/01/09 18:44:09 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	handle_heredoc_parent_process(t_command *cmd, pid_t pid, int *status)
 	return (-2);
 }
 
-void	handle_heredoc(t_command *cmd)
+void	handle_heredoc(t_command *cmd, t_status_cmd *st)
 {
 	int		write_check;
 	char	*line;
@@ -87,7 +87,7 @@ void	handle_heredoc(t_command *cmd)
 		{
 			free(line);
 			if (write_check == 0)
-				exit(0);
+				exit_free_resources(0, cmd, st);
 			break ;
 		}
 		write_check = 1;
@@ -96,10 +96,10 @@ void	handle_heredoc(t_command *cmd)
 		free(line);
 	}
 	close(cmd->write_pipe_fd);
-	exit(0);
+	exit_free_resources(0, cmd, st);
 }
 
-int	handle_heredoc_redirection(t_command *cmd, int fd_stdout, int *status)
+int	handle_heredoc_redirection(t_command *cmd, int fd_stdout, int *status, t_status_cmd *st)
 {
 	pid_t	pid;
 
@@ -114,7 +114,7 @@ int	handle_heredoc_redirection(t_command *cmd, int fd_stdout, int *status)
 		}
 		if (cmd->read_pipe_fd != -1)
 			close(cmd->read_pipe_fd);
-		handle_heredoc(cmd);
+		handle_heredoc(cmd, st);
 	}
 	else if (pid < 0)
 	{
@@ -125,13 +125,13 @@ int	handle_heredoc_redirection(t_command *cmd, int fd_stdout, int *status)
 	return (handle_heredoc_parent_process(cmd, pid, status));
 }
 
-int	handle_input_redirection(t_command **command, int fd_stdout, int *status)
+int	handle_input_redirection(t_command **command, int fd_stdout, int *status, t_status_cmd *st)
 {
 	int			local_status;
 	t_command	*cmd;
 
 	if ((*command)->heredoc)
-		return (handle_heredoc_redirection(*command, fd_stdout, status));
+		return (handle_heredoc_redirection(*command, fd_stdout, status, st));
 	else
 	{
 		cmd = *command;
