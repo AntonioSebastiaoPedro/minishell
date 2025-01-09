@@ -6,12 +6,12 @@
 #    By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/29 11:32:47 by ansebast          #+#    #+#              #
-#    Updated: 2024/11/18 02:38:21 by ansebast         ###   ########.fr        #
+#    Updated: 2025/01/09 05:42:23 by ansebast         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 NAME = libft.a
 
 GREEN = \033[0;32m
