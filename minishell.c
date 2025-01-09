@@ -45,7 +45,8 @@ int	main(void)
 		line = readline("Akatsuki> ");
 		if (!line)
 			break ;
-		add_history(line);
+		if (ft_strcmp(line, "") != 0)
+			add_history(line);
 		tokenize(line, &tokens, &env_dup, 0);
 		free(line);
 		commands = parse_tokens(tokens);
