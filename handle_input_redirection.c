@@ -27,7 +27,7 @@ int	handle_file_input_redirection(t_command *cmd, int *status)
 	}
 	dup2(fd_read, STDIN_FILENO);
 	close(fd_read);
-	if (cmd->next && cmd->next->output_redir)
+	if (cmd->next && !cmd->next->command && cmd->next->output_redir)
 	{
 		cmd->output_redir = cmd->next->output_redir;
 		return (handle_output_redirection(&cmd, status));

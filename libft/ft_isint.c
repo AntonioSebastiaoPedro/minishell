@@ -30,12 +30,13 @@ int	ft_islong(char *str)
 {
 	char	*endptr;
 	long	val;
-	int	i;
+	int		i;
 
 	i = 0;
 	if (str[i] == '-' || str[i] == '+')
 		i++;
-	if (ft_strlen(&str[i]) > 19 || ft_strcmp("9223372036854775808", &str[i]) < 0)
+	if (ft_strlen(&str[i]) > 19
+		|| ft_strcmp("9223372036854775808", &str[i]) < 0)
 		return (0);
 	if (*str == '\0' || (*str == '-' && *(str + 1) == '\0') || (*str == '+'
 			&& *(str + 1) == '\0'))

@@ -41,7 +41,7 @@ int	exec_builtin(t_command *cmd, int original_stdout, t_env **env)
 		close(cmd->write_pipe_fd);
 	}
 	get_status_builtin(&status, cmd, env);
-	if (cmd->write_pipe_fd != -1)
+	if (cmd->write_pipe_fd != -1 && cmd->next && !cmd->next->output_redir)
 	{
 		dup2(original_stdout, STDOUT_FILENO);
 		close(original_stdout);
