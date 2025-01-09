@@ -43,7 +43,7 @@ int	handle_redirections(t_command **cmd, t_status_cmd *st, pid_t *pids, int *i)
 	result = 0;
 	if ((*cmd)->input_redir != NULL)
 	{
-		result = handle_input_redirection(*cmd, st->original_stdout,
+		result = handle_input_redirection(cmd, st->original_stdout,
 				&st->status);
 		if (result == -3)
 		{

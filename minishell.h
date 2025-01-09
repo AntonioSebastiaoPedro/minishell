@@ -93,13 +93,14 @@ int			exec_builtin_exec_external(t_command *cmd, pid_t *pids,
 				t_status_cmd *st);
 int			expects_stdin(char *cmd);
 int			is_command_pipe(char *line, int i, t_token *tokens);
-int			handle_input_redirection(t_command *cmd, int fd_stdout,
+int			handle_input_redirection(t_command **cmd, int fd_stdout,
 				int *status);
 int			handle_output_redirection(t_command **command, int *status);
 int			is_argument(const char *token, int interpret);
 int			handle_dollar_sign(char *str, int *i, t_expand_state *state);
 int			setup_pipes(t_command *cmd);
 int			has_unclsed_quotes(const char *line, int *j);
+int			handle_chained_redirection(t_command **cmd);
 void		handle_heredoc(t_command *cmd);
 void		free_env(t_env **env);
 void		handle_sigint(int sig);
