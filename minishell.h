@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 11:25:08 by ateca             #+#    #+#             */
-/*   Updated: 2025/01/09 17:55:41 by ansebast         ###   ########.fr       */
+/*   Updated: 2025/01/09 18:30:01 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,9 +85,9 @@ int			ft_echo(t_command *cmd);
 int			ft_pwd(void);
 int			ft_cd(char **args, t_env **env);
 int			ft_export(t_command *cmd, t_env **env);
-int			exec_builtin(t_command *cmd, int original_stdout, t_env **env);
+int			exec_builtin(t_command *cmd, t_status_cmd *st);
 int			ft_unset(t_command *cmd, t_env **env);
-int			ft_exit(t_command *cmd);
+int			ft_exit(t_command *cmd, t_status_cmd *st);
 int			handle_redirections(t_command **cmd, t_status_cmd *st,
 				pid_t *pids, int *i);
 int			is_redirection(const char *token);
@@ -110,6 +110,7 @@ void		handle_sigquit(int sig);
 void		tokenize(char *line, t_token **tokens, t_env **envp,
 				int is_recursive);
 void		execute_commands(t_command *cmd, t_env **env, t_token **tokens);
+void		exit_free_resources(int status_exit, t_command *cmd, t_status_cmd *st);
 void		free_commands(t_command *commands);
 void		envcpy(t_env **env_dup, char **src);
 void		print_tokens(t_token *tokens);

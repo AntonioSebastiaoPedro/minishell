@@ -6,31 +6,31 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 19:37:31 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/22 13:13:47 by ansebast         ###   ########.fr       */
+/*   Updated: 2025/01/09 18:30:49 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	get_status_builtin(int *status, t_command *cmd, t_env **env)
+void	get_status_builtin(int *status, t_command *cmd, t_status_cmd *st)
 {
 	if (ft_strcmp(cmd->command, "echo") == 0)
 		*status = (ft_echo(cmd));
 	else if (ft_strcmp(cmd->command, "cd") == 0)
-		*status = (ft_cd(cmd->args, env));
+		*status = (ft_cd(cmd->args, st->env));
 	else if (ft_strcmp(cmd->command, "pwd") == 0)
 		*status = (ft_pwd());
 	else if (ft_strcmp(cmd->command, "env") == 0)
-		*status = (ft_env(cmd, env));
+		*status = (ft_env(cmd, st->env));
 	else if (ft_strcmp(cmd->command, "export") == 0)
-		*status = (ft_export(cmd, env));
+		*status = (ft_export(cmd, st->env));
 	else if (ft_strcmp(cmd->command, "unset") == 0)
-		*status = (ft_unset(cmd, env));
+		*status = (ft_unset(cmd, st->env));
 	else if (ft_strcmp(cmd->command, "exit") == 0)
-		*status = (ft_exit(cmd));
+		*status = (ft_exit(cmd, st));
 }
 
-int	exec_builtin(t_command *cmd, int original_stdout, t_env **env)
+int	exec_builtin(t_command *cmd, t_status_cmd *st)
 {
 	int	status;
 
@@ -40,11 +40,11 @@ int	exec_builtin(t_command *cmd, int original_stdout, t_env **env)
 		dup2(cmd->write_pipe_fd, STDOUT_FILENO);
 		close(cmd->write_pipe_fd);
 	}
-	get_status_builtin(&status, cmd, env);
+	get_status_builtin(&status, cmd, st);
 	if (cmd->write_pipe_fd != -1 && cmd->next && !cmd->next->output_redir)
 	{
-		dup2(original_stdout, STDOUT_FILENO);
-		close(original_stdout);
+		dup2(st->original_stdout, STDOUT_FILENO);
+		close(st->original_stdout);
 	}
 	return (status);
 }

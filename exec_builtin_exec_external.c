@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 11:45:18 by ateca             #+#    #+#             */
-/*   Updated: 2025/01/09 17:57:27 by ansebast         ###   ########.fr       */
+/*   Updated: 2025/01/09 18:19:58 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int	create_processes(t_command *cmd, pid_t *pids, int i, t_status_cmd *st)
 {
 	if (cmd != NULL && cmd->command != NULL && is_builtin(cmd->command))
 	{
-		st->status = exec_builtin(cmd, st->original_stdout, st->env);
+		st->status = exec_builtin(cmd, st);
 	}
 	else if (cmd != NULL && cmd->command != NULL)
 	{
