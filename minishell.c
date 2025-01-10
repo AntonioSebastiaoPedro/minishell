@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 11:19:19 by ateca             #+#    #+#             */
-/*   Updated: 2025/01/09 17:40:08 by ansebast         ###   ########.fr       */
+/*   Updated: 2025/01/10 19:15:20 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,6 @@ int	main(void)
 		tokenize(line, &tokens, &env_dup, 0);
 		free(line);
 		commands = parse_tokens(tokens);
-		//print_tokens(tokens);
-		//print_commands(commands);
 		if (commands)
 			execute_commands(commands, &env_dup, &tokens);
 		free_tokens(tokens);

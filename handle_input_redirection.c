@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 14:01:15 by ateca             #+#    #+#             */
-/*   Updated: 2025/01/10 11:10:46 by ansebast         ###   ########.fr       */
+/*   Updated: 2025/01/10 19:18:01 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,6 @@ int	handle_file_input_redirection(t_command **cmd, t_command **command,
 	{
 		*status = 1;
 		print_error_no_such_file_or_directory((*cmd)->input_redir);
-		//if (cmd->next != NULL && expects_stdin(cmd->next->command))
-		//	return (-2);
 		while (*command && (*command)->input_redir)
 			*command = (*command)->next;
 		return (-3);

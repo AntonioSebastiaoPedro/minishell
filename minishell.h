@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 11:25:08 by ateca             #+#    #+#             */
-/*   Updated: 2025/01/10 10:59:14 by ansebast         ###   ########.fr       */
+/*   Updated: 2025/01/10 19:17:34 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,8 +117,6 @@ void		execute_commands(t_command *cmd, t_env **env, t_token **tokens);
 void		exit_free_resources(int status_exit, t_status_cmd *st);
 void		free_commands(t_command *commands);
 void		envcpy(t_env **env_dup, char **src);
-void		print_tokens(t_token *tokens);
-void		print_commands(t_command *commands);
 void		free_tokens(t_token *tokens);
 void		add_back(t_env **head, t_env *new_env);
 void		extract_variable_name(const char *str, int *i, char *var_name);
