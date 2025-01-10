@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 19:34:35 by ansebast          #+#    #+#             */
-/*   Updated: 2025/01/09 17:56:18 by ansebast         ###   ########.fr       */
+/*   Updated: 2025/01/10 09:43:48 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,7 @@ void	print_check_cmd(char *exec_path, t_command **cmd, t_status_cmd *st)
 		write(2, (*cmd)->command, ft_strlen((*cmd)->command));
 		write(2, msg, ft_strlen(msg));
 		write(2, "\n", 1);
-		free_tokens(*st->tokens);
-		free_commands((*cmd));
-		free_env(st->env);
-		free(st->pids);
-		exit(127);
+		exit_free_resources(127, (*cmd), st);
 	}
 }
 
