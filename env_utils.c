@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 14:17:28 by ansebast          #+#    #+#             */
-/*   Updated: 2024/11/18 01:29:56 by ansebast         ###   ########.fr       */
+/*   Updated: 2025/01/10 18:40:42 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,11 @@ t_env	*ft_newenv(char *name)
 	if (ft_strchr(name_copy, '='))
 		show = 1;
 	var = ft_strdup(ft_strtok_2(name_copy, "="));
-	value = ft_strdup(ft_strtok_2(NULL, "="));
+	value = &name[strlen(var)];
+	if (!ft_strchr(name, '=') || !value[1])
+		value = ft_strdup("");
+	else
+		value = ft_strdup(value + 1);
 	new_env->var = var;
 	new_env->value = value;
 	new_env->index = 0;
