@@ -24,7 +24,8 @@ int	handle_file_input_redirection(t_command **cmd, t_command **command,
 		print_error_no_such_file_or_directory((*cmd)->input_redir);
 		//if (cmd->next != NULL && expects_stdin(cmd->next->command))
 		//	return (-2);
-		*command = (*cmd)->next;
+		while (*command && (*command)->input_redir)
+			*command = (*command)->next;
 		return (-3);
 	}
 	if ((*cmd)->next && (*cmd)->next->input_redir)
