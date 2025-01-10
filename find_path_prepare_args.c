@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 13:29:37 by ateca             #+#    #+#             */
-/*   Updated: 2024/11/22 14:41:23 by ansebast         ###   ########.fr       */
+/*   Updated: 2025/01/10 10:51:09 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,34 +65,35 @@ char	*get_env_(char **path, t_env **env, char *command)
 	return (*path);
 }
 
-char	*absolute_relative_path(char *path)
+char	*absolute_relative_path(t_command *path, t_status_cmd *st)
 {
 	struct stat	path_stat;
 
-	if (stat(path, &path_stat) == 0)
+	if (stat(path->command, &path_stat) == 0)
 	{
 		if (S_ISDIR(path_stat.st_mode))
 		{
 			write(2, "minishell: ", 11);
-			write(2, path, ft_strlen(path));
+			write(2, path->command, ft_strlen(path->command));
 			write(2, ": Is a directory\n", 17);
-			exit(126);
+			exit_free_resources(126, path, st);
 		}
-		if (access(path, X_OK) == 0)
-			return (ft_strdup(path));
+		if (access(path->command, X_OK) == 0)
+			return (ft_strdup(path->command));
 		else
 		{
 			write(2, "minishell: ", 11);
-			write(2, path, ft_strlen(path));
+			write(2, path->command, ft_strlen(path->command));
 			write(2, ": Permission denied\n", 20);
-			exit(126);
+			exit_free_resources(126, path, st);
 		}
 	}
-	print_error_no_such_file_or_directory(path);
-	exit(127);
+	print_error_no_such_file_or_directory(path->command);
+	exit_free_resources(127, NULL, st);
+	return (NULL);
 }
 
-char	*find_executable_path(char *command, t_env **env)
+char	*find_executable_path(t_command *command, t_status_cmd *st)
 {
 	char	*dir;
 	char	*path;
@@ -100,15 +101,15 @@ char	*find_executable_path(char *command, t_env **env)
 	char	*next_path;
 	char	*exec_path;
 
-	if (ft_strchr(command, '/') != NULL)
-		return (absolute_relative_path(command));
-	if (!get_env_(&path, env, command))
+	if (ft_strchr(command->command, '/') != NULL)
+		return (absolute_relative_path(command, st));
+	if (!get_env_(&path, st->env, command->command))
 		return (NULL);
 	path_copy = ft_strjoin(path, ":");
 	dir = ft_strtok(path_copy, ':', &next_path);
 	while (dir)
 	{
-		exec_path = ft_strjoin_delimiter(dir, '/', command);
+		exec_path = ft_strjoin_delimiter(dir, '/', command->command);
 		if (access(exec_path, F_OK) == 0 && access(exec_path, X_OK) == 0)
 		{
 			free(path_copy);

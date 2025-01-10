@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 19:00:41 by ansebast          #+#    #+#             */
-/*   Updated: 2025/01/09 18:37:12 by ansebast         ###   ########.fr       */
+/*   Updated: 2025/01/10 11:05:45 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,19 @@ int	ft_exit(t_command *cmd, t_status_cmd *st)
 
 void	exit_free_resources(int status_exit, t_command *cmd, t_status_cmd *st)
 {
-	free_commands(cmd);
+	if (cmd)
+		free_commands(cmd);
 	free_tokens(*st->tokens);
 	free(st->pids);
 	free_env(st->env);
 	exit(status_exit);
+}
+
+void	free_resources(t_command *cmd, t_status_cmd *st)
+{
+	if (cmd)
+	{
+		free_tokens(*st->tokens);
+		free_commands(cmd);
+	}
 }

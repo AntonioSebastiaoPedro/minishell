@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 11:25:08 by ateca             #+#    #+#             */
-/*   Updated: 2025/01/09 18:45:22 by ansebast         ###   ########.fr       */
+/*   Updated: 2025/01/10 10:59:14 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,7 @@ void		tokenize(char *line, t_token **tokens, t_env **envp,
 void		execute_commands(t_command *cmd, t_env **env, t_token **tokens);
 void		exit_free_resources(int status_exit, t_command *cmd,
 				t_status_cmd *st);
+void		free_resources(t_command *cmd, t_status_cmd *st);
 void		free_commands(t_command *commands);
 void		envcpy(t_env **env_dup, char **src);
 void		print_tokens(t_token *tokens);
@@ -145,7 +146,7 @@ void		free_arguments(char **args);
 char		*expand_variables(char *str, t_env **env);
 char		*get_env_value(char *var, t_env **env);
 char		**env_list_to_array(t_env *env_list);
-char		*find_executable_path(char *command, t_env **env);
+char		*find_executable_path(t_command *command, t_status_cmd *st);
 char		**prepare_args(char *executable_path, char **original_args);
 char		*realloc_token(char *buffer, int *capacity);
 char		*process_quotes(const char *line, int *i, char quote);

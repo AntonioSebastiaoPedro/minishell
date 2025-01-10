@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 11:45:18 by ateca             #+#    #+#             */
-/*   Updated: 2025/01/09 18:19:58 by ansebast         ###   ########.fr       */
+/*   Updated: 2025/01/10 10:11:42 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	execute_child_process(t_command *cmd, t_status_cmd *st)
 	char	*executable_path;
 	char	**env_array;
 
-	executable_path = find_executable_path(cmd->command, st->env);
+	executable_path = find_executable_path(cmd, st);
 	print_check_cmd(executable_path, &cmd, st);
 	new_args = prepare_args(executable_path, cmd->args);
 	if (!new_args)
