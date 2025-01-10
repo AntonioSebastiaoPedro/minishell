@@ -85,3 +85,17 @@ int	setup_pipes(t_command *cmd)
 	}
 	return (0);
 }
+
+int	is_command_pipe(char *line, int i, t_token *tokens)
+{
+	t_token	*last_token;
+
+	last_token = ft_lstlast_token(tokens);
+	if (last_token && line[i] == '|' && check_isspace(line, i))
+	{
+		if (ft_strcmp(last_token->value, "|") != 0
+			&& !is_redirection(last_token->value))
+			return (1);
+	}
+	return (0);
+}
