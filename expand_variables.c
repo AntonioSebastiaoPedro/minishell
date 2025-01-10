@@ -43,7 +43,7 @@ void	check_enval(char **env_val, char **result, int *pos)
 
 int	handle_dollar_sign(char *str, int *i, t_expand_state *state)
 {
-	char	var_name[2097152];
+	char	var_name[70000];
 	char	*env_val;
 	char	*exit_status;
 
@@ -76,14 +76,9 @@ char	*allocate_result_buffer(char *str)
 	size_t	capacity;
 
 	capacity = 2097152;
-	if (ft_strlen(str) >= capacity)
-	{
-		perror("Minishell: argument size exceeded");
-		return (NULL);
-	}
+	if (ft_strlen(str) > capacity)
+		capacity = ft_strlen(str);
 	result = malloc(sizeof(char) * capacity);
-	if (!result)
-		perror("minishell: malloc failed");
 	return (result);
 }
 
