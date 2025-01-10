@@ -44,7 +44,7 @@ int	handle_file_input_redirection(t_command **cmd, t_command **command,
 	return (1);
 }
 
-int	handle_heredoc_parent_process(t_command *cmd, pid_t pid, int *status, t_status_cmd *st)
+int	handle_heredoc_parent_process(t_command *cmd, pid_t pid, int *status)
 {
 	int	local_status;
 
@@ -70,7 +70,6 @@ int	handle_heredoc_parent_process(t_command *cmd, pid_t pid, int *status, t_stat
 		}
 		return (0);
 	}
-	free_resources(cmd, st);
 	return (-2);
 }
 
@@ -126,7 +125,7 @@ int	handle_heredoc_redir(t_command *cmd, int fd_stdout, int *status,
 		perror("minishell: fork failed");
 		return (-2);
 	}
-	return (handle_heredoc_parent_process(cmd, pid, status, st));
+	return (handle_heredoc_parent_process(cmd, pid, status));
 }
 
 int	handle_input_redirection(t_command **command, int fd_stdout, int *status,

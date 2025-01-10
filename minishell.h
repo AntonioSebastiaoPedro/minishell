@@ -114,7 +114,6 @@ void		tokenize(char *line, t_token **tokens, t_env **envp,
 void		execute_commands(t_command *cmd, t_env **env, t_token **tokens);
 void		exit_free_resources(int status_exit, t_command *cmd,
 				t_status_cmd *st);
-void		free_resources(t_command *cmd, t_status_cmd *st);
 void		free_commands(t_command *commands);
 void		envcpy(t_env **env_dup, char **src);
 void		print_tokens(t_token *tokens);

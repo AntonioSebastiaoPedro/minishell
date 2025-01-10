@@ -39,14 +39,9 @@ void	exit_free_resources(int status_exit, t_command *cmd, t_status_cmd *st)
 	free_tokens(*st->tokens);
 	free(st->pids);
 	free_env(st->env);
+	if (st->original_stdin >= 0)
+		close(st->original_stdin);
+	if (st->original_stdout >= 0)
+		close(st->original_stdout);
 	exit(status_exit);
-}
-
-void	free_resources(t_command *cmd, t_status_cmd *st)
-{
-	if (cmd)
-	{
-		free_tokens(*st->tokens);
-		free_commands(cmd);
-	}
 }
