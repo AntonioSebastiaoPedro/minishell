@@ -6,43 +6,17 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 13:11:19 by ansebast          #+#    #+#             */
-/*   Updated: 2024/12/07 17:50:21 by ansebast         ###   ########.fr       */
+/*   Updated: 2025/01/09 17:55:29 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	setup_pipes(t_command *cmd)
-{
-	int	pipe_fd[2];
-
-	if (cmd->next != NULL || (cmd->command && cmd->input_redir && cmd->heredoc))
-	{
-		if (pipe(pipe_fd) == -1)
-		{
-			perror("minishell: pipe failed");
-			return (-1);
-		}
-		if (cmd->next != NULL)
-		{
-			cmd->write_pipe_fd = pipe_fd[1];
-			cmd->next->read_pipe_fd = pipe_fd[0];
-		}
-		else if (cmd->command && cmd->input_redir && cmd->heredoc)
-		{
-			cmd->write_pipe_fd = pipe_fd[1];
-			cmd->read_pipe_fd = pipe_fd[0];
-		}
-	}
-	return (0);
-}
 
 void	wait_for_processes(pid_t *pids, int num_commands, int *status)
 {
 	int	i;
 	int	local_status;
 	int	signal_code;
-	int	exit_status;
 
 	i = 0;
 	local_status = 0;
@@ -54,11 +28,12 @@ void	wait_for_processes(pid_t *pids, int num_commands, int *status)
 			if (WIFSIGNALED(local_status))
 			{
 				signal_code = WTERMSIG(local_status);
-				exit_status = 128 + signal_code;
-				*status = exit_status;
+				if (*status == 0)
+					*status = 128 + signal_code;
 			}
 			else if (WIFEXITED(local_status))
-				*status = WEXITSTATUS(local_status);
+				if (*status == 0)
+					*status = WEXITSTATUS(local_status);
 		}
 		i++;
 	}
@@ -90,9 +65,8 @@ void	init_pids(pid_t *pids, int num_commands)
 	}
 }
 
-void	execute_commands(t_command *cmd, t_env **envp)
+t_status_cmd	init_status_cmd(t_env **envp, t_command *cmd)
 {
-	pid_t			*pids;
 	t_status_cmd	st;
 
 	st.env = envp;
@@ -100,7 +74,18 @@ void	execute_commands(t_command *cmd, t_env **envp)
 	st.original_stdin = dup(STDIN_FILENO);
 	st.original_stdout = dup(STDOUT_FILENO);
 	st.num_commands = ft_lstsize_command(cmd);
+	return (st);
+}
+
+void	execute_commands(t_command *cmd, t_env **envp, t_token **tokens)
+{
+	pid_t			*pids;
+	t_status_cmd	st;
+
+	st = init_status_cmd(envp, cmd);
 	pids = malloc(sizeof(pid_t) * st.num_commands);
+	st.tokens = tokens;
+	st.pids = pids;
 	if (!pids)
 	{
 		perror("minishell: malloc failed");

@@ -44,9 +44,9 @@ int	handle_chained_redirection(t_command **cmd)
 		free((*cmd)->next->command);
 	if ((*cmd)->command != NULL && (*cmd)->args != NULL)
 	{
+		(*cmd)->next->read_pipe_fd = (*cmd)->read_pipe_fd;
 		(*cmd)->next->command = ft_strdup((*cmd)->command);
-		if (copy_arguments((*cmd)->args, (*cmd)->next) == -2)
-			return (-2);
+		copy_arguments((*cmd)->args, (*cmd)->next);
 	}
 	else if ((*cmd)->command != NULL)
 	{

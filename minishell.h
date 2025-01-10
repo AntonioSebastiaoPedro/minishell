@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 11:25:08 by ateca             #+#    #+#             */
-/*   Updated: 2024/12/07 17:47:42 by ansebast         ###   ########.fr       */
+/*   Updated: 2025/01/09 18:45:22 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ typedef struct s_status_cmds
 	int		num_commands;
 	int		original_stdin;
 	int		original_stdout;
+	t_token	**tokens;
+	pid_t	*pids;
 	t_env	**env;
 }					t_status_cmd;
 
@@ -83,9 +85,9 @@ int			ft_echo(t_command *cmd);
 int			ft_pwd(void);
 int			ft_cd(char **args, t_env **env);
 int			ft_export(t_command *cmd, t_env **env);
-int			exec_builtin(t_command *cmd, int original_stdout, t_env **env);
+int			exec_builtin(t_command *cmd, t_status_cmd *st);
 int			ft_unset(t_command *cmd, t_env **env);
-int			ft_exit(t_command *cmd);
+int			ft_exit(t_command *cmd, t_status_cmd *st);
 int			handle_redirections(t_command **cmd, t_status_cmd *st,
 				pid_t *pids, int *i);
 int			is_redirection(const char *token);
@@ -94,20 +96,24 @@ int			exec_builtin_exec_external(t_command *cmd, pid_t *pids,
 int			expects_stdin(char *cmd);
 int			is_command_pipe(char *line, int i, t_token *tokens);
 int			handle_input_redirection(t_command **cmd, int fd_stdout,
-				int *status);
+				int *status, t_status_cmd *st);
 int			handle_output_redirection(t_command **command, int *status);
 int			is_argument(const char *token, int interpret);
 int			handle_dollar_sign(char *str, int *i, t_expand_state *state);
 int			setup_pipes(t_command *cmd);
 int			has_unclsed_quotes(const char *line, int *j);
 int			handle_chained_redirection(t_command **cmd);
-void		handle_heredoc(t_command *cmd);
+int			setup_pipes(t_command *cmd);
+int			check_isspace(char *line, int i);
+int			is_command_pipe(char *line, int i, t_token *tokens);
+void		handle_heredoc(t_command *cmd, t_status_cmd *st);
 void		free_env(t_env **env);
 void		handle_sigint(int sig);
-void		handle_sigquit(int sig);
 void		tokenize(char *line, t_token **tokens, t_env **envp,
 				int is_recursive);
-void		execute_commands(t_command *cmd, t_env **env);
+void		execute_commands(t_command *cmd, t_env **env, t_token **tokens);
+void		exit_free_resources(int status_exit, t_command *cmd,
+				t_status_cmd *st);
 void		free_commands(t_command *commands);
 void		envcpy(t_env **env_dup, char **src);
 void		print_tokens(t_token *tokens);
@@ -127,7 +133,7 @@ void		handle_sigint_external_command(int signum);
 void		handle_sigint_heredoc(int signum);
 void		handle_pipe_stdin(char *line, t_token **tokens, int *i,
 				t_env **env);
-void		print_check_cmd(char *exec_path, t_command *cmd);
+void		print_check_cmd(char *exec_path, t_command **cmd, t_status_cmd *st);
 void		expand_command_args(t_command *cmd, t_env **env);
 void		isspace_add(const char *line, int *i, t_token **tokens,
 				char **buffer);

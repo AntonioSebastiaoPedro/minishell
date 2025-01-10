@@ -24,72 +24,75 @@ int	check_isspace(char *line, int i)
 	return (1);
 }
 
-int	is_command_pipe(char *line, int i, t_token *tokens)
-{
-	t_token	*last_token;
-
-	last_token = ft_lstlast_token(tokens);
-	if (last_token && line[i] == '|' && check_isspace(line, i))
-	{
-		if (ft_strcmp(last_token->value, "|") != 0
-			&& !is_redirection(last_token->value))
-			return (1);
-	}
-	return (0);
-}
-
 void	child_process(t_token **tokens, int *pipe_fd)
 {
-	char	*next_line;
+	char	*line;
 
+	close(pipe_fd[0]);
 	signal(SIGINT, handle_sigint_heredoc);
 	*tokens = add_token(*tokens, "|", 0);
 	while (1)
 	{
-		next_line = readline("> ");
-		if (check_isspace(next_line, -1))
+		line = readline("> ");
+		if (line && (check_isspace(line, -1) || ft_strcmp(line, "") == 0))
+		{
+			free(line);
 			continue ;
-		if (next_line == NULL)
+		}
+		if (line == NULL)
 		{
 			write(2, "minishell: ", 11);
 			write(2, "syntax error: unexpected end of file\n", 37);
 			write(2, "exit\n", 5);
-			exit(1);
+			exit(2);
 		}
-		close(pipe_fd[0]);
-		write(pipe_fd[1], next_line, ft_strlen(next_line));
+		write(pipe_fd[1], line, ft_strlen(line));
 		close(pipe_fd[1]);
-		free(next_line);
+		free(line);
 		exit(0);
 	}
 }
 
-void	parent_process(int status, t_token **tokens, int *pipe_fd, t_env **env)
+void	read_from_pipe(int *pipe_fd, t_token **tokens, t_env **env)
 {
-	char	new_line[2097152];
+	char	*new_line;
 	int		bytes;
 
-	if (WIFEXITED(status) && WEXITSTATUS(status) == 1)
+	new_line = malloc(2097152 * sizeof(char));
+	if (!new_line)
+	{
+		perror("malloc failed");
+		exit(1);
+	}
+	bytes = read(pipe_fd[0], new_line, 2097152);
+	if (bytes >= 0 && bytes < 2097152)
+	{
+		new_line[bytes] = '\0';
+		tokenize(new_line, tokens, env, 0);
+	}
+	else
+		perror("Read error or size exceeded");
+	free(new_line);
+	close(pipe_fd[0]);
+}
+
+void	parent_process(int status, t_token **tokens, int *pipe_fd, t_env **env)
+{
+	close(pipe_fd[1]);
+	if (WIFEXITED(status) && WEXITSTATUS(status) == 2)
 	{
 		free_tokens(*tokens);
-		exit(1);
+		g_exit_status = WEXITSTATUS(status);
+		exit(WEXITSTATUS(status));
 	}
 	else if (WIFEXITED(status) && WEXITSTATUS(status) == 130)
 	{
 		free_tokens(*tokens);
-		(*tokens) = NULL;
+		g_exit_status = WEXITSTATUS(status);
+		*tokens = NULL;
 	}
 	else
-	{
-		bytes = read(pipe_fd[0], new_line, 2097152);
-		if (bytes >= 0 && bytes < 2097152)
-		{
-			new_line[bytes] = '\0';
-			tokenize(new_line, tokens, env, 0);
-		}
-		else
-			perror("Read error or size exceeded");
-	}
+		read_from_pipe(pipe_fd, tokens, env);
 }
 
 void	handle_pipe_stdin(char *line, t_token **tokens, int *i, t_env **env)

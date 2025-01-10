@@ -6,7 +6,7 @@
 /*   By: ansebast <ansebast@student.42luanda.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 15:28:48 by ateca             #+#    #+#             */
-/*   Updated: 2024/12/07 17:47:03 by ansebast         ###   ########.fr       */
+/*   Updated: 2025/01/09 18:46:23 by ansebast         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,9 @@ int	handle_redirections(t_command **cmd, t_status_cmd *st, pid_t *pids, int *i)
 	if ((*cmd)->input_redir != NULL)
 	{
 		result = handle_input_redirection(cmd, st->original_stdout,
-				&st->status);
+				&st->status, st);
 		if (result == -3)
 		{
-			*cmd = (*cmd)->next;
 			pids[(*i)] = -1;
 			(*i)++;
 		}
