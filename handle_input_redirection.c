@@ -48,7 +48,6 @@ int	handle_heredoc_parent_process(t_command *cmd, pid_t pid, int *status)
 {
 	int	local_status;
 
-	close(cmd->write_pipe_fd);
 	dup2(cmd->read_pipe_fd, STDIN_FILENO);
 	if (cmd->read_pipe_fd != -1)
 		close(cmd->read_pipe_fd);
@@ -125,6 +124,8 @@ int	handle_heredoc_redir(t_command *cmd, int fd_stdout, int *status,
 		perror("minishell: fork failed");
 		return (-2);
 	}
+	if (cmd->write_pipe_fd != -1)
+		close(cmd->write_pipe_fd);
 	return (handle_heredoc_parent_process(cmd, pid, status));
 }
 

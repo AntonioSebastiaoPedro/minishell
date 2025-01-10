@@ -106,6 +106,7 @@ int			handle_chained_redirection(t_command **cmd);
 int			setup_pipes(t_command *cmd);
 int			check_isspace(char *line, int i);
 int			is_command_pipe(char *line, int i, t_token *tokens);
+void		exit_free_reso_pipe(int status_exit, t_token **tokens, t_env **env);
 void		handle_heredoc(t_command *cmd, t_status_cmd *st);
 void		free_env(t_env **env);
 void		handle_sigint(int sig);

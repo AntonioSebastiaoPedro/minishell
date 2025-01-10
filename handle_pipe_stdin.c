@@ -24,7 +24,7 @@ int	check_isspace(char *line, int i)
 	return (1);
 }
 
-void	child_process(t_token **tokens, int *pipe_fd)
+void	child_process(int *pipe_fd, t_token **tokens, t_env **env)
 {
 	char	*line;
 
@@ -44,12 +44,12 @@ void	child_process(t_token **tokens, int *pipe_fd)
 			write(2, "minishell: ", 11);
 			write(2, "syntax error: unexpected end of file\n", 37);
 			write(2, "exit\n", 5);
-			exit(2);
+			exit_free_reso_pipe(2, tokens, env);
 		}
 		write(pipe_fd[1], line, ft_strlen(line));
 		close(pipe_fd[1]);
 		free(line);
-		exit(0);
+		exit_free_reso_pipe(0, tokens, env);
 	}
 }
 
@@ -81,9 +81,8 @@ void	parent_process(int status, t_token **tokens, int *pipe_fd, t_env **env)
 	close(pipe_fd[1]);
 	if (WIFEXITED(status) && WEXITSTATUS(status) == 2)
 	{
-		free_tokens(*tokens);
 		g_exit_status = WEXITSTATUS(status);
-		exit(WEXITSTATUS(status));
+		exit_free_reso_pipe(g_exit_status, tokens, env);
 	}
 	else if (WIFEXITED(status) && WEXITSTATUS(status) == 130)
 	{
@@ -106,7 +105,7 @@ void	handle_pipe_stdin(char *line, t_token **tokens, int *i, t_env **env)
 	pipe(pipe_fd);
 	pid = fork();
 	if (pid == 0)
-		child_process(tokens, pipe_fd);
+		child_process(pipe_fd, tokens, env);
 	else if (pid < 0)
 	{
 		*tokens = NULL;

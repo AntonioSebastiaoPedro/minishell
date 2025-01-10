@@ -89,7 +89,7 @@ char	*absolute_relative_path(t_command *path, t_status_cmd *st)
 		}
 	}
 	print_error_no_such_file_or_directory(path->command);
-	exit_free_resources(127, NULL, st);
+	exit_free_resources(127, path, st);
 	return (NULL);
 }
 

@@ -45,3 +45,10 @@ void	exit_free_resources(int status_exit, t_command *cmd, t_status_cmd *st)
 		close(st->original_stdout);
 	exit(status_exit);
 }
+
+void	exit_free_reso_pipe(int status_exit, t_token **tokens, t_env **env)
+{
+	free_tokens(*tokens);
+	free_env(env);
+	exit(status_exit);
+}
