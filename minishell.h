@@ -50,17 +50,6 @@ typedef struct s_expand_state
 	t_env	**env;
 }					t_expand_state;
 
-typedef struct s_status_cmds
-{
-	int		status;
-	int		num_commands;
-	int		original_stdin;
-	int		original_stdout;
-	t_token	**tokens;
-	pid_t	*pids;
-	t_env	**env;
-}					t_status_cmd;
-
 typedef struct s_command
 {
 	char				*command;
@@ -75,6 +64,18 @@ typedef struct s_command
 	int					read_pipe_fd;
 	struct s_command	*next;
 }						t_command;
+
+typedef struct s_status_cmds
+{
+	int			status;
+	int			num_commands;
+	int			original_stdin;
+	int			original_stdout;
+	t_token		**tokens;
+	t_env		**env;
+	pid_t		*pids;
+	t_command	*cmd;
+}					t_status_cmd;
 
 extern int	g_exit_status;
 
@@ -113,8 +114,7 @@ void		handle_sigint(int sig);
 void		tokenize(char *line, t_token **tokens, t_env **envp,
 				int is_recursive);
 void		execute_commands(t_command *cmd, t_env **env, t_token **tokens);
-void		exit_free_resources(int status_exit, t_command *cmd,
-				t_status_cmd *st);
+void		exit_free_resources(int status_exit, t_status_cmd *st);
 void		free_commands(t_command *commands);
 void		envcpy(t_env **env_dup, char **src);
 void		print_tokens(t_token *tokens);

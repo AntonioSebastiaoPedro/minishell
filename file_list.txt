@@ -1,0 +1,131 @@
+total 588
+-rw-r--r-- 1 ateca 2024_luanda   2227 Jan 10 10:20 builtins_utils.c
+-rw-r--r-- 1 ateca 2024_luanda   9400 Jan 10 15:17 builtins_utils.o
+-rw-r--r-- 1 ateca 2024_luanda   1895 Dec  6 12:24 cd.c
+-rw-r--r-- 1 ateca 2024_luanda   7584 Jan 10 15:17 cd.o
+-rw-r--r-- 1 ateca 2024_luanda   3023 Jan  7 09:45 command_utils.c
+-rw-r--r-- 1 ateca 2024_luanda   9360 Jan 10 15:17 command_utils.o
+-rw-r--r-- 1 ateca 2024_luanda   1722 Jan  9 16:35 echo.c
+-rw-r--r-- 1 ateca 2024_luanda   6912 Jan 10 15:17 echo.o
+-rw-r--r-- 1 ateca 2024_luanda   1833 Nov 29 12:42 env.c
+-rw-r--r-- 1 ateca 2024_luanda   6144 Jan 10 15:17 env.o
+-rw-r--r-- 1 ateca 2024_luanda   2313 Jan  9 17:23 env_utils2.c
+-rw-r--r-- 1 ateca 2024_luanda   7544 Jan 10 15:17 env_utils2.o
+-rw-r--r-- 1 ateca 2024_luanda   2038 Jan  7 09:45 env_utils3.c
+-rw-r--r-- 1 ateca 2024_luanda   7272 Jan 10 15:17 env_utils3.o
+-rw-r--r-- 1 ateca 2024_luanda   2049 Nov 29 12:42 env_utils.c
+-rw-r--r-- 1 ateca 2024_luanda   7464 Jan 10 15:17 env_utils.o
+-rw-r--r-- 1 ateca 2024_luanda   3241 Jan 10 11:45 exec_builtin_exec_external.c
+-rw-r--r-- 1 ateca 2024_luanda  11872 Jan 10 15:17 exec_builtin_exec_external.o
+-rw-r--r-- 1 ateca 2024_luanda   2640 Jan 10 10:31 execute_commands.c
+-rw-r--r-- 1 ateca 2024_luanda  10088 Jan 10 15:17 execute_commands.o
+-rw-r--r-- 1 ateca 2024_luanda   1812 Jan 10 15:02 exit.c
+-rw-r--r-- 1 ateca 2024_luanda   8488 Jan 10 15:17 exit.o
+-rw-r--r-- 1 ateca 2024_luanda   2717 Jan 10 10:20 expand_variables.c
+-rw-r--r-- 1 ateca 2024_luanda   9344 Jan 10 15:17 expand_variables.o
+-rw-r--r-- 1 ateca 2024_luanda   2889 Jan  7 09:45 export.c
+-rw-r--r-- 1 ateca 2024_luanda   9656 Jan 10 15:17 export.o
+-rw-r--r-- 1 ateca 2024_luanda      0 Jan 10  2025 file_list.txt
+-rw-r--r-- 1 ateca 2024_luanda   3304 Jan 10 13:38 find_path_prepare_args.c
+-rw-r--r-- 1 ateca 2024_luanda  13896 Jan 10 15:17 find_path_prepare_args.o
+-rw-r--r-- 1 ateca 2024_luanda   4027 Jan 10 13:57 handle_input_redirection.c
+-rw-r--r-- 1 ateca 2024_luanda  13120 Jan 10 15:17 handle_input_redirection.o
+-rw-r--r-- 1 ateca 2024_luanda   3275 Jan 10 10:20 handle_output_redirection.c
+-rw-r--r-- 1 ateca 2024_luanda   9512 Jan 10 15:17 handle_output_redirection.o
+-rw-r--r-- 1 ateca 2024_luanda   3099 Jan 10 15:09 handle_pipe_stdin.c
+-rw-r--r-- 1 ateca 2024_luanda  12064 Jan 10 15:17 handle_pipe_stdin.o
+-rw-r--r-- 1 ateca 2024_luanda   2191 Jan 10 10:20 handle_redirection.c
+-rw-r--r-- 1 ateca 2024_luanda   8120 Jan 10 15:17 handle_redirection.o
+-rw-r--r-- 1 ateca 2024_luanda   1332 Jan 10 12:56 handle_signal.c
+-rw-r--r-- 1 ateca 2024_luanda   6112 Jan 10 15:17 handle_signal.o
+-rw-r--r-- 1 ateca 2024_luanda     41 Jan  9 11:32 key
+drwxr-xr-x 2 ateca 2024_luanda   4096 Jan 10 15:17 libft
+-rw-r--r-- 1 ateca 2024_luanda    220 Jan  9 16:48 local.supp
+-rw-r--r-- 1 ateca 2024_luanda   1917 Jan  9 11:32 Makefile
+-rwxr-xr-x 1 ateca 2024_luanda 132448 Jan 10 15:17 minishell
+-rw-r--r-- 1 ateca 2024_luanda   1799 Jan 10 10:20 minishell.c
+-rw-r--r-- 1 ateca 2024_luanda   5974 Jan 10 15:03 minishell.h
+-rw-r--r-- 1 ateca 2024_luanda   8816 Jan 10 15:17 minishell.o
+-rw-r--r-- 1 ateca 2024_luanda   2479 Jan 10 13:17 minishell_utils.c
+-rw-r--r-- 1 ateca 2024_luanda   8984 Jan 10 15:17 minishell_utils.o
+-rw-r--r-- 1 ateca 2024_luanda     13 Jan 10 15:33 output.txt
+-rw-r--r-- 1 ateca 2024_luanda   3441 Jan 10 10:20 parser.c
+-rw-r--r-- 1 ateca 2024_luanda   9448 Jan 10 15:17 parser.o
+-rw-r--r-- 1 ateca 2024_luanda   3955 Jan 10 11:45 print_utils.c
+-rw-r--r-- 1 ateca 2024_luanda  14216 Jan 10 15:17 print_utils.o
+-rw-r--r-- 1 ateca 2024_luanda   1098 Nov 29 12:42 pwd.c
+-rw-r--r-- 1 ateca 2024_luanda   4768 Jan 10 15:17 pwd.o
+-rw-r--r-- 1 ateca 2024_luanda  11662 Dec 12 18:41 TestsCommands.sh
+-rw-r--r-- 1 ateca 2024_luanda   3021 Jan  7 09:45 tokenize.c
+-rw-r--r-- 1 ateca 2024_luanda  10360 Jan 10 15:17 tokenize.o
+-rw-r--r-- 1 ateca 2024_luanda   3262 Jan  7 10:44 token_utils2.c
+-rw-r--r-- 1 ateca 2024_luanda   9688 Jan 10 15:17 token_utils2.o
+-rw-r--r-- 1 ateca 2024_luanda   2434 Jan  7 09:45 token_utils.c
+-rw-r--r-- 1 ateca 2024_luanda   7664 Jan 10 15:17 token_utils.o
+-rw-r--r-- 1 ateca 2024_luanda   1452 Jan  7 09:45 unset.c
+-rw-r--r-- 1 ateca 2024_luanda   5776 Jan 10 15:17 unset.o
+builtins_utils.c
+builtins_utils.o
+cd.c
+cd.o
+command_utils.c
+command_utils.o
+echo.c
+echo.o
+env.c
+env.o
+env_utils2.c
+env_utils2.o
+env_utils3.c
+env_utils3.o
+env_utils.c
+env_utils.o
+exec_builtin_exec_external.c
+exec_builtin_exec_external.o
+execute_commands.c
+execute_commands.o
+exit.c
+exit.o
+expand_variables.c
+expand_variables.o
+export.c
+export.o
+file_list.txt
+find_path_prepare_args.c
+find_path_prepare_args.o
+handle_input_redirection.c
+handle_input_redirection.o
+handle_output_redirection.c
+handle_output_redirection.o
+handle_pipe_stdin.c
+handle_pipe_stdin.o
+handle_redirection.c
+handle_redirection.o
+handle_signal.c
+handle_signal.o
+key
+libft
+local.supp
+Makefile
+minishell
+minishell.c
+minishell.h
+minishell.o
+minishell_utils.c
+minishell_utils.o
+output.txt
+parser.c
+parser.o
+print_utils.c
+print_utils.o
+pwd.c
+pwd.o
+TestsCommands.sh
+tokenize.c
+tokenize.o
+token_utils2.c
+token_utils2.o
+token_utils.c
+token_utils.o
+unset.c
+unset.o

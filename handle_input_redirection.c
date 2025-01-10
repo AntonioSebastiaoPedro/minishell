@@ -88,7 +88,7 @@ void	handle_heredoc(t_command *cmd, t_status_cmd *st)
 		{
 			free(line);
 			if (write_check == 0)
-				exit_free_resources(0, cmd, st);
+				exit_free_resources(0, st);
 			break ;
 		}
 		write_check = 1;
@@ -97,7 +97,7 @@ void	handle_heredoc(t_command *cmd, t_status_cmd *st)
 		free(line);
 	}
 	close(cmd->write_pipe_fd);
-	exit_free_resources(0, cmd, st);
+	exit_free_resources(0, st);
 }
 
 int	handle_heredoc_redir(t_command *cmd, int fd_stdout, int *status,

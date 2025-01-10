@@ -76,7 +76,7 @@ char	*absolute_relative_path(t_command *path, t_status_cmd *st)
 			write(2, "minishell: ", 11);
 			write(2, path->command, ft_strlen(path->command));
 			write(2, ": Is a directory\n", 17);
-			exit_free_resources(126, path, st);
+			exit_free_resources(126, st);
 		}
 		if (access(path->command, X_OK) == 0)
 			return (ft_strdup(path->command));
@@ -85,11 +85,11 @@ char	*absolute_relative_path(t_command *path, t_status_cmd *st)
 			write(2, "minishell: ", 11);
 			write(2, path->command, ft_strlen(path->command));
 			write(2, ": Permission denied\n", 20);
-			exit_free_resources(126, path, st);
+			exit_free_resources(126, st);
 		}
 	}
 	print_error_no_such_file_or_directory(path->command);
-	exit_free_resources(127, path, st);
+	exit_free_resources(127, st);
 	return (NULL);
 }
 

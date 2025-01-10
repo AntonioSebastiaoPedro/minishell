@@ -22,7 +22,7 @@ void	print_check_cmd(char *exec_path, t_command **cmd, t_status_cmd *st)
 		write(2, (*cmd)->command, ft_strlen((*cmd)->command));
 		write(2, msg, ft_strlen(msg));
 		write(2, "\n", 1);
-		exit_free_resources(127, (*cmd), st);
+		exit_free_resources(127, st);
 	}
 }
 

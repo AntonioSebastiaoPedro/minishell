@@ -100,6 +100,7 @@ int	exec_builtin_exec_external(t_command *cmd, pid_t *pids, t_status_cmd *st)
 	t_command	*current;
 
 	i = 0;
+	st->cmd = cmd;
 	current = cmd;
 	while (current != NULL && i < st->num_commands)
 	{
